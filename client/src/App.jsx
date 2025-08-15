@@ -14,7 +14,7 @@ function App() {
     <BrowserRouter>
       <div className="flex flex-col min-h-screen w-full  ">
         <Navbar />
-        <main className="flex-grow w-full p-4 ">
+        <main className="flex-grow w-full">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />

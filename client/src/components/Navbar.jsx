@@ -1,8 +1,8 @@
 import React from "react";
 import { AppBar, Toolbar, Typography } from "@mui/material";
-import NavLinks from "./NavLinks";
-import UserSection from "./UserSection";
-import HamburgerMenu from "./HamburgerMenu";
+import NavLinks from "./Navbar/NavLinks";
+import UserSection from "./Navbar/UserSection";
+import HamburgerMenu from "./Navbar/Sidebar";
 import LogoImg from "../assets/logoImg.png"
 import ExploreIcon from "@mui/icons-material/Explore";
 import CategoryIcon from "@mui/icons-material/Category";
