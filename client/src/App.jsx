@@ -12,9 +12,9 @@ import './App.css'
 function App() {
   return (
     <BrowserRouter>
-      <div className="flex flex-col min-h-screen w-full bg-red-500 text-gray-900">
+      <div className="flex flex-col min-h-screen w-full  ">
         <Navbar />
-        <main className="flex-grow w-full p-4">
+        <main className="flex-grow w-full p-4 ">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />

@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
     Box,
     List,
@@ -5,6 +7,7 @@ import {
     ListItemIcon,
     ListItemText,
     Button,
+    Divider,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
@@ -35,21 +38,44 @@ export default function NavLinks({ links, isDrawer }) {
             position: "fixed",
             left: "50%",
             transform: "translateX(-50%)",
-            top: "10px", // adjust based on your AppBar height
-            zIndex: 1100, // make sure it stays above content if needed
-            backgroundColor: "white",
-            borderRadius: "12px",
-            padding: "4px 12px",
-        }}>
-            {links.map((link) => (
-                <Button
-                    key={link.text}
-                    color="inherit"
-                    component={Link}
-                    to={link.path}
-                >
-                    {link.text}
-                </Button>
+            top: "10px",
+            zIndex: 1100,
+
+            /* 🔹 Frosted glass effect */
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+            backdropFilter: "blur(10px) saturate(100%)",
+            WebkitBackdropFilter: "blur(12px) saturate(180%)",
+
+            borderRadius: "50px",
+            padding: "6px 14px",
+
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            // boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
+        }}
+        >
+            {links.map((link, index) => (
+                <React.Fragment key={link.text}>
+                    <Button
+                        color="inherit"
+                        component={Link}
+                        to={link.path}
+                        sx={{ px: 2 }}
+                    >
+                        {link.text}
+                    </Button>
+                    {index < links.length - 1 && (
+                        <Divider
+                            orientation="vertical"
+                            flexItem
+                            sx={{
+                                mx: 0.5,
+                                height: "20px", // adjust height
+                                alignSelf: "center",
+                                borderColor: "rgba(200, 200, 200, 0.7)",
+                            }}
+                        />
+                    )}
+                </React.Fragment>
             ))}
         </Box>
     );

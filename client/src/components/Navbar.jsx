@@ -14,6 +14,7 @@ export default function Navbar() {
         { text: "Explore", path: "/", icon: <ExploreIcon sx={{ color: "#082567" }} /> },
         { text: "Categories", path: "/categories", icon: <CategoryIcon sx={{ color: "#082567" }} /> },
         { text: "About", path: "/about", icon: <InfoIcon sx={{ color: "#082567" }} /> },
+
     ];
 
     return (
