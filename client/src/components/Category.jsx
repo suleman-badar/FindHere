@@ -7,10 +7,10 @@ import ParkIcon from "@mui/icons-material/Park";
 
 export default function Category() {
     const categories = [
-        { name: "Restaurants", icon: <RestaurantIcon fontSize="small" /> },
-        { name: "Hotels", icon: <HotelIcon fontSize="small" /> },
-        { name: "Cafes", icon: <LocalCafeIcon fontSize="small" /> },
-        { name: "Parks", icon: <ParkIcon fontSize="small" /> },
+        { name: "Restaurants", icon: <RestaurantIcon fontSize="small" sx={{ color: "red" }} /> },
+        { name: "Hotels", icon: <HotelIcon fontSize="small" sx={{ color: "blue" }} /> },
+        { name: "Cafes", icon: <LocalCafeIcon fontSize="small" sx={{ color: "brown" }} /> },
+        { name: "Parks", icon: <ParkIcon fontSize="small" sx={{ color: "green" }} /> },
         { name: "Shopping", icon: <ParkIcon fontSize="small" /> },
         { name: "Museums", icon: <ParkIcon fontSize="small" /> },
         { name: "Gyms", icon: <ParkIcon fontSize="small" /> },

@@ -1,4 +1,6 @@
 import React from "react";
+import Logo from "../assets/logo.png"
+
 import { FaTwitter, FaInstagram, FaFacebook } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -48,7 +50,7 @@ const Footer = () => {
         <div className="flex justify-center gap-4 mt-8">
           <Link
             to="/signup"
-            className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700"
+            className="bg-[#082567] text-white px-6 py-2 rounded-md hover:bg-[#0A2C73]"
           >
             Sign Up Today →
           </Link>
@@ -68,11 +70,12 @@ const Footer = () => {
             {/* Logo and Description */}
             <div>
               <div className="flex items-center mb-4">
-                <img
-                  src="/pin-map.png"
-                  alt="FindHere Logo"
-                  className="h-8 w-8 mr-2"
-                />
+                <img src={Logo} alt="Logo"
+                  style={{
+                    height: 70,
+                    width: "auto",
+
+                  }}></img>
                 <span className="text-xl font-bold">FindHere</span>
               </div>
               <p className="text-sm text-gray-300">
