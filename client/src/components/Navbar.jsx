@@ -1,8 +1,8 @@
 import React from "react";
 import { AppBar, Toolbar, Typography } from "@mui/material";
-import NavLinks from "./NavLinks";
-import UserSection from "./UserSection";
-import HamburgerMenu from "./HamburgerMenu";
+import NavLinks from "./Navbar/NavLinks";
+import UserSection from "./Navbar/UserSection";
+import HamburgerMenu from "./Navbar/Sidebar";
 import LogoImg from "../assets/logoImg.png"
 import ExploreIcon from "@mui/icons-material/Explore";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -14,6 +14,7 @@ export default function Navbar() {
         { text: "Explore", path: "/", icon: <ExploreIcon sx={{ color: "#082567" }} /> },
         { text: "Categories", path: "/categories", icon: <CategoryIcon sx={{ color: "#082567" }} /> },
         { text: "About", path: "/about", icon: <InfoIcon sx={{ color: "#082567" }} /> },
+
     ];
 
     return (
