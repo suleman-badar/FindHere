@@ -13,7 +13,7 @@ export default function Search() {
     }
 
     return (
-        <div className="bg-white w-[80%] p-6 rounded-2xl flex justify-center my-3">
+        <div className="bg-white w-[100%] p-4 rounded-2xl flex justify-center my-3">
             <form
                 onSubmit={handleSubmit}
                 style={{
@@ -30,12 +30,12 @@ export default function Search() {
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     sx={{
-                        backgroundColor: "#f0f0f0",
+                        backgroundColor: "#d0d0d0",
                         borderRadius: "15px",
                         "& .MuiFilledInput-root": {
                             borderRadius: "15px",
-                            backgroundColor: "#f0f0f0",
-                            height: "60px",
+                            backgroundColor: "#d0d0d0",
+                            height: "50px",
                             display: "flex",
                             alignItems: "center", // ✅ centers icon & text
                             paddingBottom: 2,
@@ -64,7 +64,7 @@ export default function Search() {
                         backgroundColor: "#082567",
                         borderRadius: "20px",
                         padding: "10px 20px",
-                        height: "60px",
+                        height: "50px",
                     }}
                 >
                     Search
@@ -76,11 +76,11 @@ export default function Search() {
                     startIcon={<FilterListIcon />}
                     sx={{
                         borderColor: "#082567",
-                        backgroundColor: "#f0f0f0",
+                        backgroundColor: "#d0d0d0",
                         color: "#082567",
                         borderRadius: "20px",
                         padding: "10px 20px",
-                        height: "60px",
+                        height: "50px",
                     }}
                 >
                     Filters

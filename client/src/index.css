@@ -38,6 +38,16 @@ h1 {
     line-height: 1.1;
 }
 
+h2 {
+    font-size: 2.6em;
+    line-height: 1.1;
+}
+
+h3 {
+    font-size: 2rem;
+    line-height: 1.1;
+}
+
 
 /* button {
     border-radius: 8px;
