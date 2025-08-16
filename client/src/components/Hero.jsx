@@ -1,5 +1,5 @@
 import Search from "./Search";
-import bgVideo from "../assets/bg.mp4"; // adjust path if different
+import bgVideo from "../assets/bg.mp4";
 
 export default function Hero() {
     return (
@@ -17,7 +17,6 @@ export default function Hero() {
 
             <div className="absolute top-0 left-0 w-full h-[auto] object-cover z-0"></div>
 
-            {/* Overlay to make text readable */}
             <div className="absolute top-0 left-0 w-full h-full bg-black/40 z-10"></div>
 
             {/* Content */}

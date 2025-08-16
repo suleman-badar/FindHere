@@ -10,7 +10,7 @@ export default function FilterCard({ name, icon }) {
                 borderRadius: 3,
                 boxShadow: 2,
                 textAlign: "center",
-                backgroundColor: "red",
+                backgroundColor: "#d0d0d0",
                 margin: "10px",
             }}
         >

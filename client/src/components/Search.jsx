@@ -37,7 +37,7 @@ export default function Search() {
                             backgroundColor: "#d0d0d0",
                             height: "50px",
                             display: "flex",
-                            alignItems: "center", // ✅ centers icon & text
+                            alignItems: "center",
                             paddingBottom: 2,
                         },
                         "& .MuiFilledInput-underline:before, & .MuiFilledInput-underline:after": {
