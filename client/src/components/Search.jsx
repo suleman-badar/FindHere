@@ -81,6 +81,7 @@ export default function Search() {
                         borderRadius: "20px",
                         padding: "10px 20px",
                         height: "50px",
+                        display: { xs: "none", sm: "flex" },
                     }}
                 >
                     Filters
