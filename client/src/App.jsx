@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import Navbar from './components/Navbar.jsx'
 import Categories from './pages/Categories.jsx'
@@ -10,24 +10,25 @@ import Profile from './pages/Profile.jsx'
 import './App.css'
 
 function App() {
+  const location = useLocation();
+  const hideNavbarRoutes = ["/signin", "/signup"];
+  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
   return (
-    <BrowserRouter>
-      <div className="flex flex-col min-h-screen w-full  ">
-        <Navbar />
-        <main className="flex-grow w-full">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/categories" element={<Categories />} />
+    <div className="flex flex-col min-h-screen w-full  ">
+      {!shouldHideNavbar && <Navbar />}
+      <main className="flex-grow w-full">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/categories" element={<Categories />} />
 
-            <Route path="/signIn" element={<SignIn />} />
-            <Route path="/signUp" element={<SignUp />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </main>
+    </div>
   )
 }
 
