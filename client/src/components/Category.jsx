@@ -1,0 +1,58 @@
+import FilterCard from "./FilterCard";
+import { Box, Typography } from "@mui/material";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import HotelIcon from "@mui/icons-material/Hotel";
+import LocalCafeIcon from "@mui/icons-material/LocalCafe";
+import ParkIcon from "@mui/icons-material/Park";
+
+export default function Category() {
+    const categories = [
+        { name: "Restaurants", icon: <RestaurantIcon fontSize="small" /> },
+        { name: "Hotels", icon: <HotelIcon fontSize="small" /> },
+        { name: "Cafes", icon: <LocalCafeIcon fontSize="small" /> },
+        { name: "Parks", icon: <ParkIcon fontSize="small" /> },
+        { name: "Shopping", icon: <ParkIcon fontSize="small" /> },
+        { name: "Parks", icon: <ParkIcon fontSize="small" /> },
+        { name: "Parks", icon: <ParkIcon fontSize="small" /> },
+
+        // Add more if needed...
+    ];
+    return (
+        <Box sx={{
+            p: 4, px: 10,
+            backgroundColor: "#F8F9FA",
+            textAlign: "center",
+            position: "relative", // so we can overlay gradients
+            overflow: "hidden", // hide overflow for smooth fade
+        }}>
+            <Typography variant="h5" fontWeight="bold" gutterBottom>
+                Explore By Category
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+                Browse locations by type and discover new places that match your interests.
+            </Typography>
+
+            {/* Horizontal scroll container */}
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    overflowX: "auto",
+                    gap: 2,
+                    py: 2,
+                    px: 4,
+                    scrollbarWidth: "none",
+                    "&::-webkit-scrollbar": { display: "none" },
+                }}
+            >
+                {categories.map((cat, index) => (
+                    <FilterCard
+                        key={index}
+                        name={cat.name}
+                        icon={cat.icon}
+                    />
+                ))}
+            </Box>
+        </Box>
+    );
+}
