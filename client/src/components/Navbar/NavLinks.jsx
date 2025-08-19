@@ -29,7 +29,7 @@ export default function NavLinks({ links, isDrawer }) {
         );
     }
 
-    // Desktop version without icons
+    // Desktop version
     return (
         <Box sx={{
             display: { xs: "none", sm: "flex" },

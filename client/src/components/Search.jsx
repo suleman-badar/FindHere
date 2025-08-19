@@ -1,6 +1,5 @@
 import { Button, TextField, InputAdornment } from "@mui/material";
 import NearMeIcon from "@mui/icons-material/NearMe";
-import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useState } from "react";
 import Btn from "./Btn"
@@ -56,10 +55,8 @@ export default function Search() {
                     }}
                 />
 
-                {/* Search Button */}
                 <Btn text="Search" IconStart="p" IconEnd="p" w="20%"></Btn>
 
-                {/* Filters Button */}
                 <Button
                     variant="outlined"
                     startIcon={<FilterListIcon />}

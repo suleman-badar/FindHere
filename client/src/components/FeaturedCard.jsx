@@ -1,6 +1,5 @@
 import React from "react";
-import { Card, CardMedia, Box, Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Card, CardMedia, Box, Typography } from "@mui/material";
 import Btn from "./Btn"
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -42,15 +41,13 @@ const HoverCard = ({ name, image, rating, description }) => {
                     alignItems: "center",
                     textAlign: "center",
                     p: 2,
-                    transform: "translateY(82%)", // initially mostly hidden at bottom
+                    transform: "translateY(82%)",
                     transition: "transform 0.4s ease, opacity 0.4s ease",
                     opacity: 1,
                 }}
             >
-                {/* Bottom name initially visible and slides up */}
                 <Typography variant="h6" sx={{ mb: 2 }}>name</Typography>
 
-                {/* Description and rating */}
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1 }}>
                     <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
                     <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />

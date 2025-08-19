@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Card, CardActionArea, CardContent, Typography, Stack } from "@mui/material";
-import FilterListIcon from "@mui/icons-material/FilterList";
 
 export default function FilterCard({ name, icon }) {
     return (

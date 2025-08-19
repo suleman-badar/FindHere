@@ -6,7 +6,6 @@ import HamburgerMenu from "./Navbar/Sidebar";
 import LogoImg from "../assets/logoImg.png"
 import ExploreIcon from "@mui/icons-material/Explore";
 import CategoryIcon from "@mui/icons-material/Category";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import InfoIcon from "@mui/icons-material/Info";
 
 export default function Navbar() {

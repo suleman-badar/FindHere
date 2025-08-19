@@ -8,19 +8,6 @@ import AppleIcon from '@mui/icons-material/Apple';
 
 
 export default function SignIn() {
-    let styles = {
-        backgroundColor: "#082567",
-        width: "80%",
-        margin: "0.5rem",
-        color: "white",
-        borderRadius: "8px",
-        padding: "8px 16px",
-        textTransform: "none",
-        boxShadow: 3,
-        "&:hover": {
-            backgroundColor: "#000d1a",
-        },
-    };
     return (
         <Box className="flex justify-center items-center bg-blue-100 w-full min-h-screen p-5">
             <Box className="flex bg-white w-[65%] h-[550px] rounded-lg shadow-lg overflow-hidden">

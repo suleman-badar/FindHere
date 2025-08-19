@@ -62,7 +62,6 @@ export default function Category() {
                     }}
                 />
 
-                {/* Right fade */}
                 <Box
                     sx={{
                         position: "absolute",
