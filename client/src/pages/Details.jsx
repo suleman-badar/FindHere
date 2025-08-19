@@ -41,7 +41,7 @@ export default function Details() {
                 <Box className="flex justify-between w-full mb-4 ">
                     <Box
                         component={Link}
-                        to="/home"
+                        to="/"
                         sx={{
                             display: "flex",
                             alignItems: "center",
@@ -52,7 +52,7 @@ export default function Details() {
                         }}
                     >
                         <ArrowBackIcon fontSize="small" />
-                        Back To Search
+                        Back To Home
                     </Box>
 
                     <Box className="flex gap-2">
