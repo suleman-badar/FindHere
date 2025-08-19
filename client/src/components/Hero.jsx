@@ -1,24 +1,23 @@
 import Search from "./Search";
-import bgVideo from "../assets/bg.mp4"; // adjust path if different
+import bgVideo from "../assets/bg.mp4";
 
 export default function Hero() {
     return (
         <div className="relative w-full h-screen flex flex-col justify-center items-center text-center overflow-hidden">
             {/* Video background */}
-            {/* <video
+            <video
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="absolute top-0 left-0 w-full h-[auto] object-cover z-0"
+                className="absolute top-0 left-0 w-full h-full object-cover z-0"
                 src={bgVideo} type="video/mp4"
             >
-            </video> */}
+            </video>
 
-            <div className="absolute top-0 left-0 w-full h-[auto] object-cover z-0"></div>
+            {/* <div className="absolute top-0 left-0 w-full h-[auto] object-cover z-0"></div> */}
 
-            {/* Overlay to make text readable */}
-            <div className="absolute top-0 left-0 w-full h-full bg-black/40 z-10"></div>
+            {/* <div className="absolute top-0 left-0 w-full h-full bg-black/40 z-10"></div> */}
 
             {/* Content */}
             <div className="relative z-20 text-white p-8">

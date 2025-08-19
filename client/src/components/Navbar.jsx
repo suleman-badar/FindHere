@@ -27,8 +27,8 @@ export default function Navbar() {
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
                     <img src={LogoImg} alt="Logo"
                         style={{
-                            height: 70,   // height in px
-                            width: "auto" // keep aspect ratio
+                            height: 70,
+                            width: "auto"
                         }}></img>
                     <UserSection />
                     <HamburgerMenu links={links} />
