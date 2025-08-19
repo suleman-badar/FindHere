@@ -1,5 +1,7 @@
 import React from "react";
 import { Card, CardMedia, Box, Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import Btn from "./Btn"
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
@@ -50,38 +52,18 @@ const HoverCard = ({ name, image, rating, description }) => {
 
                 {/* Description and rating */}
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1 }}>
-                    <StarIcon sx={{ color: "#082567", mr: 0.5 }} />
-                    <StarIcon sx={{ color: "#082567", mr: 0.5 }} />
-                    <StarIcon sx={{ color: "#082567", mr: 0.5 }} />
-                    <StarIcon sx={{ color: "#082567", mr: 0.5 }} />
-                    <StarIcon sx={{ color: "#082567", mr: 0.5 }} />
+                    <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
+                    <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
+                    <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
+                    <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
+                    <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
                 </Box>
                 <Typography sx={{ fontSize: "0.6rem", mb: 2 }} >4.7(19,987)</Typography>
                 <Box sx={{ display: "flex" }}>
                     <LocationOnIcon sx={{ color: "#082567" }}></LocationOnIcon>
                     <Typography variant="body2" sx={{ fontSize: "1rem" }} gutterBottom>Pak, Lhr</Typography>
                 </Box>
-
-                <Button
-                    variant="contained"
-                    sx={{
-                        backgroundColor: "#082567",
-                        width: "60%",
-                        color: "white",
-                        borderRadius: "8px",
-                        padding: "8px 16px",
-                        textTransform: "none",
-                        boxShadow: 3,
-                        mt: 1,
-                        "&:hover": {
-                            backgroundColor: "#056acfff",
-                        },
-                    }}
-                    to="/signin"
-                >
-                    View more
-                </Button>
-
+                <Btn text="View More" to="/details" w="100%"></Btn>
             </Box>
 
         </Card>

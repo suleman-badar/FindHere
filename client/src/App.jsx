@@ -1,12 +1,14 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
-import Home from './pages/Home.jsx'
 import Navbar from './components/Navbar.jsx'
+import Home from './pages/Home.jsx'
+import Details from './pages/Details.jsx'
 import Categories from './pages/Categories.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import About from './pages/About.jsx'
 import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/SignUp.jsx'
-import Profile from './pages/Profile.jsx'
+import Footer from './components/Footer.jsx'
+
 import './App.css'
 
 function App() {
@@ -19,15 +21,16 @@ function App() {
       <main className="flex-grow w-full">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/details" element={<Details />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />
           <Route path="/categories" element={<Categories />} />
-
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/profile" element={<Profile />} />
         </Routes>
       </main>
+      {!shouldHideNavbar && <Footer />}
+
     </div>
   )
 }

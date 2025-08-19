@@ -1,5 +1,6 @@
 import { Box, Button, Divider } from "@mui/material";
 import LoginImg from "../assets/LoginImg.png";
+import Btn from "../components/Btn"
 import { Link } from "react-router-dom";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import GoogleIcon from '@mui/icons-material/Google';
@@ -63,13 +64,7 @@ export default function SignIn() {
 
 
 
-                    <Button
-                        variant="contained"
-                        sx={styles}
-                    >
-                        Join Us&nbsp;&nbsp;&nbsp;
-                        <ArrowForwardIcon />
-                    </Button>
+                    <Btn text="Join Us" IconEnd={ArrowForwardIcon}> </Btn>
                     <Box className="flex items-center w-full my-2">
                         <Divider sx={{ flexGrow: 1, borderColor: "gray" }} />
                         <span className="px-2 text-gray-500 text-sm">or</span>
@@ -77,7 +72,6 @@ export default function SignIn() {
                     </Box>
                     <Button
                         variant="outlined"
-
                         sx={{
                             backgroundColor: "white",
                             width: "80%",
@@ -98,14 +92,8 @@ export default function SignIn() {
                         <GoogleIcon />
                         &nbsp;&nbsp;&nbsp;Sign Up With Google
                     </Button>
-                    <Button
-                        variant="contained"
-                        sx={styles}
-                    >
-                        <AppleIcon />
-                        &nbsp;&nbsp;&nbsp;Sign Up With Apple
 
-                    </Button>
+                    <Btn text="Sign in with Apple" IconStart={AppleIcon}> </Btn>
 
                     <Box className="flex g-2 text-xs">
 
