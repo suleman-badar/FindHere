@@ -3,6 +3,7 @@ import NearMeIcon from "@mui/icons-material/NearMe";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useState } from "react";
+import Btn from "./Btn"
 
 export default function Search() {
     const [value, setValue] = useState("");
@@ -37,7 +38,7 @@ export default function Search() {
                             backgroundColor: "#d0d0d0",
                             height: "50px",
                             display: "flex",
-                            alignItems: "center", // ✅ centers icon & text
+                            alignItems: "center",
                             paddingBottom: 2,
                         },
                         "& .MuiFilledInput-underline:before, & .MuiFilledInput-underline:after": {
@@ -56,19 +57,7 @@ export default function Search() {
                 />
 
                 {/* Search Button */}
-                <Button
-                    type="submit"
-                    variant="contained"
-                    startIcon={<SearchIcon />}
-                    sx={{
-                        backgroundColor: "#082567",
-                        borderRadius: "20px",
-                        padding: "10px 20px",
-                        height: "50px",
-                    }}
-                >
-                    Search
-                </Button>
+                <Btn text="Search" IconStart="p" IconEnd="p" w="20%"></Btn>
 
                 {/* Filters Button */}
                 <Button
@@ -78,9 +67,10 @@ export default function Search() {
                         borderColor: "#082567",
                         backgroundColor: "#d0d0d0",
                         color: "#082567",
-                        borderRadius: "20px",
+                        borderRadius: "10px",
                         padding: "10px 20px",
-                        height: "50px",
+                        height: "40px",
+                        display: { xs: "none", sm: "flex" },
                     }}
                 >
                     Filters
