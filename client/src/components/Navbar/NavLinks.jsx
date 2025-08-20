@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 
 export default function NavLinks({ links, isDrawer }) {
     if (isDrawer) {
-        // Drawer version with icons
         return (
             <List>
                 {links.map((link) => (
@@ -30,7 +29,7 @@ export default function NavLinks({ links, isDrawer }) {
         );
     }
 
-    // Desktop version without icons
+    // Desktop version
     return (
         <Box sx={{
             display: { xs: "none", sm: "flex" },
@@ -41,7 +40,6 @@ export default function NavLinks({ links, isDrawer }) {
             top: "10px",
             zIndex: 1100,
 
-            /* 🔹 Frosted glass effect */
             backgroundColor: "rgba(255, 255, 255, 0.2)",
             backdropFilter: "blur(10px) saturate(100%)",
             WebkitBackdropFilter: "blur(12px) saturate(180%)",
@@ -50,7 +48,6 @@ export default function NavLinks({ links, isDrawer }) {
             padding: "6px 14px",
 
             border: "1px solid rgba(255, 255, 255, 0.3)",
-            // boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
         }}
         >
             {links.map((link, index) => (
@@ -69,7 +66,7 @@ export default function NavLinks({ links, isDrawer }) {
                             flexItem
                             sx={{
                                 mx: 0.5,
-                                height: "20px", // adjust height
+                                height: "20px",
                                 alignSelf: "center",
                                 borderColor: "rgba(200, 200, 200, 0.7)",
                             }}
