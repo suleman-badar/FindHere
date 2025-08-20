@@ -2,29 +2,27 @@ import jwt from "jsonwebtoken";
 
 export const identifier = (req, res, next) => {
     let token;
-    if(req.headers.client === 'not-browser'){
-        token=req.headers.authorization
-    }
-    else{
-        token = req.cookies['Authorization']
+
+    if (req.headers.authorization) {
+        token = req.headers.authorization;
+    } else if (req.cookies && req.cookies['Authorization']) {
+        token = req.cookies['Authorization'];
     }
 
-    if(!token){
-        return res.status(403).json({success: false, message: 'Unauthorized!'});
+    if (!token) {
+        return res.status(403).json({ success: false, message: 'No token provided. Unauthorized!' });
+    }
+
+    if (token.startsWith('Bearer ')) {
+        token = token.slice(7, token.length).trim();
     }
 
     try {
-        const userToken = token.split(' ')[1]
-        const jwtVerified = jwt.verify(userToken, process.env.TOKEN_SECRET);
-
-        if(jwtVerified){
-            req.user = jwtVerified;
-            next();
-        }
-        else{
-            throw new Error('error in token');
-        }
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+        req.user = decoded;
+        return next();
     } catch (error) {
         console.error(error);
+        return res.status(401).json({ success: false, message: 'Invalid or expired token' });
     }
-}
+};
