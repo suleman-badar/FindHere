@@ -29,12 +29,16 @@ const dashBoardSchema = new Schema(
       trim: true,
     },
     openingHours: {
-      open: { type: String, required: true },  // e.g. "09:00"
-      close: { type: String, required: true }, // e.g. "22:00"
+        open: { 
+            type: String, required: true 
+        },  
+        close: { 
+            type: String, required: true 
+        }, 
     },
     images: {
-      type: [String], // will store URLs or file paths
-      default: [],
+      type: [String], 
+      required: false
     },
   },
   { timestamps: true }
