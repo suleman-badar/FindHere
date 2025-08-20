@@ -15,10 +15,6 @@ export default function Hero() {
             >
             </video>
 
-            {/* <div className="absolute top-0 left-0 w-full h-[auto] object-cover z-0"></div> */}
-
-            {/* <div className="absolute top-0 left-0 w-full h-full bg-black/40 z-10"></div> */}
-
             {/* Content */}
             <div className="relative z-20 text-white p-8">
                 <h1 className="my-4">Discover Amazing Places</h1>

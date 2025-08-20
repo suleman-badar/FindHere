@@ -1,7 +1,6 @@
 import { Box, Typography, Divider, Button } from "@mui/material";
-import { Link } from "react-router-dom";
 import Btn from "../components/Btn";
-import ArrowBackIcon from "@mui/icons-material/ArrowBackIosNew";
+import GoBack from "../components/GoBack"
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import StarIcon from "@mui/icons-material/Star";
@@ -10,11 +9,10 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CallIcon from "@mui/icons-material/Call";
 import LanguageIcon from "@mui/icons-material/Language";
 import EventIcon from "@mui/icons-material/Event";
-
+import InfoCard from "../components/InfoCard";
 
 
 import Img from "../assets/s3.jpg";
-import InfoCard from "../components/InfoCard";
 
 let buttonStyles = {
     backgroundColor: "white",
@@ -39,31 +37,17 @@ export default function Details() {
         <Box className="px-5">
             <Box className="flex flex-col items-center mt-4 w-full ">
                 <Box className="flex justify-between w-full mb-4 ">
-                    <Box
-                        component={Link}
-                        to="/home"
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            textDecoration: "none",
-                            color: "black",
-                            fontSize: "1rem",
-                            gap: 0.5,
-                        }}
-                    >
-                        <ArrowBackIcon fontSize="small" />
-                        Back To Search
-                    </Box>
+                    <GoBack></GoBack>
 
                     <Box className="flex gap-2">
                         <Btn
                             text={<span className="hidden sm:inline">Like</span>}
-                            w="120px"
+                            w="80px sm:w-[120px]"
                             IconStart={FavoriteIcon}
                         />
                         <Btn
                             text={<span className="hidden sm:inline">Share</span>}
-                            w="120px"
+                            w="80px sm:w-[120px]"
                             IconStart={ShareIcon}
                         />
                     </Box>
@@ -110,12 +94,12 @@ export default function Details() {
                 </Box>
                 <Box className="flex flex-col justify-center items-center">
                     <Box className="flex">
-                        <img src={Img} className="w-[200px] m-4"></img>
-                        <img src={Img} className="w-[200px] m-4"></img>
+                        <img src={Img} className="w-[100px] m-4 rounded-md"></img>
+                        <img src={Img} className="w-[100px] m-4 rounded-md"></img>
                     </Box>
                     <Box className="flex">
-                        <img src={Img} className="w-[200px] m-4"></img>
-                        <img src={Img} className="w-[200px] m-4"></img>
+                        <img src={Img} className="w-[100px] m-4 rounded-md"></img>
+                        <img src={Img} className="w-[100px] m-4 rounded-md"></img>
                     </Box>
                     <Btn text="View All Photos"></Btn>
                 </Box>

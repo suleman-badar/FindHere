@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="w-full bg-indigo-950 text-white">
-      {/* Stats Section */}
       <div className="container mx-auto py-16 px-4">
         <h2 className="text-4xl font-bold text-center mb-4">
           Join Communities You Love
