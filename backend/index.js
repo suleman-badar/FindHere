@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoute.js";
+import listingRoutes from "./routes/listingRoute.js";
 
 dotenv.config();
 
@@ -26,7 +27,10 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (_req, res) => res.send("API is running"));
 
 
+// Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/listing", listingRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);

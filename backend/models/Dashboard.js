@@ -20,19 +20,19 @@ const dashBoardSchema = new Schema(
       trim: true,
       maxlength: 1000,
     },
-    phone: {
+    number: {
       type: String,
       trim: true,
     },
-    website: {
+    weblink: {
       type: String,
       trim: true,
     },
     openingHours: {
-        open: { 
+        opentime: { 
             type: String, required: true 
         },  
-        close: { 
+        closingtime: { 
             type: String, required: true 
         }, 
     },
