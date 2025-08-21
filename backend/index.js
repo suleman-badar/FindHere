@@ -3,11 +3,14 @@ import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import path from "path";
+import axios from "axios";
 import { fileURLToPath } from "url";
 
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoute.js";
 import listingRoutes from "./routes/listingRoute.js";
+import mapRoute from "./routes/mapRoute.js";
+
 
 dotenv.config();
 
@@ -30,8 +33,10 @@ app.get("/", (_req, res) => res.send("API is running"));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/listing", listingRoutes);
+app.use("/api/map", mapRoute);
+
 
 
 app.listen(PORT, () => {
-  console.log(`Server started on http://localhost:${PORT}`);
+    console.log(`Server started on http://localhost:${PORT}`);
 });
