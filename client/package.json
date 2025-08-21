@@ -19,6 +19,7 @@
     "@mui/material": "^7.3.1",
     "@react-google-maps/api": "^2.20.7",
     "axios": "^1.11.0",
+    "cors": "^2.8.5",
     "leaflet": "^1.9.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

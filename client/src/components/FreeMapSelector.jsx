@@ -28,33 +28,19 @@ export default function FreeMapSelector({ location, setLocation }) {
     const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleSearch = async () => {
-        if (!search) return;
-
+    const handleSearch = async (query) => {
         try {
             setLoading(true);
-
-            const res = await axios.get("https://nominatim.openstreetmap.org/search", {
-                params: {
-                    q: search,
-                    format: "json",
-                },
+            const res = await axios.get("http://localhost:8000/api/search", {
+                params: { q: query },
             });
-
-            if (res.data && res.data.length > 0) {
-                const place = res.data[0];
-                setLocation([parseFloat(place.lat), parseFloat(place.lon)]);
-            } else {
-                alert("Place not found!");
-            }
+            console.log(res.data);
+            setSearch(res.data);
         } catch (err) {
-            console.error(err);
-            alert("Error fetching location!");
-        } finally {
-            setLoading(false);
+            console.error("Search error:", err);
+            alert("Failed to fetch search results");
         }
     };
-
 
     return (
         <div>
