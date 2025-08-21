@@ -34,11 +34,6 @@ export default function SignIn() {
                         className="rounded-sm h-10 w-[280px] m-2 border px-4"
                     />
                     <input
-                        type="text"
-                        placeholder="Username"
-                        className="rounded-sm h-10 w-[280px] m-2 border px-4"
-                    />
-                    <input
                         type="email"
                         placeholder="Email Address"
                         className="rounded-sm h-10 w-[280px] m-2 border px-4"
