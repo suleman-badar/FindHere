@@ -1,42 +1,94 @@
-import { Box, TextField, Button } from "@mui/material";
-import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+  TextField,
+  Button,
+  Divider,
+  Stack,
+} from "@mui/material";
 
 export default function GeneralInfoForm() {
-  const [name, setName] = useState("Restaurant Name");
-  const [description, setDescription] = useState("Short description here...");
-  const [about, setAbout] = useState("Detailed about text...");
-
-  const handleSave = () => {
-    // later: call API to save changes
-    console.log({ name, description, about });
-  };
-
   return (
-    <Box display="flex" flexDirection="column" gap={3} maxWidth="600px">
-      <TextField
-        label="Restaurant Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        fullWidth
+    <Card
+      className="rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300"
+      sx={{ overflow: "hidden" }}
+    >
+      {/* Header */}
+      <CardHeader
+        title={
+          <Typography
+            variant="h6"
+            className="font-semibold text-gray-800"
+            sx={{ letterSpacing: 0.3 }}
+          >
+            General Information
+          </Typography>
+        }
+        sx={{
+          background:
+            "linear-gradient(135deg, rgba(59,130,246,0.15), rgba(99,102,241,0.15))",
+          py: 2,
+          px: 3,
+        }}
       />
-      <TextField
-        label="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        fullWidth
-        multiline
-      />
-      <TextField
-        label="About"
-        value={about}
-        onChange={(e) => setAbout(e.target.value)}
-        fullWidth
-        multiline
-        rows={4}
-      />
-      <Button variant="contained" onClick={handleSave}>
-        Save
-      </Button>
-    </Box>
+
+      <Divider />
+
+      {/* Content */}
+      <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+        <Stack spacing={3}>
+          <TextField
+            label="Business Name"
+            fullWidth
+            variant="outlined"
+            sx={{ "& .MuiOutlinedInput-root": { borderRadius: "12px" } }}
+          />
+
+          <TextField
+            label="Tagline"
+            fullWidth
+            variant="outlined"
+            sx={{ "& .MuiOutlinedInput-root": { borderRadius: "12px" } }}
+          />
+
+          <TextField
+            label="Description"
+            fullWidth
+            multiline
+            rows={5}
+            variant="outlined"
+            sx={{
+              "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+            }}
+          />
+        </Stack>
+
+        {/* Actions */}
+        <div className="flex justify-end gap-3 mt-8">
+          <Button
+            variant="outlined"
+            color="secondary"
+            sx={{ borderRadius: "10px", textTransform: "none", px: 3 }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              borderRadius: "10px",
+              textTransform: "none",
+              px: 3,
+              boxShadow: "0 4px 14px rgba(59,130,246,0.3)",
+              "&:hover": { boxShadow: "0 6px 20px rgba(59,130,246,0.4)" },
+            }}
+          >
+            Save Changes
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

@@ -9,7 +9,7 @@ export default function SidebarAdmin({ onSelect }) {
     const [collapsed, setCollapsed] = useState(true);
 
     const items = [
-        { key: "dashboard", label: "Dashboard", icon: Bookmark },
+        { key: "dashboard", label: "Dashboard", icon: Compass },
 
         { key: "saved", label: "Saved Places", icon: Bookmark },
         // { key: "reviews", label: "My Reviews", icon: Star },
@@ -22,7 +22,6 @@ export default function SidebarAdmin({ onSelect }) {
         { key: "contact", label: "Contact", icon: Phone },
         { key: "location", label: "Location", icon: Map },
         { key: "hours", label: "Hours", icon: Clock },
-        { key: "manage-reviews", label: "Manage Reviews", icon: MessageSquare },
     ];
 
     return (

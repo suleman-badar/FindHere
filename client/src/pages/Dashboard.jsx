@@ -1,6 +1,6 @@
 import { useState } from "react";
+import Btn from "../components/Btn";
 import SidebarAdmin from "../components/Dashboard/SidebarAdmin";
-// import Topbar from "../components/Topbar";
 import SectionHeader from "../components/Dashboard/SectionHeader";
 import StatCard from "../components/Dashboard/StatCard";
 import SavedPlaceCard from "../components/Dashboard/SavedPlaceCard";
@@ -13,7 +13,6 @@ import MediaForm from "../components/adminForms/MediaForm";
 import ContactForm from "../components/adminForms/ContactForm";
 import LocationForm from "../components/adminForms/LocationForm";
 import HoursForm from "../components/adminForms/HoursForm";
-import ManageReviewsForm from "../components/adminForms/ManageReviewsForm";
 
 export default function Dashboard() {
     const [activePage, setActivePage] = useState("dashboard");
@@ -30,37 +29,58 @@ export default function Dashboard() {
                 return <LocationForm />;
             case "hours":
                 return <HoursForm />;
-            case "manage-reviews":
-                return <ManageReviewsForm />;
-            case "dashboard":   // 👈 show widgets here
+            case "dashboard":
             default:
                 return (
                     <>
                         <SectionHeader title="Engagement Stats" />
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                             {stats.map((s) => (
-                                <StatCard key={s.id} {...s} />
+                                <div
+                                    key={s.id}
+                                    className="bg-gray-50 rounded-2xl shadow-md hover:shadow-lg transition-all p-6"
+                                >
+                                    <StatCard {...s} />
+                                </div>
                             ))}
                         </div>
 
                         <SectionHeader title="Saved Places" />
-                        <div className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {savedPlaces.map((p) => (
-                                <SavedPlaceCard key={p.id} place={p} />
+                                <div
+                                    key={p.id}
+                                    className="bg-gray-50 rounded-2xl shadow-md hover:shadow-lg transition-all p-6"
+                                >
+                                    <SavedPlaceCard place={p} />
+                                </div>
                             ))}
+                        </div>
+                        <div className="flex justify-center mt-4">
+                            <Btn text="Add New Place" />
                         </div>
 
                         <SectionHeader title="Recent Reviews" />
-                        <div className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             {reviews.map((r) => (
-                                <ReviewCard key={r.id} review={r} />
+                                <div
+                                    key={r.id}
+                                    className="bg-gray-50 rounded-2xl shadow-md hover:shadow-lg transition-all p-6"
+                                >
+                                    <ReviewCard review={r} />
+                                </div>
                             ))}
                         </div>
 
                         <SectionHeader title="Recent Activity" />
-                        <div className="space-y-3">
+                        <div className="grid grid-cols-1 gap-4">
                             {activities.map((a) => (
-                                <ActivityItem key={a.id} activity={a} />
+                                <div
+                                    key={a.id}
+                                    className="bg-gray-50 rounded-2xl shadow-md hover:shadow-lg transition-all p-4"
+                                >
+                                    <ActivityItem activity={a} />
+                                </div>
                             ))}
                         </div>
                     </>
@@ -69,11 +89,12 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="flex">
-            {/* Sidebar handles navigation */}
+        <div className="flex bg-gray-100 min-h-screen">
+            {/* Sidebar */}
             <SidebarAdmin onSelect={setActivePage} />
 
-            <main className="flex-1 p-6 space-y-8">
+            {/* Main Content */}
+            <main className="flex-1 p-8 space-y-10">
                 {renderContent()}
             </main>
         </div>
