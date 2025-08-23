@@ -14,7 +14,7 @@ export default function AddListingForm() {
 
     const [formData, setFormData] = useState({
         name: "",
-        location: ["", ""],
+        location: null,
         description: "",
         number: "",
         openingHours: { open: "", close: "" },
@@ -232,7 +232,14 @@ export default function AddListingForm() {
                         {formData.images.length > 0 && (
                             <div className="mt-4 flex flex-wrap gap-3">
                                 {formData.images.map((file, idx) => {
-                                    const url = URL.createObjectURL(file);
+                                    let url;
+                                    if (file instanceof File) {
+                                        url = URL.createObjectURL(file);
+                                    } else if (typeof file === "string") {
+                                        url = file;
+                                    } else {
+                                        return null;
+                                    }
                                     return (
                                         <img
                                             key={idx}

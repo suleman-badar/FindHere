@@ -1,10 +1,10 @@
 import { Box, Typography, Divider, Button } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/Loader.jsx";
 import Btn from "../components/Btn";
-
+import MapPreview from "../components/MapPreview.jsx";
 import GoBack from "../components/GoBack"
 import Footer from "../components/Footer.jsx"
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -16,9 +16,9 @@ import CallIcon from "@mui/icons-material/Call";
 import LanguageIcon from "@mui/icons-material/Language";
 import EventIcon from "@mui/icons-material/Event";
 import InfoCard from "../components/InfoCard";
+import ImageGallery from "../components/ImageGallery.jsx";
 
 
-import Img from "../assets/s3.jpg";
 
 let buttonStyles = {
     backgroundColor: "white",
@@ -38,12 +38,51 @@ let buttonStyles = {
     },
 };
 
+function openDirections(lat, lon) {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            const { latitude, longitude } = pos.coords;
+            window.open(
+                `https://www.google.com/maps/dir/${latitude},${longitude}/${lat},${lon}`,
+                "_blank"
+            );
+        });
+    }
+}
+
+
+
 export default function Details() {
     const { id } = useParams();
+    const galleryRef = useRef();
 
     const [details, setDetails] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [place, setPlace] = useState({ city: "", province: "" });
 
+    async function getCityAndProvince(lat, lon) {
+        try {
+            const res = await axios.get(
+                `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+            );
+
+            const address = res.data.address;
+
+            const city =
+                address.city ||
+                address.town ||
+                address.village ||
+                address.hamlet ||
+                address.county;
+
+            const province = address.state;
+
+            setPlace({ city, province });
+        } catch (err) {
+            console.error("Error fetching location:", err);
+            return null;
+        }
+    }
     useEffect(() => {
         setLoading(true);
         const fetchDetails = async () => {
@@ -59,10 +98,18 @@ export default function Details() {
         };
         fetchDetails();
     }, [id]);
+
+    useEffect(() => {
+        if (details?.location?.length === 2) {
+            getCityAndProvince(details.location[0], details.location[1]);
+        }
+    }, [details?.location]);
+
     if (loading || !details) return <Loader />;
 
 
     return (
+
 
         <Box className="px-5">
 
@@ -105,7 +152,7 @@ export default function Details() {
                 <Divider sx={{ backgroundColor: "black" }}></Divider>
 
                 <Box className="flex justify-around my-4 overflow-x-auto scrollbar-hide">
-                    <InfoCard text="Punjab, Pakistan" Icon={LocationOnIcon} des="Lahore"></InfoCard>
+                    <InfoCard text={`${place.city}, ${place.province}`} Icon={LocationOnIcon} des="Lahore"></InfoCard>
                     <InfoCard text={`${details?.openingHours?.open} - ${details?.openingHours?.close}`} Icon={AccessTimeIcon} des="Opens daily"></InfoCard>
                     <InfoCard text={`${details?.number}`} Icon={CallIcon} des="Visitor Service"></InfoCard>
                     <InfoCard text={`${details?.weblink}`} Icon={LanguageIcon} des="Official Website"></InfoCard>
@@ -120,21 +167,23 @@ export default function Details() {
                     </Box>
                 </Box>
                 <Box className="flex flex-col justify-center items-center">
-                    <Box className="flex">
-                        <img src={Img} className="w-[100px] m-4 rounded-md"></img>
-                        <img src={Img} className="w-[100px] m-4 rounded-md"></img>
+                    <Box sx={{ display: "flex", gap: 2, overflowX: "auto" }}>
+                        <ImageGallery ref={galleryRef} details={details} previewCount={5} />
                     </Box>
-                    <Box className="flex">
-                        <img src={Img} className="w-[100px] m-4 rounded-md"></img>
-                        <img src={Img} className="w-[100px] m-4 rounded-md"></img>
-                    </Box>
-                    <Btn text="View All Photos"></Btn>
+
+                    <Btn text="View All Photos" onClick={() => galleryRef.current.openGallery(0)}
+                    ></Btn>
+
                 </Box>
                 <Box className="my-8">
                     <h3 className="my-4" >Locations & Directions</h3>
-                    <Box className="h-[300px] bg-red-100 rounded-lg">Map Here</Box>
+                    <Box className="h-[300px] bg-red-100 rounded-lg"><MapPreview location={details?.location} /></Box>
+
                 </Box>
-                <Box className="my-8">
+                <Box className="flex justify-center">
+                    <Btn text="Directions" IconStart={LocationOnIcon} onClick={() => openDirections(details.location[0], details.location[1])}></Btn>
+                </Box>
+                <Box className="my-16">
                     <h3 className="my-4" >Reviews</h3>
                     <Box className="flex flex-col items-center justify-center">
                         <Box className="flex  bg-gray-100 w-[90%] h-[180px] rounded-lg p-4">
@@ -165,7 +214,7 @@ export default function Details() {
                 <Box>
                     <h3>Plan Your Visit</h3>
                     <Box className="flex flex-col items-center">
-                        <Btn text="Check Directions" IconStart={LocationOnIcon}></Btn>
+                        <Btn text="Check Directions" IconStart={LocationOnIcon} onClick={() => openDirections(details.location[0], details.location[1])}></Btn>
                         <Button
                             variant="outlined"
                             sx={buttonStyles}

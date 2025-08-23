@@ -40,14 +40,14 @@ export default function NavLinks({ links, isDrawer }) {
             top: "10px",
             zIndex: 1100,
 
-            backgroundColor: "rgba(255, 255, 255, 0.2)",
-            backdropFilter: "blur(10px) saturate(100%)",
-            WebkitBackdropFilter: "blur(12px) saturate(180%)",
+            backgroundColor: "rgba(255, 255, 255, 0.27)", // increase opacity
+            backdropFilter: "blur(6px) saturate(180%)",
+            WebkitBackdropFilter: "blur(10px) saturate(180%)",
 
             borderRadius: "50px",
             padding: "6px 14px",
 
-            border: "1px solid rgba(255, 255, 255, 0.3)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
         }}
         >
             {links.map((link, index) => (

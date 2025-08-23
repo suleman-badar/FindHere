@@ -4,9 +4,9 @@
     export const createListing = async(req, res) => {
         try {
             const { name, location, description, number, weblink, openingHours } = req.body;
-            const loc = (req.body.latitude && req.body.longitude) ?
-                [Number(req.body.latitude), Number(req.body.longitude)] :
-                location;
+            const loc = location && location.length === 2 ?
+                location :
+                null;
 
             const opening = {
                 open: req.body.open,
@@ -29,8 +29,9 @@
             res.status(201).json({ success: true, data: listing });
         } catch (error) {
             console.error("Error creating listing:", error);
-            res.status(500).json({ success: false, message: "Server error" });
+            res.status(500).json({ success: false, message: error.message, stack: error.stack });
         }
+
     };
 
     export const updateListing = async(req, res) => {

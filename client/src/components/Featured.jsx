@@ -39,7 +39,7 @@ export default function Featured() {
 
                     <Carousel>
                         {listings.map((listing) => (
-                            <FeaturedCard id={listing._id} name={listing.name} image={listing.images[0]} />
+                            <FeaturedCard key={listing._id} id={listing._id} name={listing.name} image={listing.images[0]} />
                         ))}
                     </Carousel>
                 </>
