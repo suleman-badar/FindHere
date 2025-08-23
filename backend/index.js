@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoute.js";
-import listingRoutes from "./routes/listingRoute.js";
+import listingRoutes from "./routes/listingRoutes.js";
 import mapRoute from "./routes/mapRoute.js";
 
 

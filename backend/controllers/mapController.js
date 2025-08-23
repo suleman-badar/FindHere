@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const searchOnMap = async(req, res) => {
     try {
         const { q } = req.query; // get ?q=islamabad from frontend
@@ -10,7 +12,7 @@ export const searchOnMap = async(req, res) => {
                 addressdetails: 1,
                 limit: 5,
             },
-            headers: { "User-Agent": "FindHere-App (your-email@example.com)" } // required by Nominatim!
+            headers: { "User-Agent": "FindHere-App (https://github.com/suleman-badar/FindHere)" } // required by Nominatim!
         });
 
         res.json(response.data); // send data back to frontend

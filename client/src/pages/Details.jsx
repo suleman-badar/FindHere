@@ -1,6 +1,12 @@
 import { Box, Typography, Divider, Button } from "@mui/material";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import Loader from "../components/Loader.jsx";
 import Btn from "../components/Btn";
+
 import GoBack from "../components/GoBack"
+import Footer from "../components/Footer.jsx"
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import StarIcon from "@mui/icons-material/Star";
@@ -33,8 +39,33 @@ let buttonStyles = {
 };
 
 export default function Details() {
+    const { id } = useParams();
+
+    const [details, setDetails] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setLoading(true);
+        const fetchDetails = async () => {
+            try {
+                const res = await axios.get(`http://localhost:8000/api/listing/details/${id}`);
+                setDetails(res.data);
+            }
+            catch (err) {
+                console.error("Error fetching details:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchDetails();
+    }, [id]);
+    if (loading || !details) return <Loader />;
+
+
     return (
+
         <Box className="px-5">
+
             <Box className="flex flex-col items-center mt-4 w-full ">
                 <Box className="flex justify-between w-full mb-4 ">
                     <GoBack></GoBack>
@@ -54,17 +85,13 @@ export default function Details() {
                 </Box>
 
                 <Box className="w-[90%] mx-2">
-                    <img
-                        src={Img}
-                        alt="img"
-                        className="w-full h-[500px] object-cover rounded-lg"
-                    />
+                    <img src={details?.images?.[0]} alt={details?.name} />
                 </Box>
 
             </Box>
             <Box className="mx-4 my-6">
-                <h1>name</h1>
-                <p>whatEver u want to werite here bro. I don't care what is this place and what food you have.</p>
+                <h1>{details?.name}</h1>
+                <p>{details?.description}</p>
                 <Box className="flex items-center gap-8 mb-8">
                     <Box >
                         <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
@@ -79,9 +106,9 @@ export default function Details() {
 
                 <Box className="flex justify-around my-4 overflow-x-auto scrollbar-hide">
                     <InfoCard text="Punjab, Pakistan" Icon={LocationOnIcon} des="Lahore"></InfoCard>
-                    <InfoCard text="6am-12pm" Icon={AccessTimeIcon} des="Opens daily"></InfoCard>
-                    <InfoCard text="042-6555" Icon={CallIcon} des="Visitor Service"></InfoCard>
-                    <InfoCard text="www.FindHere.com" Icon={LanguageIcon} des="Official Website"></InfoCard>
+                    <InfoCard text={`${details?.openingHours?.open} - ${details?.openingHours?.close}`} Icon={AccessTimeIcon} des="Opens daily"></InfoCard>
+                    <InfoCard text={`${details?.number}`} Icon={CallIcon} des="Visitor Service"></InfoCard>
+                    <InfoCard text={`${details?.weblink}`} Icon={LanguageIcon} des="Official Website"></InfoCard>
 
                 </Box>
 
@@ -155,6 +182,7 @@ export default function Details() {
                     </Box>
                 </Box>
             </Box>
+            <Footer />
         </Box>
     );
 }

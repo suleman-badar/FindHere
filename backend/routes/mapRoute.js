@@ -1,5 +1,5 @@
 import express from "express";
-import { searchOnMap } from "../controllers/searchOnMap.js";
+import { searchOnMap } from "../controllers/mapController.js";
 
 const router = express.Router();
 

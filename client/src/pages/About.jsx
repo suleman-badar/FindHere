@@ -2,7 +2,7 @@ import { Box } from "@mui/material"
 import GoBack from "../components/GoBack";
 import DoubleRead from "../components/DoubleRead";
 import AboutCard from "../components/AboutCard";
-import Btn from "../components/Btn";
+import Footer from "../components/Footer.jsx"
 import FlagIcon from "@mui/icons-material/Flag";
 import SearchIcon from "@mui/icons-material/Search";
 import ExploreIcon from "@mui/icons-material/Explore";
@@ -71,6 +71,7 @@ export default function About() {
                     </Box>
                 </Box>
             </Box>
+            <Footer />
         </Box>
     );
 }

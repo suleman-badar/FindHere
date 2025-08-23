@@ -7,7 +7,7 @@ const listingSchema = new Schema({
         trim: true,
     },
     location: {
-        type: [Number], // [latitude, longitude] (gpt ne btaya agar apnay map se configure karna toh esse best hei like you did in frontend)
+        type: [Number],
         required: true,
         validate: {
             validator: (arr) => arr.length === 2,
@@ -22,17 +22,19 @@ const listingSchema = new Schema({
     number: {
         type: String,
         trim: true,
+        maxlength: 11,
+
     },
-    weblink: {
+    website: {
         type: String,
         trim: true,
     },
     openingHours: {
-        opentime: {
+        open: {
             type: String,
             required: true
         },
-        closingtime: {
+        close: {
             type: String,
             required: true
         },

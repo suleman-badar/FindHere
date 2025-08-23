@@ -1,12 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Card, CardMedia, Box, Typography } from "@mui/material";
 import Btn from "./Btn"
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
-import img from "../assets/s2.jpg"
 
-const HoverCard = ({ name, image, rating, description }) => {
+const HoverCard = ({ id, name, image, rating }) => {
+    const navigate = useNavigate();
+    const handleViewMore = () => {
+        navigate(`details/${id}`);
+    }
     return (
         <Card
             sx={{
@@ -24,7 +29,16 @@ const HoverCard = ({ name, image, rating, description }) => {
                 },
             }}
         >
-            <CardMedia component="img" height="350" image={img} alt={name} />
+            <CardMedia
+                component="img"
+                image={image}
+                alt={name}
+                sx={{
+                    height: "100%",
+                    width: "100%",
+                    objectFit: "cover",
+                }}
+            />
 
             <Box
                 className="hoverContent"
@@ -46,7 +60,7 @@ const HoverCard = ({ name, image, rating, description }) => {
                     opacity: 1,
                 }}
             >
-                <Typography variant="h6" sx={{ mb: 2 }}>name</Typography>
+                <Typography variant="h6" sx={{ mb: 2 }}>{name}</Typography>
 
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1 }}>
                     <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
@@ -55,12 +69,12 @@ const HoverCard = ({ name, image, rating, description }) => {
                     <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
                     <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
                 </Box>
-                <Typography sx={{ fontSize: "0.6rem", mb: 2 }} >4.7(19,987)</Typography>
+                <Typography sx={{ fontSize: "0.6rem", mb: 2 }} >{rating}(19,987)</Typography>
                 <Box sx={{ display: "flex" }}>
                     <LocationOnIcon sx={{ color: "#082567" }}></LocationOnIcon>
                     <Typography variant="body2" sx={{ fontSize: "1rem" }} gutterBottom>Pak, Lhr</Typography>
                 </Box>
-                <Btn text="View More" to="/details" w="100%"></Btn>
+                <Btn text="View More" onClick={handleViewMore} w="100%"></Btn>
             </Box>
 
         </Card>

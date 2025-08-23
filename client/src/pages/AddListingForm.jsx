@@ -1,183 +1,279 @@
-import { useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
-import axios from "axios";
+import { use, useState } from "react";
+import Stepper from "../components/AddListingForm/Stepper";
+import StepCard from "../components/AddListingForm/StepCard";
+import Preview from "../components/AddListingForm/Preview";
 import FreeMapSelector from "../components/FreeMapSelector";
-import HourDropdown from "../components/HourDropdown";
-
-const steps = [
-    { key: "name", label: "Restaurant Name" },
-    { key: "location", label: "Select Location on Map" },
-    { key: "description", label: "Description" },
-    { key: "phone", label: "Phone Number" },
-    { key: "website", label: "Website URL" },
-    { key: "openingHours", label: "Opening Hours" },
-    { key: "images", label: "Upload Images" },
-];
+import Loader from "../components/Loader";
+import ListingValidation from "../validations/listingValidations";
+import axios from "axios";
 
 export default function AddListingForm() {
-    const [currentStep, setCurrentStep] = useState(0);
+    const [step, setStep] = useState(1);
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+
     const [formData, setFormData] = useState({
         name: "",
-        location: [31.5497, 74.3436],
+        location: ["", ""],
         description: "",
-        phone: "",
-        website: "",
+        number: "",
         openingHours: { open: "", close: "" },
         images: [],
     });
 
-    const handleNext = () => {
-        if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
-    };
-
-    const handlePrev = () => {
-        if (currentStep > 0) setCurrentStep(currentStep - 1);
-    };
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [steps[currentStep].key]: e.target.value });
-    };
-
-    const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
-        setFormData({ ...formData, images: files });
-    };
-
-    const handleSubmit = async () => {
+    const nextStep = async () => {
         try {
-            const data = new FormData();
-            Object.keys(formData).forEach((key) => {
-                if (key === "images") {
-                    formData.images.forEach((file) => data.append("images", file));
-                } else {
-                    data.append(key, formData[key]);
-                }
-            });
-
-            const res = await axios.post(
-                "http://localhost:8000/api/listings",
-                data,
-                {
-                    headers: { "Content-Type": "multipart/form-data" },
-                }
-            );
-
-            alert("Restaurant Added!");
-            console.log(res.data);
-
-            setFormData({
-                name: "",
-                location: [51.505, -0.09],
-                description: "",
-                phone: "",
-                website: "",
-                openingHours: "",
-                images: [],
-            });
-            setCurrentStep(0);
+            await ListingValidation[step].validate(formData, { abortEarly: false });
+            setErrors({});
+            setStep((s) => Math.min(s + 1, 4));
         } catch (err) {
-            console.error(err);
-            alert("Error adding restaurant!");
+            if (err.inner) {
+                const formErrors = {};
+                err.inner.forEach((e) => {
+                    formErrors[e.path] = e.message;
+                });
+                setErrors(formErrors);
+            }
         }
     };
 
+    const prevStep = () => setStep((s) => Math.max(s - 1, 1));
+
+    const updateField = (field, value) => {
+        setFormData((prev) => ({ ...prev, [field]: value }));
+    };
+    const handleSubmit = async () => {
+        try {
+            for (let i = 1; i <= 4; i++) {
+                await ListingValidation[i].validate(formData, { abortEarly: false });
+            }
+
+            const data = new FormData();
+            data.append("name", formData.name);
+            data.append("number", formData.number);
+            data.append("description", formData.description);
+            data.append("latitude", formData.location[0]);
+            data.append("longitude", formData.location[1]);
+            data.append("open", formData.openingHours.open);
+            data.append("close", formData.openingHours.close);
+
+            formData.images.forEach((img, idx) => {
+                data.append("images", img);
+            });
+
+            try {
+                setLoading(true);
+                const res = await axios.post("http://localhost:8000/api/listing/create-listing", data, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+                setFormData({
+                    name: "",
+                    location: ["", ""],
+                    description: "",
+                    number: "",
+                    openingHours: { open: "", close: "" },
+                    images: [],
+                });
+                setStep(1);
+            } catch (err) {
+                console.error("Submission error:", err);
+                alert(err.response?.data?.message || "Failed to submit listing");
+            } finally {
+                setLoading(false);
+                alert("Listing submitted successfully!");
+
+
+            }
+
+        } catch (err) {
+            if (err.inner) {
+                const formErrors = {};
+                err.inner.forEach((e) => {
+                    formErrors[e.path] = e.message;
+                });
+                setErrors(formErrors);
+            } else {
+                console.error(err);
+            }
+        }
+    };
+
+    const inputClasses =
+        "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm " +
+        "focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none";
+
     return (
-        <Box
-            sx={{
-                maxWidth: "500px",
-                mx: "auto",
-                my: 5,
-                p: 4,
-                border: "1px solid #ccc",
-                borderRadius: 2,
-                boxShadow: 2,
-            }}
-        >
-            <Typography variant="h6" mb={2}>
-                {steps[currentStep].label}
-            </Typography>
+        <div className="flex flex-col lg:flex-row gap-8 p-6">
+            <div className="flex-1">
+                <Stepper currentStep={step} />
 
-            {currentStep === 1 ? (
-                <FreeMapSelector
-                    location={formData.location}
-                    setLocation={(loc) => setFormData({ ...formData, location: loc })}
-                />
-            ) : currentStep === 5 ? (
-                <Box sx={{ display: "flex", gap: 2 }}>
-                    <HourDropdown
-                        label="Opens At"
-                        value={formData.openingHours.open}
-                        onChange={(val) =>
-                            setFormData({
-                                ...formData,
-                                openingHours: { ...formData.openingHours, open: val },
-                            })
-                        }
-                    />
-                    <HourDropdown
-                        label="Closes At"
-                        value={formData.openingHours.close}
-                        onChange={(val) =>
-                            setFormData({
-                                ...formData,
-                                openingHours: { ...formData.openingHours, close: val },
-                            })
-                        }
-                    />
-                </Box>
-            ) : currentStep === steps.length - 1 ? (
-                <Box
-                    sx={{
-                        border: "2px dashed #082567",
-                        borderRadius: 2,
-                        p: 3,
-                        textAlign: "center",
-                        cursor: "pointer",
-                        "&:hover": { backgroundColor: "#f9f9f9" },
-                    }}
-                    onClick={() => document.getElementById("file-upload").click()}
-                >
-                    <Typography variant="body1" color="textSecondary">
-                        Click or Drag & Drop Images Here
-                    </Typography>
-                    <input
-                        type="file"
-                        id="file-upload"
-                        multiple
-                        accept="image/*"
-                        style={{ display: "none" }}
-                        onChange={handleImageChange}
-                    />
-                </Box>
-            ) : (
-                <TextField
-                    fullWidth
-                    value={formData[steps[currentStep].key]}
-                    onChange={handleChange}
-                    placeholder={`Enter ${steps[currentStep].label}`}
-                />
-            )}
+                {/*Basic Info */}
+                {step === 1 && (
+                    <StepCard title="Basic Info">
+                        <label className="block mb-2 text-sm font-medium text-gray-700">Name</label>
+                        <input
+                            type="text"
+                            placeholder="Enter name"
+                            className={inputClasses}
+                            value={formData.name}
+                            onChange={(e) => updateField("name", e.target.value)}
+                        />
+                        {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
 
+                        <label className="block mt-4 mb-2 text-sm font-medium text-gray-700">Phone Number</label>
+                        <input
+                            type="text"
+                            placeholder="Enter phone number"
+                            className={inputClasses}
+                            value={formData.number}
+                            onChange={(e) => updateField("number", e.target.value)}
+                        />
+                        {errors.number && <p className="text-red-500 text-sm mt-1">{errors.number}</p>}
 
-            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
-                <Button disabled={currentStep === 0} onClick={handlePrev}>
-                    Back
-                </Button>
+                        <label className="block mt-4 mb-2 text-sm font-medium text-gray-700">Description</label>
+                        <textarea
+                            placeholder="Write a short description..."
+                            className={`${inputClasses} h-28 resize-none`}
+                            value={formData.description}
+                            onChange={(e) => updateField("description", e.target.value)}
+                        />
+                        {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
 
-                {currentStep < steps.length - 1 ? (
-                    <Button variant="contained" onClick={handleNext}>
-                        Next
-                    </Button>
-                ) : (
-                    <Button variant="contained" color="success" onClick={handleSubmit}>
-                        Submit
-                    </Button>
+                        <div className="flex justify-between mt-6">
+                            <button disabled className="px-4 py-2 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed">Back</button>
+                            <button onClick={nextStep} className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Next</button>
+                        </div>
+                    </StepCard>
                 )}
-            </Box>
 
-            <Typography mt={2} textAlign="center">
-                Step {currentStep + 1} of {steps.length}
-            </Typography>
-        </Box>
+                {/* Location */}
+                {step === 2 && (
+                    <StepCard title="Location">
+                        <FreeMapSelector
+                            location={formData.location}
+                            setLocation={(coords) => updateField("location", coords)}
+                        />
+                        <div className="flex justify-between mt-6">
+                            <button onClick={prevStep} className="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">Back</button>
+                            <button onClick={nextStep} className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Next</button>
+                        </div>
+                        {errors["location[0]"] && (
+                            <p className="text-red-500 text-sm mt-1">{errors["location[0]"]}</p>
+                        )}
+                        {errors["location[1]"] && (
+                            <p className="text-red-500 text-sm mt-1">{errors["location[1]"]}</p>
+                        )}
+
+                    </StepCard>
+                )}
+
+                {step === 3 && (
+                    <StepCard title="Opening Hours">
+                        <label className="block mb-2 text-sm font-medium text-gray-700">Opening Time</label>
+                        <input
+                            type="time"
+                            className={inputClasses}
+                            value={formData.openingHours.open}
+                            onChange={(e) =>
+                                updateField("openingHours", {
+                                    ...formData.openingHours,
+                                    open: e.target.value,
+                                })
+                            }
+                        />
+                        {errors["openingHours.open"] && (
+                            <p className="text-red-500 text-sm mt-1">{errors["openingHours.open"]}</p>
+                        )}
+
+
+                        <label className="block mt-4 mb-2 text-sm font-medium text-gray-700">Closing Time</label>
+                        <input
+                            type="time"
+                            className={inputClasses}
+                            value={formData.openingHours.close}
+                            onChange={(e) =>
+                                updateField("openingHours", {
+                                    ...formData.openingHours,
+                                    close: e.target.value,
+                                })
+                            }
+                        />
+                        {errors["openingHours.close"] && (
+                            <p className="text-red-500 text-sm mt-1">{errors["openingHours.close"]}</p>
+                        )}
+
+                        <div className="flex justify-between mt-6">
+                            <button onClick={prevStep} className="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">Back</button>
+                            <button onClick={nextStep} className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Next</button>
+                        </div>
+                    </StepCard>
+                )}
+
+                {step === 4 && (
+
+                    <StepCard title="Upload Images">
+                        <label className="block mb-2 text-sm font-medium text-gray-700">Upload Images</label>
+
+                        <input
+                            type="file"
+                            multiple
+                            id="fileUpload"
+                            className="hidden"
+                            onChange={(e) => updateField("images", Array.from(e.target.files))}
+                        />
+
+                        <label
+                            htmlFor="fileUpload"
+                            className="flex items-center justify-center gap-2 cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                        >
+                            Select Images
+                        </label>
+
+                        {formData.images.length > 0 && (
+                            <div className="mt-4 flex flex-wrap gap-3">
+                                {formData.images.map((file, idx) => {
+                                    const url = URL.createObjectURL(file);
+                                    return (
+                                        <img
+                                            key={idx}
+                                            src={url}
+                                            alt={`preview ${idx}`}
+                                            className="w-24 h-24 object-cover rounded-lg border"
+                                        />
+                                    );
+                                })}
+                            </div>
+                        )}
+
+                        {errors.images && (
+                            <p className="text-red-500 text-sm mt-1">{errors.images}</p>
+                        )}
+
+                        <div className="flex justify-between mt-6">
+                            <button
+                                onClick={prevStep}
+                                className="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400"
+                            >
+                                Back
+                            </button>
+                            <div>{loading && (<Loader />)}</div>
+                            <button
+                                onClick={handleSubmit}
+                                className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
+                            >
+                                Submit
+                            </button>
+                        </div>
+
+                    </StepCard>
+
+                )}
+
+            </div>
+
+            <div className="hidden lg:block w-80">
+                <Preview formData={formData} />
+            </div>
+        </div>
     );
 }

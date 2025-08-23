@@ -4,12 +4,11 @@ import { createListing, getAllListings, updateListing, getListingById, deleteLis
 
 const router = express.Router();
 
-// at a time user can upload 5 images at most
 router.post("/create-listing", upload.array("images", 5), createListing);
 router.put("/update-listing/:id", upload.array("images", 5), updateListing);
 
 router.get("/all-listing", getAllListings);
-router.get("/:id", getListingById);
+router.get("/details/:id", getListingById);
 
 router.delete("/:id", deleteListing)
 export default router;
