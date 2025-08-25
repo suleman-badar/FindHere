@@ -19,6 +19,7 @@ export default function SavedPlaceCard({ place }) {
         fetchDetails();
     }, [id]);
 
+    // if(details && details.length>0)
     return (
         <div className="rounded-2xl bg-gray-50 border border-gray-200 p-4 flex items-center justify-between shadow-md hover:shadow-lg transition-all">
             {/* Place Info */}

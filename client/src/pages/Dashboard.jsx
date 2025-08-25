@@ -61,18 +61,6 @@ export default function Dashboard() {
                             <Btn text="Add New Place" to="/addListing" />
                         </div>
 
-                        <SectionHeader title="Recent Reviews" />
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            {reviews.map((r) => (
-                                <div
-                                    key={r.id}
-                                    className="bg-gray-50 rounded-2xl shadow-md hover:shadow-lg transition-all p-6"
-                                >
-                                    <ReviewCard review={r} />
-                                </div>
-                            ))}
-                        </div>
-
                         <SectionHeader title="Recent Activity" />
                         <div className="grid grid-cols-1 gap-4">
                             {activities.map((a) => (

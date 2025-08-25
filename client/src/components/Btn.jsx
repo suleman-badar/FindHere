@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-export default function Btn({ text, IconStart = null, IconEnd = null, w = "80%", to = null, onClick = null }) {
+export default function Btn({ text, IconStart = null, IconEnd = null, w = "80%", to = null, ...props }) {
     return (
         <Button sx={{
             backgroundColor: "#082567",
@@ -21,7 +21,7 @@ export default function Btn({ text, IconStart = null, IconEnd = null, w = "80%",
             endIcon={IconEnd ? <IconEnd /> : null}
             component={to ? Link : "button"}
             to={to || undefined}
-            onClick={onClick}     >
+            {...props}   >
             {text}
         </Button>
     );

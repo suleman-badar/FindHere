@@ -13,25 +13,28 @@ const userSchema = new Schema({
         required: true,
         unique: true,
         lowercase: true,
+        minlength: 2,
+        maxlength: 50,
         trim: true,
+
     },
     password: {
         type: String,
         required: true,
-        minlength: 6, 
+        minlength: 6,
     }
 }, { timestamps: true });
 
 // pre - Hasing password here
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function(next) {
     if (!this.isModified("password")) return next();
     this.password = await bcrypt.hash(this.password, 10);
     next();
 });
 
 // for comparing
-userSchema.methods.comparePassword = function (candidate) {
-  return bcrypt.compare(candidate, this.password);
+userSchema.methods.comparePassword = function(candidate) {
+    return bcrypt.compare(candidate, this.password);
 };
 
 const User = mongoose.model("User", userSchema);

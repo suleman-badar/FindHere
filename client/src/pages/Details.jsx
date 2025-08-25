@@ -19,9 +19,10 @@ import GoBack from "../components/GoBack"
 import Footer from "../components/Footer.jsx"
 import InfoCard from "../components/Details/InfoCard.jsx";
 import ImageGallery from "../components/Details/ImageGallery.jsx";
-import StarRating from "../components/Reviews/StarRating.jsx";
 import AverageStars from "../components/Reviews/AverageStars.jsx";
 import AverageRating from "../components/Reviews/AverageRating.jsx";
+import AllReviews from "../components/Reviews/AllReviews";
+
 
 
 
@@ -70,7 +71,6 @@ export default function Details() {
     const navigate = useNavigate();
 
     const [details, setDetails] = useState(null);
-    const [reviews, setReviews] = useState(null);
     const [loading, setLoading] = useState(true);
 
 
@@ -96,26 +96,12 @@ export default function Details() {
         };
         fetchDetails();
     }, [id]);
+
     const { place } = usePlaceLocation(
         details?.location?.[0],
         details?.location?.[1]
     );
 
-
-
-
-    useEffect(() => {
-        const fetchReviews = async () => {
-            try {
-                const res = await axios.get(`http://localhost:8000/api/review/all-review/${id}`);
-                setReviews(res.data);
-            } catch (err) {
-                console.error("Error fetching revies:", err);
-            }
-
-        }
-        fetchReviews();
-    }, [id]);
 
     if (loading || !details) return <Loader />;
 
@@ -163,7 +149,6 @@ export default function Details() {
                     <InfoCard text={`${details?.openingHours?.open} - ${details?.openingHours?.close}`} Icon={AccessTimeIcon} des="Opens daily"></InfoCard>
                     <InfoCard text={`${details?.number}`} Icon={CallIcon} des="Visitor Service"></InfoCard>
                     <InfoCard text={`${details?.weblink}`} Icon={LanguageIcon} des="Official Website"></InfoCard>
-
                 </Box>
 
                 <Divider sx={{ backgroundColor: "black" }}></Divider>
@@ -193,32 +178,7 @@ export default function Details() {
                 <Box className="my-16">
                     <h3 className="my-4" >Reviews</h3>
                     <Box className="flex flex-col items-center justify-center">
-                        {reviews && reviews.length > 0 ? (
-                            reviews?.map((review) => (
-                                <Box key={review._id} className="flex bg-gray-100 w-[90%] min-h-[180px] rounded-lg p-4 mb-4">
-                                    <Box className="h-full w-[10%]">
-                                        <img
-                                            src={review.image || "/default-user.png"}
-                                            alt={review.name || "Anonymous"}
-                                            className="h-full w-full object-cover rounded-full"
-                                        />
-                                    </Box>
-                                    <Box className="ml-4 flex flex-col justify-between">
-                                        <Box>
-                                            <Box className="font-semibold">{review.name || "Anonymous"}</Box>
-                                            <Box className="text-sm text-gray-500">{new Date(review.createdAt).toLocaleDateString()}</Box>
-                                            <StarRating rating={Math.round(review.rating)} size={24} />
-
-                                        </Box>
-                                        <Box className="mt-2 text-gray-700">{review.reviewText}</Box>
-                                    </Box>
-                                </Box>
-                            ))) :
-                            <Typography className="text-gray-500 my-4">
-                                No reviews yet. Be the first to write one!
-                            </Typography>
-                        }
-
+                        <AllReviews id={id} />
                         <Btn text="Write a Review " onClick={handleWriteReview}></Btn>
                     </Box>
                 </Box>

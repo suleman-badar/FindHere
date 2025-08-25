@@ -12,7 +12,7 @@ export default function SidebarAdmin({ onSelect }) {
         { key: "dashboard", label: "Dashboard", icon: Compass },
 
         { key: "saved", label: "Saved Places", icon: Bookmark },
-        // { key: "reviews", label: "My Reviews", icon: Star },
+        { key: "reviews", label: "My Reviews", icon: Star },
         { key: "tools", label: "Tools", icon: Wrench },
     ];
 
