@@ -63,7 +63,7 @@ export default function AddListingForm() {
 
             try {
                 setLoading(true);
-                const res = await axios.post("http://localhost:8000/api/listing/create-listing", data, {
+                await axios.post("http://localhost:8000/api/listing/create-listing", data, {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
                 setFormData({

@@ -1,7 +1,7 @@
-import Hero from "../components/Hero.jsx"
+import Hero from "../components/Home/Hero.jsx"
 import Footer from "../components/Footer.jsx"
-import Category from "../components/Category.jsx"
-import Featured from "../components/Featured.jsx";
+import Category from "../components/Home/Category.jsx"
+import Featured from "../components/Home/Featured.jsx";
 
 
 export default function Home() {

@@ -1,11 +1,28 @@
 import { Star, Share2 } from "lucide-react";
 
 export default function SavedPlaceCard({ place }) {
+    const { id } = useParams();
+
+    const [details, setDetails] = useState(null);
+
+    useEffect(() => {
+
+        const fetchDetails = async () => {
+            try {
+                const res = await axios.get(`http://localhost:8000/api/listing/details/${id}`);
+                setDetails(res.data);
+            }
+            catch (err) {
+                console.error("Error fetching details:", err);
+            }
+        };
+        fetchDetails();
+    }, [id]);
     return (
         <div className="rounded-2xl bg-gray-50 border border-gray-200 p-4 flex items-center justify-between shadow-md hover:shadow-lg transition-all">
             {/* Place Info */}
             <div>
-                <div className="text-lg font-semibold text-gray-800">{place.name}</div>
+                <div className="text-lg font-semibold text-gray-800">{details.name}</div>
                 <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
                     <Star size={16} className="text-yellow-500" /> <span>{place.rating}</span>
                     <span>•</span>

@@ -7,6 +7,7 @@ import About from './pages/About.jsx'
 import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/SignUp.jsx'
 import AddListingForm from './pages/AddListingForm.jsx'
+import ReviewForm from './pages/ReviewForm.jsx'
 
 import './App.css'
 
@@ -23,10 +24,10 @@ function App() {
           <Route path="/details/:id" element={<Details />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/addListing" element={<AddListingForm />} />
+          <Route path="/review/create-review/:id" element={<ReviewForm />} />
           <Route path="/about" element={<About />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-
         </Routes>
       </main>
 

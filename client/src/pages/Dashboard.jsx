@@ -13,6 +13,7 @@ import MediaForm from "../components/adminForms/MediaForm";
 import ContactForm from "../components/adminForms/ContactForm";
 import LocationForm from "../components/adminForms/LocationForm";
 import HoursForm from "../components/adminForms/HoursForm";
+import Listing from "../../../backend/models/Listing";
 
 export default function Dashboard() {
     const [activePage, setActivePage] = useState("dashboard");
@@ -57,7 +58,7 @@ export default function Dashboard() {
                             ))}
                         </div>
                         <div className="flex justify-center mt-4">
-                            <Btn text="Add New Place" />
+                            <Btn text="Add New Place" to="/addListing" />
                         </div>
 
                         <SectionHeader title="Recent Reviews" />

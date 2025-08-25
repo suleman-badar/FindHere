@@ -1,5 +1,5 @@
 import Search from "./Search";
-import bgVideo from "../assets/bg.mp4";
+import bgVideo from "../../assets/Bg.mp4"
 
 export default function Hero() {
     return (

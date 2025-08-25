@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import FeaturedCard from "./FeaturedCard";
-import Carousel from "./Carousel";
-import Loader from "../components/Loader";
+import HoverCard from "./HoverCard";
+import Carousel from "../Carousel";
+import Loader from "../Loader";
 import axios from "axios";
 
 export default function Featured() {
@@ -39,7 +39,7 @@ export default function Featured() {
 
                     <Carousel>
                         {listings.map((listing) => (
-                            <FeaturedCard key={listing._id} id={listing._id} name={listing.name} image={listing.images[0]} />
+                            <HoverCard key={listing._id} id={listing._id} name={listing.name} image={listing.images[0]} />
                         ))}
                     </Carousel>
                 </>

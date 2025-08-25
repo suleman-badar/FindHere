@@ -2,7 +2,7 @@ import { Button, TextField, InputAdornment } from "@mui/material";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useState } from "react";
-import Btn from "./Btn"
+import Btn from "../Btn"
 
 export default function Search() {
     const [value, setValue] = useState("");

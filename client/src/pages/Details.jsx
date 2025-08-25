@@ -1,22 +1,30 @@
 import { Box, Typography, Divider, Button } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import Loader from "../components/Loader.jsx";
-import Btn from "../components/Btn";
-import MapPreview from "../components/MapPreview.jsx";
-import GoBack from "../components/GoBack"
-import Footer from "../components/Footer.jsx"
+import { useParams, useNavigate } from "react-router-dom";
+import usePlaceLocation from "../Hooks/usePlaceLocation.jsx";
+
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
-import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CallIcon from "@mui/icons-material/Call";
 import LanguageIcon from "@mui/icons-material/Language";
 import EventIcon from "@mui/icons-material/Event";
-import InfoCard from "../components/InfoCard";
-import ImageGallery from "../components/ImageGallery.jsx";
+
+import axios from "axios";
+import Loader from "../components/Loader.jsx";
+import Btn from "../components/Btn";
+import MapPreview from "../components/Details/MapPreview.jsx";
+import GoBack from "../components/GoBack"
+import Footer from "../components/Footer.jsx"
+import InfoCard from "../components/Details/InfoCard.jsx";
+import ImageGallery from "../components/Details/ImageGallery.jsx";
+import StarRating from "../components/Reviews/StarRating.jsx";
+import AverageStars from "../components/Reviews/AverageStars.jsx";
+import AverageRating from "../components/Reviews/AverageRating.jsx";
+
+
+
 
 
 
@@ -52,37 +60,27 @@ function openDirections(lat, lon) {
 
 
 
+
 export default function Details() {
     const { id } = useParams();
     const galleryRef = useRef();
 
+
+
+    const navigate = useNavigate();
+
     const [details, setDetails] = useState(null);
+    const [reviews, setReviews] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [place, setPlace] = useState({ city: "", province: "" });
 
-    async function getCityAndProvince(lat, lon) {
-        try {
-            const res = await axios.get(
-                `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
-            );
 
-            const address = res.data.address;
 
-            const city =
-                address.city ||
-                address.town ||
-                address.village ||
-                address.hamlet ||
-                address.county;
 
-            const province = address.state;
-
-            setPlace({ city, province });
-        } catch (err) {
-            console.error("Error fetching location:", err);
-            return null;
-        }
+    function handleWriteReview() {
+        navigate(`/review/create-review/${id}`);
     }
+
+
     useEffect(() => {
         setLoading(true);
         const fetchDetails = async () => {
@@ -98,12 +96,26 @@ export default function Details() {
         };
         fetchDetails();
     }, [id]);
+    const { place } = usePlaceLocation(
+        details?.location?.[0],
+        details?.location?.[1]
+    );
+
+
+
 
     useEffect(() => {
-        if (details?.location?.length === 2) {
-            getCityAndProvince(details.location[0], details.location[1]);
+        const fetchReviews = async () => {
+            try {
+                const res = await axios.get(`http://localhost:8000/api/review/all-review/${id}`);
+                setReviews(res.data);
+            } catch (err) {
+                console.error("Error fetching revies:", err);
+            }
+
         }
-    }, [details?.location]);
+        fetchReviews();
+    }, [id]);
 
     if (loading || !details) return <Loader />;
 
@@ -140,14 +152,9 @@ export default function Details() {
                 <h1>{details?.name}</h1>
                 <p>{details?.description}</p>
                 <Box className="flex items-center gap-8 mb-8">
-                    <Box >
-                        <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
-                        <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
-                        <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
-                        <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
-                        <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
-                    </Box>
-                    <Typography sx={{ fontSize: "0.8rem" }} >4.7(19,987)</Typography>
+                    <AverageStars id={id} />
+                    <AverageRating id={id} />
+
                 </Box>
                 <Divider sx={{ backgroundColor: "black" }}></Divider>
 
@@ -186,29 +193,33 @@ export default function Details() {
                 <Box className="my-16">
                     <h3 className="my-4" >Reviews</h3>
                     <Box className="flex flex-col items-center justify-center">
-                        <Box className="flex  bg-gray-100 w-[90%] h-[180px] rounded-lg p-4">
-                            <Box className="h-full w-[10%]"> User Image</Box>
-                            <Box>
-                                <Box>Name</Box>
-                                <Box>Description</Box>
-                                <Box className="flex gap-12">
-                                    <Box>
-                                        <StarIcon sx={{ color: "#dae020ff", mr: 0.2 }} />
-                                        <StarIcon sx={{ color: "#dae020ff", mr: 0.2 }} />
-                                        <StarIcon sx={{ color: "#dae020ff", mr: 0.2 }} />
-                                        <StarIcon sx={{ color: "#dae020ff", mr: 0.2 }} />
-                                        <StarIcon sx={{ color: "#dae020ff", mr: 0.2 }} />
+                        {reviews && reviews.length > 0 ? (
+                            reviews?.map((review) => (
+                                <Box key={review._id} className="flex bg-gray-100 w-[90%] min-h-[180px] rounded-lg p-4 mb-4">
+                                    <Box className="h-full w-[10%]">
+                                        <img
+                                            src={review.image || "/default-user.png"}
+                                            alt={review.name || "Anonymous"}
+                                            className="h-full w-full object-cover rounded-full"
+                                        />
                                     </Box>
-                                    <Box>
-                                        {Date.now(30 * 24 * 60 * 60)}
+                                    <Box className="ml-4 flex flex-col justify-between">
+                                        <Box>
+                                            <Box className="font-semibold">{review.name || "Anonymous"}</Box>
+                                            <Box className="text-sm text-gray-500">{new Date(review.createdAt).toLocaleDateString()}</Box>
+                                            <StarRating rating={Math.round(review.rating)} size={24} />
+
+                                        </Box>
+                                        <Box className="mt-2 text-gray-700">{review.reviewText}</Box>
                                     </Box>
                                 </Box>
-                                <Box className="my-4">
-                                    Review Message
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Btn text="Write a Review "></Btn>
+                            ))) :
+                            <Typography className="text-gray-500 my-4">
+                                No reviews yet. Be the first to write one!
+                            </Typography>
+                        }
+
+                        <Btn text="Write a Review " onClick={handleWriteReview}></Btn>
                     </Box>
                 </Box>
                 <Box>
@@ -232,6 +243,6 @@ export default function Details() {
                 </Box>
             </Box>
             <Footer />
-        </Box>
+        </Box >
     );
 }

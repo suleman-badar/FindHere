@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
 import { Card, CardMedia, Box, Typography } from "@mui/material";
-import Btn from "./Btn"
-import StarIcon from "@mui/icons-material/Star";
+import Btn from "../Btn"
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import AverageStars from "../Reviews/AverageStars";
+import AverageRating from "../Reviews/AverageRating";
 
 
-const HoverCard = ({ id, name, image, rating }) => {
+const HoverCard = ({ id, name, image }) => {
     const navigate = useNavigate();
     const handleViewMore = () => {
         navigate(`details/${id}`);
@@ -62,21 +62,12 @@ const HoverCard = ({ id, name, image, rating }) => {
             >
                 <Typography variant="h6" sx={{ mb: 2 }}>{name}</Typography>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1 }}>
-                    <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
-                    <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
-                    <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
-                    <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
-                    <StarIcon sx={{ color: "#dae020ff", mr: 0.5 }} />
-                </Box>
-                <Typography sx={{ fontSize: "0.6rem", mb: 2 }} >{rating}(19,987)</Typography>
-                <Box sx={{ display: "flex" }}>
-                    <LocationOnIcon sx={{ color: "#082567" }}></LocationOnIcon>
-                    <Typography variant="body2" sx={{ fontSize: "1rem" }} gutterBottom>Pak, Lhr</Typography>
+                <Box className="mb-8">
+                    <AverageStars id={id} />
+                    <AverageRating id={id} />
                 </Box>
                 <Btn text="View More" onClick={handleViewMore} w="100%"></Btn>
             </Box>
-
         </Card>
     );
 };
