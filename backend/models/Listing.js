@@ -43,11 +43,11 @@ const listingSchema = new Schema({
         type: [String],
         required: false
     },
-    userId: {
-        type: Schema.Types.ObjectId,
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true,
-    },
+        required: true
+    }
 }, { timestamps: true });
 
 const Listing = mongoose.model("listing", listingSchema);
