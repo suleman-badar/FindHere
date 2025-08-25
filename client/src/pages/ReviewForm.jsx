@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { Star, StarBorder } from "@mui/icons-material";
 import axios from "axios";
-import userImg from "../assets/user.png";
 import { useParams } from "react-router-dom";
 import { reviewValidations } from "../validations/reviewValidations";
 import AverageRating from "../components/Reviews/AverageRating";
@@ -29,7 +28,17 @@ export default function ReviewForm() {
     const [reviewText, setReviewText] = useState("");
     const [name, setName] = useState("");
     const [image, setImage] = useState(null);
+    const [preview, setPreview] = useState(null);
+
     const [loading, setLoading] = useState(false);
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImage(file);
+            setPreview(URL.createObjectURL(file));
+        }
+    };
+
 
     const handleSubmit = async () => {
         // Validation for form
@@ -48,8 +57,6 @@ export default function ReviewForm() {
             formData.append("name", name);
             if (image) {
                 formData.append("image", image);
-            } else {
-                formData.append("image", userImg);
             }
 
             await axios.post(`http://localhost:8000/api/review/create-review/${id}`, formData, {
@@ -92,10 +99,11 @@ export default function ReviewForm() {
             <CardContent>
                 <Box display="flex" gap={2} mb={3} alignItems="center">
                     <Avatar
-                        src={image}
+                        src={preview || "/default-user.png"}
                         alt={name || "Anonymous"}
                         sx={{ width: 50, height: 50 }}
                     />
+
                     <TextField
                         label="Your Name"
                         variant="outlined"
@@ -103,18 +111,16 @@ export default function ReviewForm() {
                         onChange={(e) => setName(e.target.value)}
                         fullWidth
                     />
-                    <Button
-                        variant="outlined"
-                        component="label"
-                    >
+                    <Button variant="outlined" component="label">
                         Upload
                         <input
                             type="file"
                             hidden
                             accept="image/*"
-                            onChange={(e) => setImage(e.target.files[0])}
+                            onChange={handleFileChange}
                         />
                     </Button>
+
                 </Box>
 
                 <Box display="flex" alignItems="center" mb={3}>
