@@ -22,7 +22,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
         minlength: 6,
-    }
+    },
+    isVerified: { type: Boolean, default: false },
+    verificationCode: { type: String },
+    verificationCodeExpires: { type: Date }
 }, { timestamps: true });
 
 // pre - Hasing password here
