@@ -174,9 +174,6 @@ export default function SignIn() {
                         &nbsp;&nbsp;&nbsp;Sign Up With Google
                     </Button>
 
-                    {/* Apple Button */}
-                    <Btn text="Sign in with Apple" IconStart={AppleIcon} />
-
                     {/* Already have account */}
                     <Box className="flex gap-1 text-xs mt-3">
                         <p>Already have an account?</p>
