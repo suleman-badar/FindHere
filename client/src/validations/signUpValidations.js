@@ -15,6 +15,9 @@ export const signUpValidations = Yup.object({
         .min(6, "Password must be at least 6 characters")
         .matches(
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/,
-            "Password must contain at least one uppercase, one lowercase, and one number"
+            "Password must contain at least one uppercase letter, one lowercase letter, and one number"
         ),
+    confirmPassword: Yup.string()
+        .required("Confirm Password is required")
+        .oneOf([Yup.ref("password"), null], "Passwords must match"),
 });

@@ -13,7 +13,7 @@ export default function Featured() {
         const fetchListings = async () => {
             try {
                 const res = await axios.get("http://localhost:8000/api/listing/all-listing");
-                setListings(res.data);
+                setListings(res.data.data);
             }
             catch (err) {
                 console.error("Error fetching listings:", err);

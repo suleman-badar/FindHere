@@ -16,6 +16,10 @@ const userSchema = new Schema({
         minlength: 2,
         maxlength: 50,
         trim: true,
+        match: [
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            "Please fill a valid email address"
+        ],
 
     },
     password: {
@@ -36,8 +40,12 @@ userSchema.pre("save", async function(next) {
 });
 
 // for comparing
-userSchema.methods.comparePassword = function(candidate) {
-    return bcrypt.compare(candidate, this.password);
+userSchema.methods.comparePassword = async function(candidate) {
+    try {
+        return await bcrypt.compare(candidate, this.password);
+    } catch (err) {
+        return false;
+    }
 };
 
 const User = mongoose.model("User", userSchema);

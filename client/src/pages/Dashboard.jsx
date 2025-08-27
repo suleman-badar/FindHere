@@ -1,22 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import Btn from "../components/Btn";
 import SidebarAdmin from "../components/Dashboard/SidebarAdmin";
 import SectionHeader from "../components/Dashboard/SectionHeader";
 import StatCard from "../components/Dashboard/StatCard";
 import SavedPlaceCard from "../components/Dashboard/SavedPlaceCard";
-import ReviewCard from "../components/Dashboard/ReviewCard";
 import ActivityItem from "../components/Dashboard/ActivityItem";
-import { stats, savedPlaces, reviews, activities } from "../data/dummyData";
+import { stats, activities } from "../data/dummyData";
 
 import GeneralInfoForm from "../components/adminForms/GeneralInfoForm";
 import MediaForm from "../components/adminForms/MediaForm";
 import ContactForm from "../components/adminForms/ContactForm";
 import LocationForm from "../components/adminForms/LocationForm";
 import HoursForm from "../components/adminForms/HoursForm";
-import Listing from "../../../backend/models/Listing";
+import Loader from "../components/Loader";
 
 export default function Dashboard() {
     const [activePage, setActivePage] = useState("dashboard");
+    const [places, setPlaces] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
+
+    // Check auth and fetch user's listings
+    useEffect(() => {
+        const checkAuthAndFetch = async () => {
+            try {
+                setLoading(true);
+                await axios.get("http://localhost:8000/api/auth/check-auth", {
+                    withCredentials: true,
+                });
+                const res = await axios.get(
+                    "http://localhost:8000/api/listing/owner",
+                    { withCredentials: true }
+                );
+                setPlaces(res.data.data || []);
+            } catch (err) {
+                navigate("/", {
+                    state: { authMessage: "You must be logged in first" },
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        checkAuthAndFetch();
+    }, [navigate]);
+
+    if (loading) return <Loader />;
 
     const renderContent = () => {
         switch (activePage) {
@@ -48,15 +81,15 @@ export default function Dashboard() {
 
                         <SectionHeader title="Saved Places" />
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {savedPlaces.map((p) => (
-                                <div
-                                    key={p.id}
-                                    className="bg-gray-50 rounded-2xl shadow-md hover:shadow-lg transition-all p-6"
-                                >
-                                    <SavedPlaceCard place={p} />
-                                </div>
-                            ))}
+                            {places.length === 0 ? (
+                                <p className="text-gray-500 text-center">No listings yet</p>
+                            ) : (
+                                places.map((place) => (
+                                    <SavedPlaceCard key={place._id} place={place} />
+                                ))
+                            )}
                         </div>
+
                         <div className="flex justify-center mt-4">
                             <Btn text="Add New Place" to="/addListing" />
                         </div>
@@ -83,9 +116,7 @@ export default function Dashboard() {
             <SidebarAdmin onSelect={setActivePage} />
 
             {/* Main Content */}
-            <main className="flex-1 p-8 space-y-10">
-                {renderContent()}
-            </main>
+            <main className="flex-1 p-8 space-y-10">{renderContent()}</main>
         </div>
     );
 }

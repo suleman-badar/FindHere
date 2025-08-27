@@ -5,19 +5,9 @@ import { Star, Share2 } from "lucide-react";
 
 export default function SavedPlaceCard({ place }) {
     const { id } = useParams();
-    const [details, setDetails] = useState(null);
+    // const [details, setDetails] = useState(null);
 
-    useEffect(() => {
-        const fetchDetails = async () => {
-            try {
-                const res = await axios.get(`http://localhost:8000/api/listing/details/${id}`);
-                setDetails(res.data);
-            } catch (err) {
-                console.error("Error fetching details:", err);
-            }
-        };
-        fetchDetails();
-    }, [id]);
+
 
     // if(details && details.length>0)
     return (

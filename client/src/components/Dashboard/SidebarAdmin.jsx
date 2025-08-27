@@ -4,9 +4,36 @@ import {
     Wrench, LogOut, ChevronLeft, ChevronRight,
     Info, Image, Phone, Clock, Map, MessageSquare
 } from "lucide-react";
+import { toast } from "react-toastify";
+import axios from "axios"
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function SidebarAdmin({ onSelect }) {
+    const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(true);
+    const { logout } = useAuth();
+    const handleSignOut = async () => {
+        try {
+            const res = await axios.post(
+                "http://localhost:8000/api/auth/logout",
+                {},
+                { withCredentials: true }
+            );
+
+            if (res.data.success) {
+                logout();
+                toast.success("Logged out successfully");
+                navigate("/signin");
+            } else {
+                toast.error(res.data.message || "Logout failed");
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Error logging out");
+            console.error("Logout error:", error);
+        }
+    };
+
 
     const items = [
         { key: "dashboard", label: "Dashboard", icon: Compass },
@@ -87,7 +114,7 @@ export default function SidebarAdmin({ onSelect }) {
                     <button
                         className={`group relative flex items-center gap-3 px-3 py-2.5 w-full text-sm 
               rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors
-              ${collapsed ? "justify-center" : ""}`}
+              ${collapsed ? "justify-center" : ""}`} onClick={handleSignOut}
                     >
                         <LogOut size={18} />
                         {!collapsed && <span>Sign Out</span>}

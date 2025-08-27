@@ -1,12 +1,19 @@
 import Listing from "../models/Listing.js";
 
-
-export const createListing = async (req, res) => {
+/**
+ * @desc   Create new listing
+ * @route  POST /api/listing/create-listing
+ * @access Private (owner only)
+ */
+export const createListing = async(req, res) => {
     try {
         const { name, location, description, number, weblink, openingHours } = req.body;
 
+        if (!name || !description) {
+            return res.status(400).json({ success: false, message: "Name and description are required" });
+        }
+
         const loc = location && location.length === 2 ? location : null;
-        const opening = { open: req.body.open, close: req.body.close };
         const images = req.files ? req.files.map(file => file.path) : [];
 
         const listing = new Listing({
@@ -15,27 +22,33 @@ export const createListing = async (req, res) => {
             description,
             number,
             website: weblink,
-            openingHours: opening,
+            openingHours,
             images,
-            owner: req.userId
+            owner: req.userId,
         });
 
         await listing.save();
         res.status(201).json({ success: true, data: listing });
     } catch (error) {
         console.error("Error creating listing:", error);
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({ success: false, message: "Server error" });
     }
 };
 
-
-export const updateListing = async (req, res) => {
+/**
+ * @desc   Update listing by ID
+ * @route  PUT /api/listing/update-listing/:id
+ * @access Private (owner only)
+ */
+export const updateListing = async(req, res) => {
     try {
         const listing = await Listing.findById(req.params.id);
-        if (!listing) return res.status(404).json({ message: "Listing not found" });
+        if (!listing) {
+            return res.status(404).json({ success: false, message: "Listing not found" });
+        }
 
         if (listing.owner.toString() !== req.userId) {
-            return res.status(403).json({ message: "Not authorized to update this listing" });
+            return res.status(403).json({ success: false, message: "Not authorized to update this listing" });
         }
 
         const { name, location, description, number, weblink, openingHours } = req.body;
@@ -57,40 +70,72 @@ export const updateListing = async (req, res) => {
     }
 };
 
-
-
-export const getAllListings = async (req, res) => {
+/**
+ * @desc   Get all listings (public)
+ * @route  GET /api/listing/all-listing
+ * @access Public
+ */
+export const getAllListings = async(req, res) => {
     try {
-        const listings = await Listing.find().select("-password");
-        res.json(listings);
+        const listings = await Listing.find().populate("owner", "name email");
+        res.json({ success: true, data: listings });
     } catch (e) {
-        res.status(500).json({ message: e.message });
+        res.status(500).json({ success: false, message: "Server error" });
     }
 };
 
-export const getListingById = async (req, res) => {
+/**
+ * @desc   Get single listing by ID (public)
+ * @route  GET /api/listing/details/:id
+ * @access Public
+ */
+export const getListingById = async(req, res) => {
     try {
-        const listing = await Listing.findById(req.params.id);
-        if (!listing) return res.status(404).json({ message: "Listing not found" });
-        res.json(listing);
+        const listing = await Listing.findById(req.params.id).populate("owner", "name email");
+        if (!listing) {
+            return res.status(404).json({ success: false, message: "Listing not found" });
+        }
+        res.json({ success: true, data: listing });
     } catch (e) {
-        res.status(500).json({ message: e.message });
+        res.status(500).json({ success: false, message: "Server error" });
     }
 };
 
+/**
+ * @desc   Get all listings by logged-in owner
+ * @route  GET /api/listing/owner
+ * @access Private (owner only)
+ */
+export const getOwnerListings = async(req, res) => {
+    try {
+        const listings = await Listing.find({ owner: req.userId }).populate("owner", "name email");
 
-export const deleteListing = async (req, res) => {
+        res.json({ success: true, data: listings });
+    } catch (error) {
+        console.error("Error fetching owner listings:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+/**
+ * @desc   Delete listing by ID
+ * @route  DELETE /api/listing/delete-listing/:id
+ * @access Private (owner only)
+ */
+export const deleteListing = async(req, res) => {
     try {
         const listing = await Listing.findById(req.params.id);
-        if (!listing) return res.status(404).json({ message: "Listing not found" });
+        if (!listing) {
+            return res.status(404).json({ success: false, message: "Listing not found" });
+        }
 
         if (listing.owner.toString() !== req.userId) {
-            return res.status(403).json({ message: "Not authorized to delete this listing" });
+            return res.status(403).json({ success: false, message: "Not authorized to delete this listing" });
         }
 
         await listing.deleteOne();
-        res.json({ message: "Listing deleted" });
+        res.json({ success: true, message: "Listing deleted successfully" });
     } catch (e) {
-        res.status(500).json({ message: e.message });
+        res.status(500).json({ success: false, message: "Server error" });
     }
 };

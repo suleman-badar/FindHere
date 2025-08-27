@@ -2,6 +2,7 @@ import { Box, Typography, Divider, Button } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import usePlaceLocation from "../Hooks/usePlaceLocation.jsx";
+import useDetails from "../Hooks/useDetails.jsx";
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
@@ -22,10 +23,6 @@ import ImageGallery from "../components/Details/ImageGallery.jsx";
 import AverageStars from "../components/Reviews/AverageStars.jsx";
 import AverageRating from "../components/Reviews/AverageRating.jsx";
 import AllReviews from "../components/Reviews/AllReviews";
-
-
-
-
 
 
 
@@ -60,19 +57,11 @@ function openDirections(lat, lon) {
 }
 
 
-
-
 export default function Details() {
     const { id } = useParams();
     const galleryRef = useRef();
-
-
-
     const navigate = useNavigate();
-
-    const [details, setDetails] = useState(null);
-    const [loading, setLoading] = useState(true);
-
+    const { details, detailsLoading } = useDetails(id);    //Fetching deta8ls in custom hook
 
 
 
@@ -80,30 +69,16 @@ export default function Details() {
         navigate(`/review/create-review/${id}`);
     }
 
+    //fetching place information(city,province) in a  custom hook
 
-    useEffect(() => {
-        setLoading(true);
-        const fetchDetails = async () => {
-            try {
-                const res = await axios.get(`http://localhost:8000/api/listing/details/${id}`);
-                setDetails(res.data);
-            }
-            catch (err) {
-                console.error("Error fetching details:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchDetails();
-    }, [id]);
-
-    const { place } = usePlaceLocation(
+    const { place, placeLoading } = usePlaceLocation(
         details?.location?.[0],
         details?.location?.[1]
     );
 
+    //running loader on screen while the inforamtion is being fetched
 
-    if (loading || !details) return <Loader />;
+    if (placeLoading || detailsLoading || !details) return <Loader />;
 
 
     return (
@@ -145,7 +120,15 @@ export default function Details() {
                 <Divider sx={{ backgroundColor: "black" }}></Divider>
 
                 <Box className="flex justify-around my-4 overflow-x-auto scrollbar-hide">
-                    <InfoCard text={`${place.city}, ${place.province}`} Icon={LocationOnIcon} des="Lahore"></InfoCard>
+                    <InfoCard
+                        text={
+                            place?.city && place?.province
+                                ? `${place.city}, ${place.province}`
+                                : "Unknown"
+                        }
+                        Icon={LocationOnIcon}
+                        des="Lahore"
+                    />
                     <InfoCard text={`${details?.openingHours?.open} - ${details?.openingHours?.close}`} Icon={AccessTimeIcon} des="Opens daily"></InfoCard>
                     <InfoCard text={`${details?.number}`} Icon={CallIcon} des="Visitor Service"></InfoCard>
                     <InfoCard text={`${details?.weblink}`} Icon={LanguageIcon} des="Official Website"></InfoCard>

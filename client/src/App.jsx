@@ -1,4 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Navbar from './components/Navbar.jsx'
 import Home from './pages/Home.jsx'
 import Details from './pages/Details.jsx'
@@ -8,6 +11,7 @@ import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/SignUp.jsx'
 import AddListingForm from './pages/AddListingForm.jsx'
 import ReviewForm from './pages/ReviewForm.jsx'
+import VerifyOtp from './components/VerifyOtp.jsx';
 
 import './App.css'
 
@@ -15,6 +19,7 @@ function App() {
   const location = useLocation();
   const hideNavbarRoutes = ["/signin", "/signup"];
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
+
   return (
     <div className="flex flex-col min-h-screen w-full  ">
       {!shouldHideNavbar && <Navbar />}
@@ -28,9 +33,21 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/verify-otp" element={<VerifyOtp />} />
         </Routes>
       </main>
-
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored" // "light" | "dark" | "colored"
+      />
     </div>
   )
 }
