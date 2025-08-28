@@ -1,5 +1,7 @@
 import React from "react";
+
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Card, CardMedia, Box, Typography } from "@mui/material";
 import Btn from "../Btn"
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -7,11 +9,12 @@ import AverageStars from "../Reviews/AverageStars";
 import AverageRating from "../Reviews/AverageRating";
 
 
-const HoverCard = ({ id, name, image }) => {
+const HoverCard = ({ id, name, image, averageRating, reviewCount, locationLat, locationLon }) => {
     const navigate = useNavigate();
     const handleViewMore = () => {
         navigate(`details/${id}`);
     }
+
     return (
         <Card
             sx={{
@@ -64,7 +67,7 @@ const HoverCard = ({ id, name, image }) => {
 
                 <Box className="mb-8">
                     <AverageStars id={id} />
-                    <AverageRating id={id} />
+                    <Box> {averageRating?.toFixed(1)} ({reviewCount} reviews)</Box>
                 </Box>
                 <Btn text="View More" onClick={handleViewMore} w="100%"></Btn>
             </Box>

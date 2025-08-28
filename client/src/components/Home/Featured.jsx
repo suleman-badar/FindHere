@@ -9,20 +9,23 @@ export default function Featured() {
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
 
+
     useEffect(() => {
-        const fetchListings = async () => {
+        async function fetchListings() {
             try {
-                const res = await axios.get("http://localhost:8000/api/listing/all-listing");
-                setListings(res.data.data);
-            }
-            catch (err) {
-                console.error("Error fetching listings:", err);
+                const res = await axios.get("http://localhost:8000/api/review/listings-with-reviews");
+                setListings(res.data);
+                console.log("API response:", res.data);
+            } catch (err) {
+                console.error("Failed to fetch listings:", err);
             } finally {
                 setLoading(false);
             }
-        };
+        }
         fetchListings();
     }, []);
+
+
 
     return (
         <Box sx={{ p: 4, backgroundColor: "#d0d0d0", textAlign: "center", position: "relative" }}>
@@ -39,7 +42,17 @@ export default function Featured() {
 
                     <Carousel>
                         {listings.map((listing) => (
-                            <HoverCard key={listing._id} id={listing._id} name={listing.name} image={listing.images[0]} />
+                            <HoverCard
+                                key={listing._id}
+                                id={listing._id}
+                                name={listing.name}
+                                image={listing.images[0]}
+                                verageRating={listing.averageRating}
+                                reviewCount={listing.reviewCount}
+                                locationLat={listing.location[0]}
+                                locationLon={listing.location[1]}
+
+                            />
                         ))}
                     </Carousel>
                 </>

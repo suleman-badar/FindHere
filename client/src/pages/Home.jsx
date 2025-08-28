@@ -10,7 +10,7 @@ import Featured from "../components/Home/Featured.jsx";
 export default function Home() {
     const navigate = useNavigate();
     const location = useLocation();
-    const hasShownToast = useRef(false); // ✅ prevents double firing
+    const hasShownToast = useRef(false); // prevents double firing
 
     useEffect(() => {
         if (location.state?.authMessage && !hasShownToast.current) {
@@ -20,7 +20,7 @@ export default function Home() {
                 <div className="flex flex-col items-center">
                     <span>{location.state.authMessage}</span>
                     <Link
-                        to="/login"
+                        to="/signin"
                         className="mt-2 underline font-medium text-blue-800 hover:text-blue-600"
                     >
                         Go to Login
