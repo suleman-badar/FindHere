@@ -13,6 +13,7 @@ export default function useDetails(id) {
             try {
                 setLoading(true);
                 const res = await axios.get(`http://localhost:8000/api/listing/details/${id}`);
+                // console.log(res.data);
                 setDetails(res.data);
             } catch (err) {
                 setError(err);

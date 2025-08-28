@@ -1,4 +1,6 @@
 import Listing from "../models/Listing.js";
+import mongoose from "mongoose";
+
 
 /**
  * @desc   Create new listing
@@ -7,13 +9,13 @@ import Listing from "../models/Listing.js";
  */
 export const createListing = async(req, res) => {
     try {
-        const { name, location, description, number, weblink, openingHours } = req.body;
+        const { name, description, number, weblink, openingHours, latitude, longitude } = req.body;
 
         if (!name || !description) {
             return res.status(400).json({ success: false, message: "Name and description are required" });
         }
 
-        const loc = location && location.length === 2 ? location : null;
+        const loc = (latitude && longitude) ? [latitude, longitude] : null;
         const images = req.files ? req.files.map(file => file.path) : [];
 
         const listing = new Listing({
@@ -108,7 +110,26 @@ export const getListingById = async(req, res) => {
  */
 export const getOwnerListings = async(req, res) => {
     try {
-        const listings = await Listing.find({ owner: req.userId }).populate("owner", "name email");
+
+        const listings = await Listing.aggregate([{
+                $match: { owner: new mongoose.Types.ObjectId(String(req.userId)) }
+            },
+            {
+                $lookup: {
+                    from: "reviews",
+                    localField: "_id",
+                    foreignField: "listingId",
+                    as: "reviews"
+                }
+            },
+            {
+                $addFields: {
+                    averageRating: { $avg: "$reviews.rating" },
+                    reviewCount: { $size: "$reviews" }
+                }
+            }
+        ]);
+
 
         res.json({ success: true, data: listings });
     } catch (error) {

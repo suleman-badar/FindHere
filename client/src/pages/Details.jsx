@@ -63,7 +63,7 @@ export default function Details() {
     const navigate = useNavigate();
     const { details, detailsLoading } = useDetails(id);    //Fetching deta8ls in custom hook
 
-    console.log("details::", details);
+    // console.log("details::", details);
 
     function handleWriteReview() {
         navigate(`/review/create-review/${id}`);

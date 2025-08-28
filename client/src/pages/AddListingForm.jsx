@@ -54,8 +54,8 @@ export default function AddListingForm() {
             data.append("description", formData.description);
             data.append("latitude", formData.location[0]);
             data.append("longitude", formData.location[1]);
-            data.append("open", formData.openingHours.open);
-            data.append("close", formData.openingHours.close);
+            data.append("openingHours[open]", open);
+            data.append("openingHours[close]", close);
 
             formData.images.forEach((img, idx) => {
                 data.append("images", img);
@@ -63,7 +63,7 @@ export default function AddListingForm() {
 
             try {
                 setLoading(true);
-                await axios.post("http://localhost:8000/api/listing/create-listing", data, {
+                await axios.post("http://localhost:8000/api/listing/create-listing", data, { withCredentials: true }, {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
                 setFormData({
@@ -74,15 +74,14 @@ export default function AddListingForm() {
                     openingHours: { open: "", close: "" },
                     images: [],
                 });
+                alert("Listing submitted successfully!");
+
                 setStep(1);
             } catch (err) {
                 console.error("Submission error:", err);
                 alert(err.response?.data?.message || "Failed to submit listing");
             } finally {
                 setLoading(false);
-                alert("Listing submitted successfully!");
-
-
             }
 
         } catch (err) {

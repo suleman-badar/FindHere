@@ -15,7 +15,7 @@ export default function Featured() {
             try {
                 const res = await axios.get("http://localhost:8000/api/review/listings-with-reviews");
                 setListings(res.data);
-                console.log("API response:", res.data);
+                // console.log("API response:", res.data);
             } catch (err) {
                 console.error("Failed to fetch listings:", err);
             } finally {

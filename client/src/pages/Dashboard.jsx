@@ -36,7 +36,10 @@ export default function Dashboard() {
                     "http://localhost:8000/api/listing/owner",
                     { withCredentials: true }
                 );
+                // console.log("Full response:", res.data);
+
                 setPlaces(res.data.data || []);
+                // console.log("places", res.data.data);
             } catch (err) {
                 navigate("/", {
                     state: { authMessage: "You must be logged in first" },
