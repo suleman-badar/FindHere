@@ -172,24 +172,12 @@ export default function SignUp() {
                         Sign Up with Google
                     </Button>
 
-<<<<<<< HEAD
                     <Btn text="Sign Up with Apple" IconStart={AppleIcon} className="w-80 max-w-sm mb-2" />
 
                     {/* Sign In Link */}
                     <Box className="flex gap-1 text-sm mt-3">
                         <p className="text-gray-200">Already have an account?</p>
                         <Link to="/signin" className="text-pink-300 font-semibold hover:underline">Sign In</Link>
-=======
-                    {/* Already have account */}
-                    <Box className="flex gap-1 text-xs mt-3">
-                        <p>Already have an account?</p>
-                        <Link
-                            to="/signin"
-                            className="text-blue-600 hover:underline font-medium"
-                        >
-                            Sign In
-                        </Link>
->>>>>>> 5d232ddd5b9aaed43b26277d85fb596e2c55814c
                     </Box>
                 </Box>
             </Box>
