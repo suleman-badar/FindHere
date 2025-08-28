@@ -63,7 +63,7 @@ export default function Details() {
     const navigate = useNavigate();
     const { details, detailsLoading } = useDetails(id);    //Fetching deta8ls in custom hook
 
-
+    console.log("details::", details);
 
     function handleWriteReview() {
         navigate(`/review/create-review/${id}`);
@@ -72,8 +72,8 @@ export default function Details() {
     //fetching place information(city,province) in a  custom hook
 
     const { place, placeLoading } = usePlaceLocation(
-        details?.location?.[0],
-        details?.location?.[1]
+        details?.data?.location?.[0],
+        details?.data?.location?.[1]
     );
 
     //running loader on screen while the inforamtion is being fetched
@@ -105,13 +105,13 @@ export default function Details() {
                 </Box>
 
                 <Box className="w-[90%] mx-2">
-                    <img src={details?.images?.[0]} alt={details?.name} />
+                    <img src={details?.data?.images?.[0]} alt={details?.name} />
                 </Box>
 
             </Box>
             <Box className="mx-4 my-6">
-                <h1>{details?.name}</h1>
-                <p>{details?.description}</p>
+                <h1>{details?.data?.name}</h1>
+                <p>{details?.data?.description}</p>
                 <Box className="flex items-center gap-8 mb-8">
                     <AverageStars id={id} />
                     <AverageRating id={id} />
@@ -129,9 +129,9 @@ export default function Details() {
                         Icon={LocationOnIcon}
                         des="Lahore"
                     />
-                    <InfoCard text={`${details?.openingHours?.open} - ${details?.openingHours?.close}`} Icon={AccessTimeIcon} des="Opens daily"></InfoCard>
-                    <InfoCard text={`${details?.number}`} Icon={CallIcon} des="Visitor Service"></InfoCard>
-                    <InfoCard text={`${details?.weblink}`} Icon={LanguageIcon} des="Official Website"></InfoCard>
+                    <InfoCard text={`${details?.data?.openingHours?.open} - ${details?.data?.openingHours?.close}`} Icon={AccessTimeIcon} des="Opens daily"></InfoCard>
+                    <InfoCard text={`${details?.data?.number}`} Icon={CallIcon} des="Visitor Service"></InfoCard>
+                    <InfoCard text={`${details?.data?.weblink}`} Icon={LanguageIcon} des="Official Website"></InfoCard>
                 </Box>
 
                 <Divider sx={{ backgroundColor: "black" }}></Divider>
@@ -152,7 +152,7 @@ export default function Details() {
                 </Box>
                 <Box className="my-8">
                     <h3 className="my-4" >Locations & Directions</h3>
-                    <Box className="h-[300px] bg-red-100 rounded-lg"><MapPreview location={details?.location} /></Box>
+                    <Box className="h-[300px] bg-red-100 rounded-lg"><MapPreview location={details?.data?.location} /></Box>
 
                 </Box>
                 <Box className="flex justify-center">

@@ -6,7 +6,7 @@ const ImageGallery = forwardRef(({ details, previewCount = 4 }, ref) => {
     const [open, setOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const images = details?.images || [];
+    const images = details?.data?.images || [];
 
     const handleOpen = (index = 0) => {
         setCurrentIndex(index);
