@@ -13,6 +13,25 @@ import AddListingForm from './pages/AddListingForm.jsx'
 import ReviewForm from './pages/ReviewForm.jsx'
 import VerifyOtp from './components/VerifyOtp.jsx';
 
+// import AdminLayout from "./layouts/AdminLayout";
+
+// import Dashboard from './pages/Dashboard.jsx';
+import DashboardHome from './components/DashboardHome.jsx';
+
+
+
+
+import GeneralInfoEdit from "./components/ListingEditForms/GeneralInfoEdit.jsx";
+import ContactEdit from "./components/ListingEditForms/ContactEdit.jsx";
+import LocationEdit from "./components/ListingEditForms/LocationEdit.jsx";
+import HoursEdit from "./components/ListingEditForms/HoursEdit.jsx";
+import MediaEdit from "./components/ListingEditForms/MediaEdit.jsx";
+import ListingReviewsEdit from "./components/ListingEditForms/ListingReviewsEdit.jsx";
+
+import { SelectedPlaceProvider } from './context/SelectedPlaceContext.jsx'
+
+
+
 import './App.css'
 
 function App() {
@@ -25,15 +44,43 @@ function App() {
       {!shouldHideNavbar && <Navbar />}
       <main className="flex-grow w-full">
         <Routes>
+          {/* main pages public access */}
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+
+          {/* side pages and forms */}
           <Route path="/details/:id" element={<Details />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/addListing" element={<AddListingForm />} />
           <Route path="/review/create-review/:id" element={<ReviewForm />} />
-          <Route path="/about" element={<About />} />
+
+          {/* authentication routes */}
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/verify-otp" element={<VerifyOtp />} />
+
+          {/* admin access */}
+          <Route path="/admin"
+            element={
+              <SelectedPlaceProvider>
+                <Dashboard />
+              </SelectedPlaceProvider>
+            }
+          >
+            <Route path="dashboard" element={<DashboardHome />} />
+            {/* <Route path="/admin/saved" element={<SavedPlacesCard />} /> */}
+            {/* <Route path="/admin/tools" element={<Tools />} /> */}
+
+            {/* admin access edit */}
+
+            <Route path="edit/:placeId/general-info" element={<GeneralInfoEdit />} />
+            <Route path="edit/:placeId/contact" element={<ContactEdit />} />
+            <Route path="edit/:placeId/location" element={<LocationEdit />} />
+            <Route path="edit/:placeId/hours" element={<HoursEdit />} />
+            <Route path="edit/:placeId/media" element={<MediaEdit />} />
+            <Route path="edit/:placeId/reviews" element={<ListingReviewsEdit />} />
+
+
+          </Route>
         </Routes>
       </main>
       <ToastContainer

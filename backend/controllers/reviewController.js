@@ -77,3 +77,21 @@ export const getListingsWithRatings = async(req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
+
+export const deleteReview = async(req, res) => {
+    try {
+        const review = await Review.findById(req.params.reviewId);
+
+        if (!review) {
+            return res.status(404).json({ success: false, message: "Review not found" });
+        }
+
+        await review.deleteOne();
+
+        res.json({ success: true, message: "Review deleted successfully" });
+
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};

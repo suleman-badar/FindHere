@@ -12,7 +12,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 export default function Navbar() {
     const links = [
         { text: "Explore", path: "/", icon: <ExploreIcon sx={{ color: "#082567" }} /> },
-        { text: "Dashboard", path: "/dashboard", icon: <DashboardIcon sx={{ color: "#082567" }} /> },
+        { text: "Dashboard", path: "/admin/dashboard", icon: <DashboardIcon sx={{ color: "#082567" }} /> },
         { text: "About", path: "/about", icon: <InfoIcon sx={{ color: "#082567" }} /> },
 
     ];

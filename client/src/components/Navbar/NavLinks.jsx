@@ -40,7 +40,7 @@ export default function NavLinks({ links, isDrawer }) {
             top: "10px",
             zIndex: 1100,
 
-            backgroundColor: "rgba(255, 255, 255, 0.27)", // increase opacity
+            backgroundColor: "rgba(255, 255, 255, 0.27)",
             backdropFilter: "blur(6px) saturate(180%)",
             WebkitBackdropFilter: "blur(10px) saturate(180%)",
 

@@ -9,14 +9,26 @@ import mongoose from "mongoose";
  */
 export const createListing = async(req, res) => {
     try {
-        const { name, description, number, weblink, openingHours, latitude, longitude } = req.body;
+        let { name, description, number, weblink, latitude, longitude } = req.body;
 
         if (!name || !description) {
             return res.status(400).json({ success: false, message: "Name and description are required" });
         }
 
+        let openingHours = null;
+
+        if (req.body.openingHours) {
+            try {
+                openingHours = JSON.parse(req.body.openingHours);
+            } catch (e) {
+                return res.status(400).json({ success: false, message: "Invalid openingHours format" });
+            }
+        }
+
         const loc = (latitude && longitude) ? [latitude, longitude] : null;
         const images = req.files ? req.files.map(file => file.path) : [];
+        console.log("REQ BODY:", req.body);
+
 
         const listing = new Listing({
             name,
@@ -42,9 +54,10 @@ export const createListing = async(req, res) => {
  * @route  PUT /api/listing/update-listing/:id
  * @access Private (owner only)
  */
+
 export const updateListing = async(req, res) => {
     try {
-        const listing = await Listing.findById(req.params.id);
+        const listing = await Listing.findById(req.params.listingId);
         if (!listing) {
             return res.status(404).json({ success: false, message: "Listing not found" });
         }
@@ -56,21 +69,40 @@ export const updateListing = async(req, res) => {
         const { name, location, description, number, weblink, openingHours } = req.body;
         const images = req.files ? req.files.map(file => file.path) : [];
 
+
+        console.log("images", images);
+        if (images.length > 0) {
+            listing.images = [...listing.images, ...images];
+        }
+
         if (name) listing.name = name;
-        if (location) listing.location = location;
+        if (location) {
+            const parsedLoc = typeof location === "string" ? JSON.parse(location) : location;
+            if (Array.isArray(parsedLoc) && parsedLoc.length === 2) {
+                listing.location = parsedLoc.map(Number);
+
+            }
+        }
         if (description) listing.description = description;
         if (number) listing.number = number;
         if (weblink) listing.website = weblink;
-        if (openingHours) listing.openingHours = openingHours;
-        if (images.length > 0) listing.images = images;
-
+        if (openingHours) {
+            try {
+                listing.openingHours =
+                    typeof openingHours === "string" ? JSON.parse(openingHours) : openingHours;
+            } catch (e) {
+                return res.status(400).json({ success: false, message: "Invalid openingHours format" });
+            }
+        }
         await listing.save();
         res.status(200).json({ success: true, data: listing });
     } catch (error) {
-        console.error("Error updating listing:", error);
-        res.status(500).json({ success: false, message: "Server error" });
+        console.error("Error updating listing:", error.message, error.stack);
+        res.status(500).json({ success: false, message: error.message });
     }
 };
+
+
 
 /**
  * @desc   Get all listings (public)

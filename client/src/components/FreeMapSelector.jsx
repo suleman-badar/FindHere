@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import Loader from "./Loader";
 import "leaflet/dist/leaflet.css";
@@ -20,6 +20,8 @@ export default function FreeMapSelector({ location, setLocation }) {
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState([]);
+    // console.log("Setting location:", location);
+
 
     const handleSearch = async () => {
         try {
@@ -41,6 +43,8 @@ export default function FreeMapSelector({ location, setLocation }) {
             setLoading(false);
         }
     };
+    // console.log("results", results);
+
 
     return (
         <div>
@@ -94,8 +98,10 @@ export default function FreeMapSelector({ location, setLocation }) {
                                 textAlign: "left",
                             }}
                             onClick={() => {
-                                const [lon, lat] = place.geometry.coordinates;
-                                setLocation([lat, lon]);
+                                const coords = place.geometry?.coordinates;
+                                if (!coords || coords.length < 2) return;
+                                const [lng, lat] = coords;
+                                setLocation([lat, lng]);
                                 setResults([]);
                             }}
                         >
@@ -107,7 +113,10 @@ export default function FreeMapSelector({ location, setLocation }) {
                     </li>
                 ))}
             </ul>
+
+            {/* console.log("locartiondfjh",location) */}
             <MapPreview location={location} />
+
 
             <p>
                 {location

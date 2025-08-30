@@ -25,7 +25,7 @@ const listingSchema = new Schema({
         maxlength: 11,
 
     },
-    website: {
+    weblink: {
         type: String,
         trim: true,
     },

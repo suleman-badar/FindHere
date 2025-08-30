@@ -42,6 +42,9 @@ export default function AddListingForm() {
     const updateField = (field, value) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
+
+
+
     const handleSubmit = async () => {
         try {
             for (let i = 1; i <= 4; i++) {
@@ -54,8 +57,11 @@ export default function AddListingForm() {
             data.append("description", formData.description);
             data.append("latitude", formData.location[0]);
             data.append("longitude", formData.location[1]);
-            data.append("openingHours[open]", open);
-            data.append("openingHours[close]", close);
+
+            data.append("openingHours", JSON.stringify({
+                open: formData.openingHours.open,
+                close: formData.openingHours.close
+            }));
 
             formData.images.forEach((img, idx) => {
                 data.append("images", img);
@@ -63,7 +69,8 @@ export default function AddListingForm() {
 
             try {
                 setLoading(true);
-                await axios.post("http://localhost:8000/api/listing/create-listing", data, { withCredentials: true }, {
+                await axios.post("http://localhost:8000/api/listing/create-listing", data, {
+                    withCredentials: true,
                     headers: { "Content-Type": "multipart/form-data" },
                 });
                 setFormData({

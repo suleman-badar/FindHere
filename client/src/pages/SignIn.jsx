@@ -41,7 +41,7 @@ export default function SignIn() {
                 setEmail("");
                 setPassword("");
                 toast.success("Welcome to FindHere");
-                navigate("/dashboard");
+                navigate("admin/dashboard");
             }
 
         } catch (e) {
