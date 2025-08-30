@@ -10,7 +10,6 @@ import authRoutes from "./routes/authRoute.js";
 import listingRoutes from "./routes/listingRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import helmet from "helmet";
-import { authMiddleware } from "./middlewares/identification.js"
 
 
 
