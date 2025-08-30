@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { register, login, me, logout, resendOtp } from "../controllers/authController.js";
-import { protect } from "../middlewares/identification.js";
+import { protect, authMiddleware } from "../middlewares/identification.js";
 import { verifyUserOtp } from "../controllers/authController.js";
 import rateLimit from "express-rate-limit";
 
@@ -23,7 +23,7 @@ router.post("/register", loginLimiter, register);
 router.post("/register/verify", verifyUserOtp);
 router.post("/register/resend-otp", resendOtp);
 router.post("/login", loginLimiter, login);
-router.get("/me", protect, me);
+router.get("/me", authMiddleware, protect, me);
 router.post("/logout", protect, logout);
 
 

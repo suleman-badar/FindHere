@@ -18,7 +18,7 @@ export default function VerifyOtp() {
                 otp,
             });
             console.log("OTP Verified:", res.data);
-            navigate("/dashboard");
+            navigate("/admin/dashboard");
         } catch (e) {
             setError(e.response?.data?.message || "Invalid OTP");
         }

@@ -29,6 +29,22 @@ const listingSchema = new Schema({
         type: String,
         trim: true,
     },
+    city: {
+        type: String,
+        trim: true,
+
+    },
+    country: {
+        type: String,
+        trim: true,
+        default: "Pakistan",
+
+    },
+    about: {
+        type: String,
+        trim: true,
+        default: "",
+    },
     openingHours: {
         open: {
             type: String,
