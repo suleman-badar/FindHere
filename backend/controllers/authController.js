@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import { sendOtp, verifyOtp } from "./otpController.js";
 
-import { changePasswordSchema, acceptFPCodeSchema, doHashValidation, hmacProcess } from "../middlewares/validator.js";
+import { changePasswordSchema, acceptFPCodeSchema, hmacProcess } from "../middlewares/validator.js";
 
 dotenv.config();
 
@@ -164,41 +164,41 @@ export const logout = (_req, res) => {
     res.clearCookie("token", { path: "/" }).json({ success: true, message: "Logged out successfully" });
 };
 
-
-// change password
+// CHANGE PASSWORD
 export const changePassword = async (req, res) => {
-    const userId = req.userId;  // <-- from middleware
-    const { oldPassword, newPassword } = req.body;
+  const userId = req.userId; 
+  const { oldPassword, newPassword } = req.body;
 
-    try {
-        const { error } = changePasswordSchema.validate({ oldPassword, newPassword });
-        if (error) {
-            return res.status(401).json({ success: false, message: error.details[0].message });
-        }
-
-        const existingUser = await User.findById(userId).select("+password");
-        if (!existingUser) {
-            return res.status(404).json({ success: false, message: 'User does not exist!' });
-        }
-
-        if (!existingUser.isVerified) {
-            return res.status(401).json({ success: false, message: "You are not verified!" });
-        }
-
-        const result = await doHashValidation(oldPassword, existingUser.password);
-        if (!result) {
-            return res.status(401).json({ success: false, message: "Invalid credentials!" });
-        }
-
-        existingUser.password = newPassword;
-        await existingUser.save();
-
-        return res.status(200).json({ success: true, message: "Password Updated!" });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ success: false, message: "Server error" });
+  try {
+    const { error } = changePasswordSchema.validate({ oldPassword, newPassword });
+    if (error) {
+      return res.status(400).json({ success: false, message: error.details[0].message });
     }
+
+    const user = await User.findById(userId).select("+password");
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User does not exist!" });
+    }
+
+    if (!user.isVerified) {
+      return res.status(403).json({ success: false, message: "You are not verified!" });
+    }
+
+    const validPassword = await user.comparePassword(oldPassword);
+    if (!validPassword) {
+      return res.status(401).json({ success: false, message: "Invalid credentials!" });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    return res.status(200).json({ success: true, message: "Password updated successfully!" });
+  } catch (error) {
+    console.error("Change password error:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
 };
+
 
 export const sendForgotPasswordCode = async (req, res) => {
 	const { email } = req.body;

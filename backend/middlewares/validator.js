@@ -7,12 +7,6 @@ export function hmacProcess(value, key) {
     return result;
 }
 
-export function doHashValidation(value, hashedValue){
-    const result = compare(value, hashedValue);
-    return result;
-}
-
-
 export const changePasswordSchema = Joi.object({
     newPassword: Joi.string().required(),
     oldPassword: Joi.string().required(),
