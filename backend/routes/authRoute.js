@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login, me, logout, resendOtp } from "../controllers/authController.js";
+import { register, login, me, logout, resendOtp, changePassword, sendForgotPasswordCode, verifyForgotPasswordCode } from "../controllers/authController.js";
 import { protect } from "../middlewares/identification.js";
 import { verifyUserOtp } from "../controllers/authController.js";
 import rateLimit from "express-rate-limit";
@@ -25,6 +25,11 @@ router.post("/register/resend-otp", resendOtp);
 router.post("/login", loginLimiter, login);
 router.get("/me", protect, me);
 router.post("/logout", protect, logout);
+
+router.patch('/change-password', protect, changePassword);
+
+router.patch('/send-forgot-password-code', sendForgotPasswordCode);
+router.patch('/verify-forgot-password-code', verifyForgotPasswordCode);
 
 
 
