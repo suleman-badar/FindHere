@@ -16,6 +16,7 @@ import { reviewValidations } from "../validations/reviewValidations";
 import AverageRating from "../components/Reviews/AverageRating";
 import AverageStars from "../components/Reviews/AverageStars";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 
@@ -63,7 +64,7 @@ export default function ReviewForm() {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
-            alert("Review submitted successfully!");
+            toast.success("Review submitted successfully!");
             setRating(0);
             setHoverRating(0);
             setReviewText("");
@@ -71,10 +72,10 @@ export default function ReviewForm() {
             setImage(null);
         } catch (err) {
             if (err.name === "ValidationError") {
-                alert(err.errors.join("\n"));
+                toast.error(err.errors.join("\n"));
             } else {
                 console.error("Error posting review:", err);
-                alert("Failed to submit review.");
+                toast.error("Failed to submit review.");
             }
         } finally {
             setLoading(false);

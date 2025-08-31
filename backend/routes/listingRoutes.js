@@ -5,9 +5,9 @@ import { protect } from "../middlewares/identification.js";
 
 const router = express.Router();
 // Protected routes (must be logged in)
-router.post("/create-listing", protect, upload.array("images", 5), createListing);
+router.post("/", protect, upload.array("images", 5), createListing);
 router.put("/update-listing/:listingId", protect, upload.array("images", 5), updateListing);
-router.delete("/delete-listing/:listingId", protect, deleteListing);
+router.delete("/:listingId", protect, deleteListing);
 router.get("/owner", protect, getOwnerListings);
 
 

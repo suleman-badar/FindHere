@@ -43,14 +43,14 @@ export default function Featured() {
                     <Carousel>
                         {listings.map((listing) => (
                             <HoverCard
-                                key={listing._id}
-                                id={listing._id}
-                                name={listing.name}
-                                image={listing.images[0]}
-                                verageRating={listing.averageRating}
-                                reviewCount={listing.reviewCount}
-                                locationLat={listing.location[0]}
-                                locationLon={listing.location[1]}
+                                key={listing?._id}
+                                id={listing?._id}
+                                name={listing?.name}
+                                image={listing?.images?.[0]}
+                                averageRating={listing?.averageRating}
+                                reviewCount={listing?.reviewCount}
+                            // locationLat={listing?.location[0]}
+                            // locationLon={listing?.location[1]}
 
                             />
                         ))}

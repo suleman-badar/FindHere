@@ -9,7 +9,7 @@ import Dashboard from './pages/Dashboard.jsx'
 import About from './pages/About.jsx'
 import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/SignUp.jsx'
-import AddListingForm from './pages/AddListingForm.jsx'
+import AddListingPage from './pages/AddListingPage.jsx'
 import ReviewForm from './pages/ReviewForm.jsx'
 import VerifyOtp from './components/VerifyOtp.jsx';
 
@@ -17,8 +17,6 @@ import VerifyOtp from './components/VerifyOtp.jsx';
 
 // import Dashboard from './pages/Dashboard.jsx';
 import DashboardHome from './components/DashboardHome.jsx';
-
-
 
 
 import GeneralInfoEdit from "./components/ListingEditForms/GeneralInfoEdit.jsx";
@@ -50,7 +48,7 @@ function App() {
 
           {/* side pages and forms */}
           <Route path="/details/:id" element={<Details />} />
-          <Route path="/addListing" element={<AddListingForm />} />
+          <Route path="/addListing" element={<AddListingPage />} />
           <Route path="/review/create-review/:id" element={<ReviewForm />} />
 
           {/* authentication routes */}

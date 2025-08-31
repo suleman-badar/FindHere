@@ -36,7 +36,7 @@ export default function MapPreview({ location, onLocationChange }) {
             location[0] != null &&
             location[1] != null
             ? location
-            : [20, 0];
+            : [30, 73];
 
     return (
         <MapContainer center={safeLocation} zoom={13} style={{ height: "300px", width: "100%" }}>

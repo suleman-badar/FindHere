@@ -2,52 +2,95 @@ import Listing from "../models/Listing.js";
 import mongoose from "mongoose";
 
 
+
 /**
  * @desc   Create new listing
- * @route  POST /api/listing/create-listing
+ * @route  POST /api/listing
  * @access Private (owner only)
  */
 export const createListing = async(req, res) => {
     try {
-        let { name, description, number, weblink, latitude, longitude } = req.body;
+        // Destructure data from req.body
+        const {
+            name,
+            tagline,
+            location,
+            address,
+            phone,
+            email,
+            website,
+            hours,
+            paymentMethods,
+            services,
+            tags,
+            amenities,
+            price,
+        } = req.body;
 
-        if (!name || !description) {
-            return res.status(400).json({ success: false, message: "Name and description are required" });
+        // Validate required fields
+        if (!name || !location) {
+            return res.status(400).json({
+                success: false,
+                message: "Name and location are required",
+            });
         }
 
-        let openingHours = null;
-
-        if (req.body.openingHours) {
-            try {
-                openingHours = JSON.parse(req.body.openingHours);
-            } catch (e) {
-                return res.status(400).json({ success: false, message: "Invalid openingHours format" });
-            }
+        // Prse hours if sent as string
+        let parsedHours = {};
+        if (hours) {
+            parsedHours = typeof hours === "string" ? JSON.parse(hours) : hours;
+        }
+        if (Array.isArray(location)) {
+            parsedLocation = location.map(Number)
+        } else if (typeof location === "string") {
+            parsedLocation = location.split(",").map(Number);
         }
 
-        const loc = (latitude && longitude) ? [latitude, longitude] : null;
-        const images = req.files ? req.files.map(file => file.path) : [];
-        console.log("REQ BODY:", req.body);
+        // Parse array fields if sent as strings
+        const parsedPaymentMethods = typeof paymentMethods === "string" ? JSON.parse(paymentMethods) : paymentMethods || [];
+        const parsedServices = typeof services === "string" ? JSON.parse(services) : services || [];
+        const parsedTags = typeof tags === "string" ? JSON.parse(tags) : tags || [];
+        const parsedAmenities = typeof amenities === "string" ? JSON.parse(amenities) : amenities || [];
 
+
+        const images = req.files ? req.files.map((file) => file.path) : [];
+        console.log("images", images);
 
         const listing = new Listing({
             name,
-            location: loc,
-            description,
-            number,
-            website: weblink,
-            openingHours,
+            tagline,
+            location: parsedLocation,
+            address,
+            phone,
+            email,
+            website,
+            hours: parsedHours,
+            paymentMethods: parsedPaymentMethods || [],
+            services: parsedServices || [],
+            tags: parsedTags || [],
+            amenities: parsedAmenities || [],
+            price: price || 0,
             images,
             owner: req.userId,
         });
 
+
         await listing.save();
-        res.status(201).json({ success: true, data: listing });
+
+        res.status(201).json({
+            success: true,
+            data: listing,
+            message: "Listing created successfully",
+        });
     } catch (error) {
         console.error("Error creating listing:", error);
-        res.status(500).json({ success: false, message: "Server error" });
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
     }
 };
+
 
 /**
  * @desc   Update listing by ID
@@ -177,7 +220,7 @@ export const getOwnerListings = async(req, res) => {
  */
 export const deleteListing = async(req, res) => {
     try {
-        const listing = await Listing.findById(req.params.id);
+        const listing = await Listing.findById(req.params.listingId);
         if (!listing) {
             return res.status(404).json({ success: false, message: "Listing not found" });
         }

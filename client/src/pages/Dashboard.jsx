@@ -152,7 +152,7 @@ export default function Dashboard() {
             <SidebarAdmin places={places} />
 
             <main className="flex-1 p-8 space-y-10">
-                <Outlet context={{ places, selectedPlaceId, listingDetails, setListingDetails, loading, onSave, onCancel }} />
+                <Outlet context={{ places, setPlaces, selectedPlaceId, listingDetails, setListingDetails, loading, onSave, onCancel }} />
             </main>
         </div>
     );

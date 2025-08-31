@@ -22,6 +22,7 @@
     "axios": "^1.11.0",
     "cors": "^2.8.5",
     "formik": "^2.4.6",
+    "framer-motion": "^12.23.12",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
     "lucide-react": "^0.541.0",

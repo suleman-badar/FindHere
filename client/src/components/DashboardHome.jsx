@@ -6,11 +6,29 @@ import Btn from "../components/Btn";
 import { stats, activities } from "../data/dummyData";
 import { useSelectedPlace } from "../context/SelectedPlaceContext";
 import { useOutletContext } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function DashboardHome() {
 
-    const { places } = useOutletContext();
+    const { places, setPlaces } = useOutletContext();
     const { setSelectedPlaceId } = useSelectedPlace();
+
+
+
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this listing?")) return;
+
+        try {
+            await axios.delete(`http://localhost:8000/api/listing/${id}`, { withCredentials: true });
+            toast.success("Listing deleted successfully");
+            setPlaces(prev => prev.filter(p => p._id !== id));
+        } catch (err) {
+            console.log("error", err);
+            toast.error(err.response?.data?.message || "Failed to delete listing");
+        }
+    };
 
 
     return (
@@ -32,7 +50,7 @@ export default function DashboardHome() {
                 {places.length === 0 ? (
                     <p className="text-gray-500 text-center">No listings yet</p>
                 ) : (
-                    places.map((place) => <SavedPlaceCard key={place._id} place={place} onSelect={() => setSelectedPlaceId(place._id)} />)
+                    places.map((place) => <SavedPlaceCard key={place._id} place={place} onSelect={() => setSelectedPlaceId(place._id)} onDelete={handleDelete} />)
                 )}
             </div>
 

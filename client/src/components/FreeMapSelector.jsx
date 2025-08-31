@@ -4,7 +4,7 @@ import Loader from "./Loader";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import axios from "axios";
-import MapPreview from "./Details/MapPreview";
+import MapPreview from "./MapPreview";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({

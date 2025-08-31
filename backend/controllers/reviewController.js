@@ -58,16 +58,17 @@ export const getListingsWithRatings = async(req, res) => {
             {
                 $project: {
                     name: 1,
-                    location: 1,
+                    address: 1,
                     description: 1,
-                    number: 1,
+                    phone: 1,
                     website: 1,
-                    openingHours: 1,
+                    hours: 1,
                     images: 1,
                     owner: 1,
                     averageRating: { $ifNull: ["$averageRating", 0] },
                     reviewCount: 1
                 }
+
             }
         ]);
 

@@ -79,7 +79,9 @@ export default function AllReviews({
                     </Box>
                 ))
             ) : (
-                <Typography className="text-gray-500 my-4">No reviews yet. Be the first to write one!</Typography>
+                <Box className="flex items-center justify-center">
+                    <Typography className="text-gray-400 my-4">No reviews yet. Be the first to write one!</Typography>
+                </Box>
             )}
         </Box>
     );
