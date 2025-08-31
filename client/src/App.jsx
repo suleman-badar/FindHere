@@ -12,6 +12,8 @@ import SignUp from './pages/SignUp.jsx'
 import AddListingForm from './pages/AddListingForm.jsx'
 import ReviewForm from './pages/ReviewForm.jsx'
 import VerifyOtp from './components/VerifyOtp.jsx';
+import SendCode from './components/SendFPCode.jsx';
+import VerifyForgotPasswordCode from './components/VerifyFPCode.jsx';
 
 // import AdminLayout from "./layouts/AdminLayout";
 
@@ -56,7 +58,9 @@ function App() {
           {/* authentication routes */}
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/verify-otp" element={<VerifyOtp />} />
+          <Route path="/verify-otp/:email" element={<VerifyOtp />} />
+          <Route path='send-fp-code' element={< SendCode />}/>
+          <Route path='verify-code' element={<VerifyForgotPasswordCode />} />
 
           {/* admin access */}
           <Route path="/admin"

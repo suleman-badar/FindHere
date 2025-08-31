@@ -44,7 +44,7 @@ export default function SignUp() {
 
                 setName(""); setEmail(""); setPassword(""); setConfirmPassword("");
 
-                navigate("/verifyOtp");
+                navigate(`/verify-otp/${email}`);
             } else {
                 toast.error(res.data.message || "Signup failed. Try again.");
             }
