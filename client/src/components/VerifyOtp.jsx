@@ -1,17 +1,18 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
 export default function VerifyOtp() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { userId, email } = location.state || {};
+    const { email } = useParams();
 
     const [otp, setOtp] = useState("");
     const [error, setError] = useState("");
     const [resendMsg, setResendMsg] = useState("");
 
     const handleVerify = async () => {
+        console.log(email);
         try {
             const res = await axios.post("http://localhost:8000/api/auth/register/verify", {
                 email,

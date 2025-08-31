@@ -29,7 +29,15 @@ const userSchema = new Schema({
     },
     isVerified: { type: Boolean, default: false },
     verificationCode: { type: String },
-    verificationCodeExpires: { type: Date }
+    verificationCodeExpires: { type: Date },
+    forgotPasswordCode: {
+        type: String,
+        select: false,
+    },
+    forgotPasswordCodeValidation: {
+        type: Number,
+        select: false,
+    },
 }, { timestamps: true });
 
 // pre - Hasing password here

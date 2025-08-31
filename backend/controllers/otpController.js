@@ -15,7 +15,7 @@
       });
 
       // const expires = Date.now() + 10 * 60 * 1000; // 10 minutes
-      const expiryMinutes = 0.5; // 30 seconds for testing
+      const expiryMinutes = 10; // 30 seconds for testing
       const expires = Date.now() + expiryMinutes * 60 * 1000;
 
 

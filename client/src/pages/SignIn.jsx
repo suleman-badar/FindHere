@@ -174,6 +174,15 @@ export default function SignIn() {
                             Create Account
                         </Link>
                     </Box>
+                    <Box className="flex gap-1 text-sm mt-2">
+                        <p className="text-gray-200">Forgot Password?</p>
+                        <Link
+                            to="/send-fp-code"
+                            className="text-pink-300 font-semibold hover:underline"
+                        >
+                            Click here to change password
+                        </Link>
+                    </Box>
                 </Box>
             </Box>
         </Box>
