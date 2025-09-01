@@ -6,7 +6,6 @@ import Btn from "../components/Btn";
 import { stats, activities } from "../data/dummyData";
 import { useSelectedPlace } from "../context/SelectedPlaceContext";
 import { useOutletContext } from "react-router-dom";
-import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 

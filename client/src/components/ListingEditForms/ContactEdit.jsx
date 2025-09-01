@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
     Card,
     CardContent,
@@ -77,7 +76,7 @@ export default function ContactEdit() {
                             <TextField
                                 label="Phone Number"
                                 name="number"
-                                value={listingDetails.number || ""}
+                                value={listingDetails.phone || ""}
                                 onChange={handleChange}
                                 fullWidth
                                 variant="outlined"
@@ -110,8 +109,8 @@ export default function ContactEdit() {
                         <Grid item xs={12}>
                             <TextField
                                 label="Website"
-                                name="weblink"
-                                value={listingDetails.weblink || ""}
+                                name="website"
+                                value={listingDetails.website || ""}
                                 onChange={handleChange}
                                 fullWidth
                                 variant="outlined"

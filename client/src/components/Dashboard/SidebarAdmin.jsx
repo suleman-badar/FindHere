@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import {
     Compass, Bookmark, Star, Wrench, LogOut, ChevronLeft, ChevronRight,
-    Info, Image, Phone, Clock, Map
+    Info, Image, Phone, Clock, Map, DollarSign, Tags
 } from "lucide-react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useSelectedPlace } from "../../context/SelectedPlaceContext";
-import { Tooltip } from "@mui/material"; // add this import
+import { Tooltip } from "@mui/material";
 
 
 export default function SidebarAdmin({ places }) {
@@ -64,13 +64,14 @@ export default function SidebarAdmin({ places }) {
     ];
 
     const adminItems = [
-        { key: "general-info", label: "General Info", icon: Info },
-        { key: "contact", label: "Contact", icon: Phone },
-        { key: "location", label: "Location", icon: Map },
-        { key: "hours", label: "Hours", icon: Clock },
+        { key: "basic-info", label: "Basic Info", icon: Info },
+        { key: "contact", label: "Contact Info", icon: Phone },
+        { key: "location", label: "Location Info", icon: Map },
+        { key: "hours", label: "Opening Hours", icon: Clock },
+        { key: "pricing", label: "Pricing Info", icon: DollarSign },
+        { key: "tags", label: "Tags & Ameneties", icon: Tags },
         { key: "media", label: "Media", icon: Image },
         { key: "reviews", label: "My Reviews", icon: Star },
-
     ];
 
     return (

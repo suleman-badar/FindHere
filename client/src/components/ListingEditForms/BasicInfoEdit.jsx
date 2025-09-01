@@ -7,11 +7,19 @@ import {
     Button,
     Divider,
     Stack,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Chip,
+    OutlinedInput,
 } from "@mui/material";
 import { useOutletContext } from "react-router-dom";
 import Loader from "../Loader";
 
-export default function GeneralInfoEdit() {
+const cuisines = ["Italian", "Chinese", "Fast Food", "Cafe", "Indian", "Mexican", "Japanese"];
+
+export default function BasicInfoEdit() {
     const { listingDetails, setListingDetails, loading, onSave, onCancel } = useOutletContext();
 
     if (!listingDetails || loading) return <Loader />;
@@ -19,6 +27,14 @@ export default function GeneralInfoEdit() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setListingDetails((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleCuisineChange = (event) => {
+        const { value } = event.target;
+        setListingDetails((prev) => ({
+            ...prev,
+            cuisine: typeof value === "string" ? value.split(",") : value,
+        }));
     };
 
     const handleSubmit = (e) => {
@@ -39,7 +55,6 @@ export default function GeneralInfoEdit() {
                 border: "1px solid rgba(255,255,255,0.3)",
                 boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
                 transition: "all 0.3s ease",
-
             }}
         >
             {/* Header */}
@@ -71,13 +86,15 @@ export default function GeneralInfoEdit() {
             <CardContent sx={{ p: { xs: 4, sm: 5 } }}>
                 <form onSubmit={handleSubmit}>
                     <Stack spacing={4}>
+                        {/* Restaurant Name */}
                         <TextField
-                            label="Name"
+                            label="Restaurant Name"
                             name="name"
-                            value={listingDetails.name}
+                            value={listingDetails.name || ""}
                             onChange={handleChange}
                             fullWidth
                             variant="outlined"
+                            InputLabelProps={{ shrink: true }}
                             sx={{
                                 "& .MuiOutlinedInput-root": {
                                     borderRadius: "14px",
@@ -87,15 +104,83 @@ export default function GeneralInfoEdit() {
                             }}
                         />
 
+                        {/* Tagline */}
+                        <TextField
+                            label="Tagline (optional)"
+                            name="tagline"
+                            value={listingDetails.tagline || ""}
+                            onChange={handleChange}
+                            fullWidth
+                            variant="outlined"
+                            InputLabelProps={{ shrink: true }}
+                            sx={{
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "14px",
+                                    backgroundColor: "rgba(255,255,255,0.8)",
+                                    backdropFilter: "blur(5px)",
+                                },
+                            }}
+                        />
+
+                        {/* Description */}
                         <TextField
                             label="Description"
                             name="description"
-                            value={listingDetails.description}
+                            value={listingDetails.description || ""}
                             onChange={handleChange}
                             fullWidth
                             multiline
                             rows={5}
                             variant="outlined"
+                            InputLabelProps={{ shrink: true }}
+                            sx={{
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "14px",
+                                    backgroundColor: "rgba(255,255,255,0.8)",
+                                    backdropFilter: "blur(5px)",
+                                },
+                            }}
+                        />
+
+                        {/* Cuisine Type */}
+                        <FormControl fullWidth>
+                            <InputLabel shrink>Cuisine Type</InputLabel>
+                            <Select
+                                multiple
+                                value={listingDetails.cuisine || []}
+                                onChange={handleCuisineChange}
+                                input={<OutlinedInput label="Cuisine Type" />}
+                                renderValue={(selected) => (
+                                    <div className="flex flex-wrap gap-1">
+                                        {selected.map((value) => (
+                                            <Chip key={value} label={value} size="small" />
+                                        ))}
+                                    </div>
+                                )}
+                                sx={{
+                                    borderRadius: "14px",
+                                    backgroundColor: "rgba(255,255,255,0.8)",
+                                    backdropFilter: "blur(5px)",
+                                }}
+                            >
+                                {cuisines.map((cuisine) => (
+                                    <MenuItem key={cuisine} value={cuisine}>
+                                        {cuisine}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                        {/* Established Year */}
+                        <TextField
+                            label="Established Year"
+                            name="establishedYear"
+                            type="number"
+                            value={listingDetails.establishedYear || ""}
+                            onChange={handleChange}
+                            fullWidth
+                            variant="outlined"
+                            InputLabelProps={{ shrink: true }}
                             sx={{
                                 "& .MuiOutlinedInput-root": {
                                     borderRadius: "14px",

@@ -9,20 +9,23 @@ import Preview from "./Preview";
 import axios from "axios"
 import { toast } from "react-toastify";
 import Loader from "../Loader";
+import { useNavigate } from "react-router-dom";
 
 export default function AddListingForm() {
     const [step, setStep] = useState(0);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
 
     const [formData, setFormDataState] = useState({
         name: "",
         tagline: "",
         location: [],
-        address: "",
+        addressNote: "",
         phone: "",
         email: "",
         website: "",
+        establishedYear: "",
         hours: {
             Monday: { open: "", close: "" },
             Tuesday: { open: "", close: "" },
@@ -36,6 +39,7 @@ export default function AddListingForm() {
         services: [],
         tags: [],
         amenities: [],
+        cuisine: [],
         price: "",
     });
 
@@ -95,6 +99,7 @@ export default function AddListingForm() {
             if (res.data.success) {
                 toast.success("Restaurant added successfully!");
             }
+            navigate("/admin/dashboard");
 
         } catch (error) {
             console.error(error);

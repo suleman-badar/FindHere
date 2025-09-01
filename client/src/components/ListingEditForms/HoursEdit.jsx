@@ -2,6 +2,8 @@ import { Card, CardContent, CardHeader, Typography, TextField, Button, Stack, Di
 import { useOutletContext } from "react-router-dom";
 import Loader from "../Loader";
 
+const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
 export default function HoursEdit() {
     const { listingDetails, setListingDetails, loading, onSave, onCancel } = useOutletContext();
 
@@ -15,9 +17,9 @@ export default function HoursEdit() {
     return (
         <Card
             sx={{
-                maxWidth: 600,
+                maxWidth: 700,
                 mx: "auto",
-                mt: 10,
+                mt: 8,
                 borderRadius: 3,
                 overflow: "hidden",
                 backdropFilter: "blur(15px)",
@@ -56,47 +58,62 @@ export default function HoursEdit() {
             <CardContent sx={{ p: { xs: 4, sm: 5 } }}>
                 <form onSubmit={handleSubmit}>
                     <Stack spacing={4}>
-                        <TextField
-                            label="Opening Time"
-                            type="time"
-                            value={listingDetails.openingHours?.open || ""}
-                            onChange={(e) =>
-                                setListingDetails(prev => ({
-                                    ...prev,
-                                    openingHours: { ...prev.openingHours, open: e.target.value }
-                                }))
-                            }
-                            fullWidth
-                            variant="outlined"
-                            sx={{
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: "14px",
-                                    backgroundColor: "rgba(255,255,255,0.8)",
-                                    backdropFilter: "blur(5px)",
-                                },
-                            }}
-                        />
+                        {days.map((day) => (
+                            <div key={day}>
+                                <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 600 }}>
+                                    {day}
+                                </Typography>
+                                <Stack direction="row" spacing={3}>
+                                    <TextField
+                                        label="Open"
+                                        type="time"
+                                        value={listingDetails.hours?.[day]?.open || ""}
+                                        onChange={(e) =>
+                                            setListingDetails((prev) => ({
+                                                ...prev,
+                                                hours: {
+                                                    ...prev.hours,
+                                                    [day]: { ...prev.hours?.[day], open: e.target.value }
+                                                }
+                                            }))
+                                        }
+                                        fullWidth
+                                        variant="outlined"
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                borderRadius: "14px",
+                                                backgroundColor: "rgba(255,255,255,0.8)",
+                                                backdropFilter: "blur(5px)",
+                                            },
+                                        }}
+                                    />
 
-                        <TextField
-                            label="Closing Time"
-                            type="time"
-                            value={listingDetails.openingHours?.close || ""}
-                            onChange={(e) =>
-                                setListingDetails(prev => ({
-                                    ...prev,
-                                    openingHours: { ...prev.openingHours, close: e.target.value }
-                                }))
-                            }
-                            fullWidth
-                            variant="outlined"
-                            sx={{
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: "14px",
-                                    backgroundColor: "rgba(255,255,255,0.8)",
-                                    backdropFilter: "blur(5px)",
-                                },
-                            }}
-                        />
+                                    <TextField
+                                        label="Close"
+                                        type="time"
+                                        value={listingDetails.hours?.[day]?.close || ""}
+                                        onChange={(e) =>
+                                            setListingDetails((prev) => ({
+                                                ...prev,
+                                                hours: {
+                                                    ...prev.hours,
+                                                    [day]: { ...prev.hours?.[day], close: e.target.value }
+                                                }
+                                            }))
+                                        }
+                                        fullWidth
+                                        variant="outlined"
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                borderRadius: "14px",
+                                                backgroundColor: "rgba(255,255,255,0.8)",
+                                                backdropFilter: "blur(5px)",
+                                            },
+                                        }}
+                                    />
+                                </Stack>
+                            </div>
+                        ))}
 
                         {/* Action Buttons */}
                         <Stack direction="row" spacing={3} justifyContent="flex-end">

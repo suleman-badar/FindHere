@@ -26,30 +26,39 @@ export default function Dashboard() {
             setUpdating(true);
 
             const formData = new FormData();
-
-            // append text fields
-            if (updatedData.name) formData.append("name", updatedData.name);
-            if (updatedData.description) formData.append("description", updatedData.description);
-            if (updatedData.number) formData.append("number", updatedData.number);
-            if (updatedData.website) formData.append("weblink", updatedData.weblink);
-
-            if (updatedData.location) {
-                formData.append("location", JSON.stringify(updatedData.location));
+            // append new image files
+            if (newImages && newImages.length > 0) {
+                newImages.forEach((file) => formData.append("images", file));
             }
 
-            if (updatedData.openingHours) {
-                formData.append("openingHours", JSON.stringify(updatedData.openingHours));
-            }
 
             // append existing images as strings
             if (updatedData.existingImages && updatedData.existingImages.length > 0) {
                 updatedData.existingImages.forEach((url) => formData.append("existingImages[]", url));
             }
 
-            // append new image files
-            if (newImages && newImages.length > 0) {
-                newImages.forEach((file) => formData.append("images", file));
-            }
+
+            Object.keys(updatedData).forEach((key) => {
+                if (key === "location" && Array.isArray(updatedData.location)) {
+                    // handle location array
+                    updatedData.location.forEach((coord) =>
+                        formData.append("location[]", coord)
+                    );
+                }
+                else if (Array.isArray(updatedData[key])) {
+                    updatedData[key].forEach((item) => formData.append(`${key}[]`, item));
+                } else if (
+                    key !== "images" &&
+                    key !== "existingImages" &&
+                    key !== "newImages" &&
+                    key !== "hours"
+                ) {
+                    formData.append(key, updatedData[key]);
+                }
+                if (key === "hours" && typeof updatedData[key] === "object") {
+                    formData.append(key, JSON.stringify(updatedData[key]));
+                }
+            });
 
             const res = await axios.put(
                 `http://localhost:8000/api/listing/update-listing/${selectedPlaceId}`,
@@ -60,7 +69,7 @@ export default function Dashboard() {
                 }
             );
 
-            setListingDetails(res.data.data); // update state with fresh DB response
+            setListingDetails(res.data.data);
 
             toast.success("Updated successfully");
         } catch (err) {

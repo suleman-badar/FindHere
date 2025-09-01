@@ -1,7 +1,7 @@
 import { Card, CardContent, Typography, Button, FormGroup, FormControlLabel, Checkbox, Chip, MenuItem, Select, OutlinedInput, InputLabel, Box } from "@mui/material";
 
 const tagsOptions = ["Family Friendly", "Romantic", "Vegan Options", "Pet Friendly", "Casual"];
-const amenitiesOptions = ["Wifi", "Parking", "Live Music", "Outdoor Seating", "Air Conditioning"];
+const amenitiesOptions = ["Wifi", "Parking", "Live Music", "Air Conditioning"];
 
 export default function TagsStep({ formData, setFormData, errors = {}, nextStep, prevStep }) {
     return (

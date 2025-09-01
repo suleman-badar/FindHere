@@ -21,10 +21,12 @@ import VerifyForgotPasswordCode from './components/VerifyFPCode.jsx';
 import DashboardHome from './components/DashboardHome.jsx';
 
 
-import GeneralInfoEdit from "./components/ListingEditForms/GeneralInfoEdit.jsx";
+import BasicInfoEdit from "./components/ListingEditForms/BasicInfoEdit.jsx";
 import ContactEdit from "./components/ListingEditForms/ContactEdit.jsx";
 import LocationEdit from "./components/ListingEditForms/LocationEdit.jsx";
 import HoursEdit from "./components/ListingEditForms/HoursEdit.jsx";
+import PricingEdit from './components/ListingEditForms/PricingEdit.jsx';
+import TagsEdit from './components/ListingEditForms/TagsEdit.jsx';
 import MediaEdit from "./components/ListingEditForms/MediaEdit.jsx";
 import ListingReviewsEdit from "./components/ListingEditForms/ListingReviewsEdit.jsx";
 
@@ -57,7 +59,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/verify-otp/:email" element={<VerifyOtp />} />
-          <Route path='send-fp-code' element={< SendCode />}/>
+          <Route path='send-fp-code' element={< SendCode />} />
           <Route path='verify-code' element={<VerifyForgotPasswordCode />} />
 
           {/* admin access */}
@@ -74,10 +76,14 @@ function App() {
 
             {/* admin access edit */}
 
-            <Route path="edit/:placeId/general-info" element={<GeneralInfoEdit />} />
+            <Route path="edit/:placeId/basic-info" element={<BasicInfoEdit />} />
             <Route path="edit/:placeId/contact" element={<ContactEdit />} />
             <Route path="edit/:placeId/location" element={<LocationEdit />} />
             <Route path="edit/:placeId/hours" element={<HoursEdit />} />
+            <Route path="edit/:placeId/pricing" element={<PricingEdit />} />
+            <Route path="edit/:placeId/tags" element={<TagsEdit />} />
+
+
             <Route path="edit/:placeId/media" element={<MediaEdit />} />
             <Route path="edit/:placeId/reviews" element={<ListingReviewsEdit />} />
 

@@ -1,8 +1,6 @@
 import Listing from "../models/Listing.js";
 import mongoose from "mongoose";
 
-
-
 /**
  * @desc   Create new listing
  * @route  POST /api/listing
@@ -15,16 +13,18 @@ export const createListing = async(req, res) => {
             name,
             tagline,
             location,
-            address,
+            addressNote,
             phone,
             email,
             website,
+            establishedYear,
             hours,
             paymentMethods,
             services,
             tags,
             amenities,
             price,
+            cuisine,
         } = req.body;
 
         // Validate required fields
@@ -40,6 +40,7 @@ export const createListing = async(req, res) => {
         if (hours) {
             parsedHours = typeof hours === "string" ? JSON.parse(hours) : hours;
         }
+        let parsedLocation = [];
         if (Array.isArray(location)) {
             parsedLocation = location.map(Number)
         } else if (typeof location === "string") {
@@ -51,6 +52,8 @@ export const createListing = async(req, res) => {
         const parsedServices = typeof services === "string" ? JSON.parse(services) : services || [];
         const parsedTags = typeof tags === "string" ? JSON.parse(tags) : tags || [];
         const parsedAmenities = typeof amenities === "string" ? JSON.parse(amenities) : amenities || [];
+        const parsedCuisine = typeof cuisine === "string" ? JSON.parse(cuisine) : cuisine || [];
+
 
 
         const images = req.files ? req.files.map((file) => file.path) : [];
@@ -60,17 +63,20 @@ export const createListing = async(req, res) => {
             name,
             tagline,
             location: parsedLocation,
-            address,
+            addressNote,
             phone,
             email,
             website,
+            establishedYear,
             hours: parsedHours,
             paymentMethods: parsedPaymentMethods || [],
             services: parsedServices || [],
             tags: parsedTags || [],
             amenities: parsedAmenities || [],
             price: price || 0,
+            cuisine: parsedCuisine || [],
             images,
+
             owner: req.userId,
         });
 
@@ -109,42 +115,108 @@ export const updateListing = async(req, res) => {
             return res.status(403).json({ success: false, message: "Not authorized to update this listing" });
         }
 
-        const { name, location, description, number, weblink, openingHours } = req.body;
-        const images = req.files ? req.files.map(file => file.path) : [];
+        const {
+            name,
+            tagline,
+            description,
+            location,
+            addressNote,
+            phone,
+            email,
+            website,
+            establishedYear,
+            hours,
+            paymentMethods,
+            services,
+            tags,
+            amenities,
+            price,
+            cuisine,
+            existingImages
+        } = req.body;
 
-
-        console.log("images", images);
-        if (images.length > 0) {
-            listing.images = [...listing.images, ...images];
+        // Handle new uploaded images
+        if (req.files && req.files.length > 0) {
+            const newImages = req.files.map(file => file.path);
+            listing.images = [...listing.images, ...newImages];
         }
 
-        if (name) listing.name = name;
-        if (location) {
-            const parsedLoc = typeof location === "string" ? JSON.parse(location) : location;
-            if (Array.isArray(parsedLoc) && parsedLoc.length === 2) {
-                listing.location = parsedLoc.map(Number);
-
+        // Handle existingImages passed from frontend to retain
+        if (existingImages) {
+            let parsedExisting = existingImages;
+            if (typeof existingImages === "string") {
+                try {
+                    parsedExisting = JSON.parse(existingImages);
+                } catch (e) {
+                    parsedExisting = [];
+                }
             }
+            listing.images = parsedExisting;
         }
+
+        // Simple string/number fields
+        if (name) listing.name = name;
+        if (tagline) listing.tagline = tagline;
         if (description) listing.description = description;
-        if (number) listing.number = number;
-        if (weblink) listing.website = weblink;
-        if (openingHours) {
+        if (phone) listing.number = phone;
+        if (website) listing.website = website;
+        if (price) listing.price = price;
+        if (addressNote) listing.addressNote = addressNote;
+        if (email) listing.email = email;
+        if (establishedYear) listing.establishedYear = Number(establishedYear);
+
+        // Opening hours
+        if (hours) {
             try {
-                listing.openingHours =
-                    typeof openingHours === "string" ? JSON.parse(openingHours) : openingHours;
+                listing.hours =
+                    typeof hours === "string" ? JSON.parse(hours) : hours;
             } catch (e) {
                 return res.status(400).json({ success: false, message: "Invalid openingHours format" });
             }
         }
+
+        // Location array
+        if (location) {
+            let parsedLoc = location;
+            if (typeof location === "string") {
+                try {
+                    parsedLoc = JSON.parse(location);
+                } catch (e) {
+                    parsedLoc = [];
+                }
+            }
+            if (Array.isArray(parsedLoc) && parsedLoc.length === 2) {
+                listing.location = parsedLoc.map(Number);
+            }
+        }
+
+        // Array fields
+        const parseArrayField = (field) => {
+            if (!field) return undefined;
+            if (typeof field === "string") {
+                try {
+                    return JSON.parse(field);
+                } catch (e) {
+                    return [];
+                }
+            }
+            return Array.isArray(field) ? field : [];
+        };
+
+        listing.cuisine = parseArrayField(cuisine) || listing.cuisine;
+        listing.tags = parseArrayField(tags) || listing.tags;
+        listing.amenities = parseArrayField(amenities) || listing.amenities;
+        listing.services = parseArrayField(services) || listing.services;
+        listing.paymentMethods = parseArrayField(paymentMethods) || listing.paymentMethods;
+
         await listing.save();
+
         res.status(200).json({ success: true, data: listing });
     } catch (error) {
         console.error("Error updating listing:", error.message, error.stack);
         res.status(500).json({ success: false, message: error.message });
     }
 };
-
 
 
 /**
@@ -168,7 +240,7 @@ export const getAllListings = async(req, res) => {
  */
 export const getListingById = async(req, res) => {
     try {
-        const listing = await Listing.findById(req.params.id).populate("owner", "name email");
+        const listing = await Listing.findById(req.params.id);
         if (!listing) {
             return res.status(404).json({ success: false, message: "Listing not found" });
         }

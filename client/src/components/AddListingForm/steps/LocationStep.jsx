@@ -17,12 +17,12 @@ export default function LocationStep({ formData, setFormData, nextStep, prevStep
 
                 <TextField
                     fullWidth
-                    label="Address"
-                    value={formData.address}
-                    onChange={(e) => setFormData("address", e.target.value)}
+                    label="Additional Address Note"
+                    value={formData.addressNote}
+                    onChange={(e) => setFormData("addressNote", e.target.value)}
                     margin="normal"
-                    error={!!errors.address}
-                    helperText={errors.address}
+                    error={!!errors.addressNote}
+                    helperText={errors.addressNote}
                 />
 
                 <div className="flex justify-between mt-6">

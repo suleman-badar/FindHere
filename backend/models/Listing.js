@@ -25,7 +25,7 @@ const listingSchema = new mongoose.Schema({
         type: [Number],
         required: true,
     },
-    address: {
+    addressNote: {
         type: String,
         trim: true,
     },
@@ -73,11 +73,23 @@ const listingSchema = new mongoose.Schema({
     amenities: {
         type: [String],
         default: [],
-        enum: ["Wifi", "Parking", "Live Music", "Outdoor Seating", "Air Conditioning"],
+        enum: ["Wifi", "Parking", "Live Music", "Air Conditioning"],
     },
     price: {
         type: Number, //avg price
         min: 0,
+    },
+    cuisine: {
+        type: [String],
+        default: [],
+        enum: [
+            "Italian", "Chinese", "Fast Food", "Cafe", "Indian", "Mexican", "Japanese"
+        ],
+    },
+    establishedYear: {
+        type: Number,
+        min: 1800,
+        max: new Date().getFullYear(),
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,

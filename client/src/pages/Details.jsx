@@ -11,6 +11,7 @@ import MapSection from "../components/Details/MapSection.jsx";
 import ReviewSection from "../components/Details/ReviewSection.jsx";
 import Footer from "../components/Footer.jsx";
 import GoBack from "../components/GoBack.jsx";
+import ContactSection from "../components/Details/ContactSection.jsx";
 
 import useDetails from "../Hooks/useDetails.jsx";
 import usePlaceLocation from "../Hooks/usePlaceLocation.jsx";
@@ -44,6 +45,9 @@ export default function Details() {
             <Divider sx={{ my: 2, backgroundColor: "black" }} />
 
 
+
+
+
             <Heading heading="Features & Services" />
             <InfoChipsSection
                 address={data.address}
@@ -62,12 +66,17 @@ export default function Details() {
             <GallerySection images={data.images} />
             <Divider sx={{ my: 2, backgroundColor: "black" }} />
 
-
             <Heading heading="Location & Map" />
-            <MapSection location={data.location} />
+            <MapSection location={data.location} address={details.data.addressNote} />
             <Divider sx={{ my: 2, backgroundColor: "black" }} />
 
-
+            <Heading heading="Get In Touch" />
+            <ContactSection
+                phone={data.phone}
+                email={data.email}
+                website={data.website}
+            />
+            <Divider sx={{ my: 2, backgroundColor: "black" }} />
 
             <Heading heading="Reviews" />
             <ReviewSection listingId={id} />

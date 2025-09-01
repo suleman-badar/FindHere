@@ -114,6 +114,24 @@ export default function LocationEdit() {
 
                     <FreeMapSelector location={localLocation} setLocation={handleLocationChange} />
 
+<TextField
+  label="Additional Address Note"
+  value={listingDetails.addressNote || ""}
+  onChange={(e) =>
+    setListingDetails((prev) => ({ ...prev, addressNote: e.target.value }))
+  }
+  fullWidth
+  margin="normal"
+  variant="outlined"
+  sx={{
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "14px",
+      backgroundColor: "rgba(255,255,255,0.8)",
+      backdropFilter: "blur(5px)",
+    },
+  }}
+/>
+
                     {/* Action Buttons */}
                     <Stack direction="row" spacing={3} justifyContent="flex-end">
                         <Button
