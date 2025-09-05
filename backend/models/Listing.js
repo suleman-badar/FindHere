@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const openingHoursSchema = new mongoose.Schema({
-    open: { type: String, default: "" }, // you can store as "HH:mm" string
+    open: { type: String, default: "" },
     close: { type: String, default: "" },
 }, { _id: false });
 
@@ -17,8 +17,13 @@ const listingSchema = new mongoose.Schema({
         trim: true,
         maxlength: 150,
     },
+    description: {
+        type: String,
+        trim: true,
+        maxlength: 500,
+    },
     images: {
-        type: [String], // URL or path
+        type: [String],
         default: "",
     },
     location: {

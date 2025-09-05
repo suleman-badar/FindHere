@@ -32,57 +32,59 @@ export default function Details() {
     const data = details.data;
 
     return (
-        <Box className="px-4 sm:px-8 md:px-16 py-8"  >
+        <Box>
+            <Box className="px-4 sm:px-8 md:px-16 py-8"  >
 
-            <Box className="flex justify-start mb-4">
-                <GoBack />
+                <Box className="flex justify-start mb-4">
+                    <GoBack />
+                </Box>
+                <HeroSection details={data} />
+                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+
+                <Heading heading="Opening Hours" />
+                <OpeningHoursSection hours={data.hours} />
+                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+
+
+
+
+
+                <Heading heading="Features & Services" />
+                <InfoChipsSection
+                    address={data.address}
+                    phone={data.phone}
+                    email={data.email}
+                    website={data.website}
+                    services={data.services}
+                    amenities={data.amenities}
+                    paymentMethods={data.paymentMethods}
+                    tags={data.tags}
+                />
+                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+
+
+                <Heading heading="Image Gallery" />
+                <GallerySection images={data.images} />
+                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+
+                <Heading heading="Location & Map" />
+                <MapSection location={data.location} address={details.data.addressNote} />
+                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+
+                <Heading heading="Get In Touch" />
+                <ContactSection
+                    phone={data.phone}
+                    email={data.email}
+                    website={data.website}
+                />
+                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+
+                <Heading heading="Reviews" />
+                <ReviewSection listingId={id} />
+                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+
+
             </Box>
-            <HeroSection details={data} />
-            <Divider sx={{ my: 2, backgroundColor: "black" }} />
-
-            <Heading heading="Opening Hours" />
-            <OpeningHoursSection hours={data.hours} />
-            <Divider sx={{ my: 2, backgroundColor: "black" }} />
-
-
-
-
-
-            <Heading heading="Features & Services" />
-            <InfoChipsSection
-                address={data.address}
-                phone={data.phone}
-                email={data.email}
-                website={data.website}
-                services={data.services}
-                amenities={data.amenities}
-                paymentMethods={data.paymentMethods}
-                tags={data.tags}
-            />
-            <Divider sx={{ my: 2, backgroundColor: "black" }} />
-
-
-            <Heading heading="Image Gallery" />
-            <GallerySection images={data.images} />
-            <Divider sx={{ my: 2, backgroundColor: "black" }} />
-
-            <Heading heading="Location & Map" />
-            <MapSection location={data.location} address={details.data.addressNote} />
-            <Divider sx={{ my: 2, backgroundColor: "black" }} />
-
-            <Heading heading="Get In Touch" />
-            <ContactSection
-                phone={data.phone}
-                email={data.email}
-                website={data.website}
-            />
-            <Divider sx={{ my: 2, backgroundColor: "black" }} />
-
-            <Heading heading="Reviews" />
-            <ReviewSection listingId={id} />
-            <Divider sx={{ my: 2, backgroundColor: "black" }} />
-
-
             <Footer />
         </Box>
     );

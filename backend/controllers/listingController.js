@@ -1,5 +1,6 @@
 import Listing from "../models/Listing.js";
 import mongoose from "mongoose";
+import client from "../meiliSearch.js";
 
 /**
  * @desc   Create new listing
@@ -12,6 +13,7 @@ export const createListing = async(req, res) => {
         const {
             name,
             tagline,
+            description,
             location,
             addressNote,
             phone,
@@ -27,7 +29,6 @@ export const createListing = async(req, res) => {
             cuisine,
         } = req.body;
 
-        // Validate required fields
         if (!name || !location) {
             return res.status(400).json({
                 success: false,
@@ -35,11 +36,13 @@ export const createListing = async(req, res) => {
             });
         }
 
-        // Prse hours if sent as string
+        // Prse hours 
         let parsedHours = {};
         if (hours) {
             parsedHours = typeof hours === "string" ? JSON.parse(hours) : hours;
         }
+
+        //pasrsed location
         let parsedLocation = [];
         if (Array.isArray(location)) {
             parsedLocation = location.map(Number)
@@ -47,7 +50,7 @@ export const createListing = async(req, res) => {
             parsedLocation = location.split(",").map(Number);
         }
 
-        // Parse array fields if sent as strings
+        //parsed arrays
         const parsedPaymentMethods = typeof paymentMethods === "string" ? JSON.parse(paymentMethods) : paymentMethods || [];
         const parsedServices = typeof services === "string" ? JSON.parse(services) : services || [];
         const parsedTags = typeof tags === "string" ? JSON.parse(tags) : tags || [];
@@ -62,6 +65,7 @@ export const createListing = async(req, res) => {
         const listing = new Listing({
             name,
             tagline,
+            description,
             location: parsedLocation,
             addressNote,
             phone,
@@ -73,26 +77,32 @@ export const createListing = async(req, res) => {
             services: parsedServices || [],
             tags: parsedTags || [],
             amenities: parsedAmenities || [],
-            price: price || 0,
+            price: price !== undefined ? Number(price) : 0,
             cuisine: parsedCuisine || [],
             images,
-
             owner: req.userId,
         });
 
 
-        await listing.save();
+
+        const saved = await listing.save();
+
+        const index = client.index("restaurants");
+        await index.addDocuments([{...saved.toObject(), id: saved._id.toString() }]);
+
+
+        // await index.addDocuments([saved]);
 
         res.status(201).json({
             success: true,
-            data: listing,
+            data: saved,
             message: "Listing created successfully",
         });
     } catch (error) {
         console.error("Error creating listing:", error);
         res.status(500).json({
             success: false,
-            message: "Server error",
+            message: error.message
         });
     }
 };
@@ -100,7 +110,7 @@ export const createListing = async(req, res) => {
 
 /**
  * @desc   Update listing by ID
- * @route  PUT /api/listing/update-listing/:id
+ * @route  PUT /api/listing/update-listing/:listingId
  * @access Private (owner only)
  */
 
@@ -158,9 +168,9 @@ export const updateListing = async(req, res) => {
         if (name) listing.name = name;
         if (tagline) listing.tagline = tagline;
         if (description) listing.description = description;
-        if (phone) listing.number = phone;
+        if (phone) listing.phone = phone;
         if (website) listing.website = website;
-        if (price) listing.price = price;
+        if (price !== undefined) listing.price = price;
         if (addressNote) listing.addressNote = addressNote;
         if (email) listing.email = email;
         if (establishedYear) listing.establishedYear = Number(establishedYear);
@@ -209,9 +219,12 @@ export const updateListing = async(req, res) => {
         listing.services = parseArrayField(services) || listing.services;
         listing.paymentMethods = parseArrayField(paymentMethods) || listing.paymentMethods;
 
-        await listing.save();
+        const updated = await listing.save();
+        const index = client.index("restaurants");
+        await index.addDocuments([{...updated.toObject(), id: updated._id.toString() }]);
 
-        res.status(200).json({ success: true, data: listing });
+
+        res.status(200).json({ success: true, data: updated });
     } catch (error) {
         console.error("Error updating listing:", error.message, error.stack);
         res.status(500).json({ success: false, message: error.message });
@@ -287,7 +300,7 @@ export const getOwnerListings = async(req, res) => {
 
 /**
  * @desc   Delete listing by ID
- * @route  DELETE /api/listing/delete-listing/:id
+ * @route  DELETE /api/listing/delete-listing/:listingId
  * @access Private (owner only)
  */
 export const deleteListing = async(req, res) => {
@@ -302,6 +315,10 @@ export const deleteListing = async(req, res) => {
         }
 
         await listing.deleteOne();
+
+        const index = client.index("restaurants");
+        await index.deleteDocument(req.params.listingId.toString());
+
         res.json({ success: true, message: "Listing deleted successfully" });
     } catch (e) {
         res.status(500).json({ success: false, message: "Server error" });

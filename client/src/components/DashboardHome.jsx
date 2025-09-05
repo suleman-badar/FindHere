@@ -8,11 +8,20 @@ import { useSelectedPlace } from "../context/SelectedPlaceContext";
 import { useOutletContext } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useEffect } from "react";
 
 export default function DashboardHome() {
 
     const { places, setPlaces } = useOutletContext();
     const { setSelectedPlaceId } = useSelectedPlace();
+
+    useEffect(() => {
+        const savedScroll = sessionStorage.getItem("scrollY");
+        if (savedScroll) {
+            window.scrollTo(0, parseInt(savedScroll, 10));
+            sessionStorage.removeItem("scrollY");
+        }
+    }, [places]);
 
 
 

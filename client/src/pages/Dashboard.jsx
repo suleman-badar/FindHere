@@ -153,7 +153,6 @@ export default function Dashboard() {
 
 
 
-
     if (loading || detailsLoading || updating) return <Loader />;
 
     return (

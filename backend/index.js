@@ -9,6 +9,8 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoute.js";
 import listingRoutes from "./routes/listingRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
+import searchRoutes from "./routes/searchRoutes.js";
+
 import helmet from "helmet";
 
 
@@ -41,6 +43,7 @@ app.get("/", (_req, res) => res.send("API is running"));
 app.use("/api/auth", authRoutes);
 app.use("/api/listing", listingRoutes);
 app.use("/api/review", reviewRoutes);
+app.use("/api/search", searchRoutes);
 // app.use("/api/map", mapRoute);
 
 
