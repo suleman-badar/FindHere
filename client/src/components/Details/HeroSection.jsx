@@ -59,7 +59,6 @@ export default function HeroSection({ details }) {
                             ))}
                         </Box>
                     )}
-                    {console.log("Price", details.price)}
 
 
                     {/* Price Box with glassmorphism */}

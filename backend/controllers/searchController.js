@@ -1,39 +1,60 @@
 import client from "../../backend/meiliSearch.js";
 import Listing from "../models/Listing.js";
 
-export const syncResturants = async(req, res) => {
+export const syncResturants = async() => {
+    const listings = await Listing.find();
+
+    // Convert ObjectId to string so Meilisearch accepts it
+    const restaurants = listings.map(doc => ({
+        ...doc.toObject(),
+        _id: doc._id.toString(),
+    }));
+
+    console.log("Syncing", restaurants.length, "restaurants");
+
+    let index;
     try {
-        const restaurants = await Listing.find();
-        const index = client.index("restaurants");
-        await client.deleteIndex("restaurants"); // ❌ remove old one
-
-        await client.createIndex("restaurants", { primaryKey: "_id" }).catch(() => {});
-
+        index = await client.getIndex("restaurants");
+    } catch (e) {
+        index = await client.createIndex("restaurants", { primaryKey: "_id" });
         await index.updateFilterableAttributes([
             "tags",
             "amenities",
             "cuisine",
             "services",
-            "paymentMethods"
+            "paymentMethods",
         ]);
+    }
+
+    await index.addDocuments(restaurants);
+    return index;
+};
 
 
-        await index.addDocuments(restaurants);
-        res.json({ success: true, message: "Restaurants synced with Meilisearch" })
+export const syncResturantsRoute = async(req, res) => {
+    try {
+        await syncResturants();
+        res.json({ success: true, message: "Restaurants synced with Meilisearch" });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
-
+};
 
 export const searchResturants = async(req, res) => {
     try {
         const q = req.query.q || "";
-        const index = client.index("restaurants");
+
+        let index;
+
+        try {
+            index = client.index("restaurants");
+            await index.getStats();
+        } catch (e) {
+            index = await syncResturants();
+        }
 
         const filters = [];
 
-        // ✅ handle array or single value
         if (req.query.tags) {
             const tags = Array.isArray(req.query.tags) ? req.query.tags : [req.query.tags];
             const tagFilters = tags.map((tag) => `tags = "${tag}"`);
@@ -41,18 +62,18 @@ export const searchResturants = async(req, res) => {
         }
 
         if (req.query.amenities) {
-            const amenities = Array.isArray(req.query.amenities) ? req.query.amenities : [req.query.amenities];
+            const amenities = Array.isArray(req.query.amenities) ?
+                req.query.amenities : [req.query.amenities];
             const amenityFilters = amenities.map((a) => `amenities = "${a}"`);
             filters.push(amenityFilters.join(" OR "));
         }
 
         if (req.query.cuisine) {
-            const cuisines = Array.isArray(req.query.cuisine) ? req.query.cuisine : [req.query.cuisine];
+            const cuisines = Array.isArray(req.query.cuisine) ?
+                req.query.cuisine : [req.query.cuisine];
             const cuisineFilters = cuisines.map((c) => `cuisine = "${c}"`);
             filters.push(cuisineFilters.join(" OR "));
         }
-
-        // …repeat for services, paymentMethods, etc.
 
         const result = await index.search(q, {
             filter: filters.length ? filters.join(" AND ") : undefined,
@@ -60,6 +81,7 @@ export const searchResturants = async(req, res) => {
 
         res.json(result.hits);
     } catch (error) {
+        console.error("Search error:", error.message);
         res.status(500).json({ error: error.message });
     }
 };

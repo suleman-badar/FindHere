@@ -25,7 +25,6 @@ export default function MapSection({ location, address }) {
             <Box className="h-[350px] w-full mb-4 rounded-lg overflow-hidden shadow-sm">
                 <MapPreview location={location} />
             </Box>
-            {console.log("address", address)}
 
             {/* Address Note */}
             {address && (

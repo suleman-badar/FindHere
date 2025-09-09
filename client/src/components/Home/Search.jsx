@@ -3,11 +3,12 @@ import {
     TextField,
     InputAdornment,
     IconButton,
+    Box
 } from "@mui/material";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Btn from "../Btn";
@@ -24,7 +25,7 @@ export default function Search() {
 
     // Handle search submit
     async function handleSubmit(e) {
-        if (e?.preventDefault) e.preventDefault(); // ✅ only prevent default if possible
+        if (e?.preventDefault) e.preventDefault();
 
         setHasSearched(true);
 
@@ -34,12 +35,9 @@ export default function Search() {
                     q: value,
                     ...filters,
                 },
-                // ✅ serialize arrays as repeated keys instead of []
                 paramsSerializer: (params) =>
                     qs.stringify(params, { arrayFormat: "repeat" }),
             });
-
-
             setResults(res.data);
             console.log("Result is:", res.data);
         } catch (err) {
@@ -48,14 +46,32 @@ export default function Search() {
     }
 
     // Handle filters applied
-    const handleApplyFilters = (selectedFilters) => {
+    const handleApplyFilters = (selectedFilters, shouldSearch = true) => {
         setFilters(selectedFilters);
-        // Re-run search if query already exists
-        handleSubmit(); // ✅ safe now
+        if (shouldSearch) {
+            handleSubmit();
+        }
     };
 
+    const handleCloseResults = useCallback(() => {
+        setResults([]);
+        setHasSearched(false);
+    }, []);
+
+    useEffect(() => {
+        const handleEsc = (event) => {
+            if (event.key === "Escape") {
+                handleCloseResults();
+            }
+        };
+
+        document.addEventListener("keydown", handleEsc);
+        return () => {
+            document.removeEventListener("keydown", handleEsc);
+        };
+    }, [handleCloseResults]);
     return (
-        <div className="bg-white w-full p-4 rounded-2xl my-3 relative">
+        <div className="bg-white w-full p-2 pt-5 px-4 rounded-2xl my-3 relative">
             {/* Search Bar */}
             <form
                 onSubmit={handleSubmit}
@@ -99,18 +115,22 @@ export default function Search() {
                     }}
                 />
 
+
                 <Btn
                     text="Search"
                     IconStart="p"
                     IconEnd="p"
                     w="20%"
                     onClick={handleSubmit}
+                    sx={{
+                        display: { xs: "none", sm: "flex" },
+                    }}
                 />
 
                 <Button
                     variant="outlined"
                     startIcon={<FilterListIcon />}
-                    onClick={() => setDrawerOpen(true)} // ✅ open drawer
+                    onClick={() => setDrawerOpen(true)}
                     sx={{
                         borderColor: "#082567",
                         backgroundColor: "#d0d0d0",
@@ -118,7 +138,7 @@ export default function Search() {
                         borderRadius: "10px",
                         padding: "10px 20px",
                         height: "40px",
-                        display: { xs: "none", sm: "flex" },
+                        display: { xs: "flex", sm: "flex" },
                     }}
                 >
                     Filters
@@ -131,12 +151,9 @@ export default function Search() {
                     <div className="space-y-2">
                         {/* Close Button */}
                         <IconButton
-                            onClick={() => {
-                                setResults([]);
-                                setHasSearched(false);
-                            }}
+                            onClick={handleCloseResults}
                             size="small"
-                            sx={{ position: "absolute", right: 10, top: -10 }}
+                            sx={{ position: "absolute", right: 15, top: -25 }}
                         >
                             <CloseIcon fontSize="small" />
                         </IconButton>
@@ -147,9 +164,9 @@ export default function Search() {
                                 onClick={() => navigate(`/details/${r.id || r._id}`)}
                                 className="p-3 rounded-lg border shadow-sm bg-gray-50 hover:bg-gray-100 transition w-[95%] mx-auto cursor-pointer"
                             >
-                                <h3 className="text-sm font-medium text-gray-900">
+                                <h5 className="text-sm font-medium text-gray-900">
                                     {r.name}
-                                </h3>
+                                </h5>
 
                                 {r.tags?.length > 0 ? (
                                     <p className="text-xs text-gray-500">{r.tags.join(", ")}</p>

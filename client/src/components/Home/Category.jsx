@@ -4,6 +4,9 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 import HotelIcon from "@mui/icons-material/Hotel";
 import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import ParkIcon from "@mui/icons-material/Park";
+import StoreIcon from '@mui/icons-material/Store';
+import MuseumIcon from '@mui/icons-material/Museum';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
 export default function Category() {
     const categories = [
@@ -11,9 +14,9 @@ export default function Category() {
         { name: "Hotels", icon: <HotelIcon fontSize="small" sx={{ color: "blue" }} /> },
         { name: "Cafes", icon: <LocalCafeIcon fontSize="small" sx={{ color: "brown" }} /> },
         { name: "Parks", icon: <ParkIcon fontSize="small" sx={{ color: "green" }} /> },
-        { name: "Shopping", icon: <ParkIcon fontSize="small" /> },
-        { name: "Museums", icon: <ParkIcon fontSize="small" /> },
-        { name: "Gyms", icon: <ParkIcon fontSize="small" /> },
+        { name: "Shopping", icon: <StoreIcon fontSize="small" sx={{ color: "teal" }} /> },
+        { name: "Museums", icon: <MuseumIcon fontSize="small" sx={{ color: "purple" }} /> },
+        { name: "Gyms", icon: <FitnessCenterIcon fontSize="small" sx={{ color: "orange" }} /> },
     ];
 
     return (

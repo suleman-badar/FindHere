@@ -1,9 +1,9 @@
 import express from "express"
 
-import { syncResturants, searchResturants } from "../controllers/searchController.js";
+import { syncResturantsRoute, searchResturants } from "../controllers/searchController.js";
 const router = express.Router();
 
-router.get("/sync", syncResturants);
+router.get("/sync", syncResturantsRoute);
 router.get("/", searchResturants);
 
 export default router;

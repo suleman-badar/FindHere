@@ -60,7 +60,7 @@ export default function FiltersDrawer({ open, onClose, onApply, search }) {
     };
 
     const handleApply = () => {
-        onApply(selected);
+        onApply(selected, true);
         onClose();
         search();
 
@@ -75,7 +75,7 @@ export default function FiltersDrawer({ open, onClose, onApply, search }) {
             paymentMethods: [],
         });
         setSelected(cleared);
-        onApply(cleared);
+        onApply(cleared, false);
     };
 
     return (
