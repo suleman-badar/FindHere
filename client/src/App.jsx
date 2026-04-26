@@ -32,8 +32,6 @@ import ListingReviewsEdit from "./components/ListingEditForms/ListingReviewsEdit
 
 import { SelectedPlaceProvider } from './context/SelectedPlaceContext.jsx'
 
-
-
 import './App.css'
 
 function App() {
@@ -42,7 +40,7 @@ function App() {
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
 
   return (
-    <div className="flex flex-col min-h-screen w-full  ">
+    <div className="flex flex-col min-h-screen w-full">
       {!shouldHideNavbar && <Navbar />}
       <main className="flex-grow w-full">
         <Routes>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -30,7 +30,7 @@ export default function SendForgotPasswordCode() {
     setMessage("");
 
     try {
-      await axios.patch("http://localhost:8000/api/auth/send-forgot-password-code", { email });
+      await api.patch("/api/auth/send-forgot-password-code", { email });
       setMaskedEmail(maskEmail(email));
       setMessage("A reset code has been sent to your email.");
       toast.success("Sent code to your email!");

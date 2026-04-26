@@ -9,7 +9,7 @@ export default function IntroStep({ nextStep }) {
                 borderRadius: "16px",
                 bgcolor: "white",
                 boxShadow: 2,
-                border: "1px solid #e5e7eb",
+                border: "1px solid var(--color-border)",
                 textAlign: "center",
             }}
         >

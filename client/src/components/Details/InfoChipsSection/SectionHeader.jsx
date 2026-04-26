@@ -6,13 +6,7 @@ export default function SectionHeader({ title, isOpen, onClick }) {
     return (
         <Box
             onClick={onClick}
-            className="cursor-pointer mx-auto w-full max-w-lg 
-           px-6 py-4 rounded-2xl 
-           bg-gradient-to-r from-slate-200 to-indigo-300
-           text-gray-800 shadow-md 
-           flex items-center justify-between
-           transition-all duration-300 
-           hover:shadow-lg hover:scale-[1.02]"
+            className="cursor-pointer mx-auto w-full max-w-lg px-6 py-4 rounded-2xl bg-surface text-text shadow-md flex items-center justify-between transition-all duration-300 hover:shadow-lg hover:scale-[1.02] border border-border"
 
 
 
@@ -21,7 +15,7 @@ export default function SectionHeader({ title, isOpen, onClick }) {
             {/* Title */}
             <Typography
                 variant="h6"
-                className="font-bold text-lg tracking-wide drop-shadow-md"
+                className="font-bold text-lg tracking-wide"
             >
                 {title}
             </Typography>

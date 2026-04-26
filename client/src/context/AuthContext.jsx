@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const res = await axios.get("http://localhost:8000/api/auth/me", {
+                const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/auth/me`, {
                     withCredentials: true,
                 });
                 console.log("Auth /me response:", res.data);

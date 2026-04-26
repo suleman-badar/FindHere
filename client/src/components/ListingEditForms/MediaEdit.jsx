@@ -11,11 +11,11 @@ import {
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { useOutletContext } from "react-router-dom";
+import { API_BASE } from "../../api/axios";
 
 export default function MediaEdit() {
     const fileInputRef = useRef(null);
     const { listingDetails, setListingDetails, onSave, onCancel } = useOutletContext();
-    const API_BASE = "http://localhost:8000";
 
     const handleAddImage = () => fileInputRef.current.click();
 
@@ -36,7 +36,11 @@ export default function MediaEdit() {
 
     const getSrc = (imgObj) => {
         if (imgObj.preview) return imgObj.preview;
-        if (typeof imgObj === "string") return imgObj.startsWith("http") ? imgObj : `${API_BASE}/${imgObj}`;
+        if (typeof imgObj === "string") {
+            if (imgObj.startsWith("http")) return imgObj;
+            const path = imgObj.startsWith("/") ? imgObj : `/${imgObj}`;
+            return `${API_BASE}${path}`;
+        }
         if (imgObj.file) return URL.createObjectURL(imgObj.file);
         return "";
     };
@@ -63,7 +67,7 @@ export default function MediaEdit() {
                 mt: 10,
                 borderRadius: 4,
                 overflow: "hidden",
-                background: "linear-gradient(135deg, #f3f4f6, #ffffff)",
+                background: "linear-gradient(135deg, var(--color-surface), #ffffff)",
                 boxShadow: "0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04)",
                 border: "1px solid rgba(0,0,0,0.05)",
                 transition: "all 0.3s ease",
@@ -72,7 +76,7 @@ export default function MediaEdit() {
             {/* Header with gradient overlay */}
             <CardHeader
                 title={
-                    <Typography variant="h5" sx={{ fontWeight: 700, letterSpacing: 0.5, color: "#1f2937" }}>
+                    <Typography variant="h5" sx={{ fontWeight: 700, letterSpacing: 0.5, color: "var(--color-primary)" }}>
                         Edit Media
                     </Typography>
                 }
@@ -89,7 +93,7 @@ export default function MediaEdit() {
             <CardContent sx={{ p: { xs: 4, sm: 5 } }}>
                 <form onSubmit={handleSubmit}>
                     <Stack spacing={4}>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#374151" }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "var(--color-text)" }}>
                             Gallery Images
                         </Typography>
 
@@ -142,9 +146,9 @@ export default function MediaEdit() {
                                 borderRadius: "12px",
                                 py: 1.5,
                                 fontWeight: 600,
-                                color: "#1d4ed8",
-                                borderColor: "#60a5fa",
-                                "&:hover": { backgroundColor: "rgba(59,130,246,0.1)", borderColor: "#3b82f6" },
+                                color: "var(--color-primary)",
+                                borderColor: "var(--color-accent)",
+                                "&:hover": { backgroundColor: "rgba(185,28,28,0.1)", borderColor: "var(--color-primary)" },
                                 width: "fit-content",
                             }}
                         >
@@ -163,8 +167,8 @@ export default function MediaEdit() {
                                 px: 4,
                                 py: 1.5,
                                 fontWeight: 500,
-                                color: "#4b5563",
-                                borderColor: "#d1d5db",
+                                color: "var(--color-muted)",
+                                borderColor: "var(--color-border)",
                                 "&:hover": { backgroundColor: "rgba(107,114,128,0.1)" },
                             }}
                         >

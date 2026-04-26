@@ -6,7 +6,7 @@ import { steps } from "./stepsConfig";
 import StepperHeader from "./StepperHeader";
 import StepWrapper from "./StepWrapper";
 import Preview from "./Preview";
-import axios from "axios"
+import api from "../../api/axios"
 import { toast } from "react-toastify";
 import Loader from "../Loader";
 import { useNavigate } from "react-router-dom";
@@ -90,8 +90,8 @@ export default function AddListingForm() {
                 }
             });
 
-            const res = await axios.post(
-                "http://localhost:8000/api/listing",
+            const res = await api.post(
+                "/api/listing",
                 data,
                 { withCredentials: true }
             );
@@ -130,7 +130,7 @@ export default function AddListingForm() {
                                 borderRadius: "16px",
                                 bgcolor: "white",
                                 boxShadow: 2,
-                                border: "1px solid #e5e7eb",
+                                border: "1px solid var(--color-border)",
                                 textAlign: "center",
                             }}
                         >

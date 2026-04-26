@@ -7,12 +7,12 @@ export default function StarRating({ rating = 0, maxStars = 5, size = 18 }) {
     return (
         <Box className="flex gap-0.5">
             {[...Array(safeRating)].map((_, i) => (
-                <Star key={i} sx={{ color: "#dae020ff", fontSize: size }} />
+                <Star key={i} sx={{ color: "var(--color-star)", fontSize: size }} />
             ))}
 
             {[...Array(maxStars - safeRating)].map((_, i) => (
-                <StarBorder key={i} sx={{ color: "#d1d5db", fontSize: size }} />
-            ))}
+                <StarBorder key={i} sx={{ color: "var(--color-star-empty)", fontSize: size }} />
+            ))}}
         </Box>
     );
 }

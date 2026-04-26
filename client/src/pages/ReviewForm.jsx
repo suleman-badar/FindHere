@@ -10,7 +10,7 @@ import {
     Avatar,
 } from "@mui/material";
 import { Star, StarBorder } from "@mui/icons-material";
-import axios from "axios";
+import api from "../api/axios";
 import { useParams } from "react-router-dom";
 import { reviewValidations } from "../validations/reviewValidations";
 import AverageRating from "../components/Reviews/AverageRating";
@@ -60,7 +60,7 @@ export default function ReviewForm() {
                 formData.append("image", image);
             }
 
-            await axios.post(`http://localhost:8000/api/review/create-review/${id}`, formData, {
+            await api.post(`/api/review/create-review/${id}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
@@ -134,9 +134,9 @@ export default function ReviewForm() {
                             sx={{ cursor: "pointer" }}
                         >
                             {star <= (hoverRating || rating) ? (
-                                <Star sx={{ color: "#facc15", fontSize: 32 }} />
+                                <Star sx={{ color: "var(--color-star)", fontSize: 32 }} />
                             ) : (
-                                <StarBorder sx={{ color: "#facc15", fontSize: 32 }} />
+                                <StarBorder sx={{ color: "var(--color-star-empty)", fontSize: 32 }} />
                             )}
                         </Box>
                     ))}

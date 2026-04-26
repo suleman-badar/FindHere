@@ -1,18 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 @import "tailwindcss";
+
+/* Reset & sensible defaults */
+html, body, #root {
+    min-height: 100%;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 :root {
     font-family: 'Roboto', sans-serif;
     line-height: 1.5;
     font-weight: 400;
-    /* color-scheme: light dark; */
-    /* color: rgba(255, 255, 255, 0.87); */
-    /* background-color: #242424; */
+    /* Light theme tokens */
+    --color-primary: #b91c1c;
+    --color-primary-dark: #9d1717;
+    --color-accent: #ff7043;
+    --color-background: #ffffff;
+    --color-surface: #fff6f5;
+    --color-text: #0f172a;
+    --color-muted: #6b7280;
+    --color-border: #e9e5e5;
+    --color-star: #fbbf24;
+    --color-star-empty: #e5e7eb;
+    --gradient-primary: linear-gradient(90deg, var(--color-primary-dark), var(--color-primary));
+    /* UI helpers */
+    --nav-bg: rgba(255,255,255,0.18);
+    --nav-border: rgba(255,255,255,0.08);
+    --hero-overlay: rgba(0,0,0,0.45);
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
 
 /* a {
     font-weight: 500;
@@ -26,11 +48,30 @@ a:hover {
 
 body {
     margin: 0;
-    /* display: flex; */
-    /* place-items: center; */
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     padding-top: 0;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    transition: background-color 200ms ease, color 200ms ease;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Hide visible scrollbars while preserving scrolling behavior */
+html, body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+
+/* Webkit browsers */
+body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+*::-webkit-scrollbar {
+    display: none;
 }
 
 h1 {

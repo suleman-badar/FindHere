@@ -60,11 +60,11 @@ export default function FreeMapSelector({ location, setLocation }) {
                             handleSearch();
                         }
                     }}
-                    style={{
+                        style={{
                         padding: "8px",
                         width: "70%",
                         marginRight: "5px",
-                        border: "1px solid #082567",
+                        border: "1px solid var(--color-primary)",
                         borderRadius: "0.4rem",
                     }}
                 />
@@ -89,9 +89,9 @@ export default function FreeMapSelector({ location, setLocation }) {
                         }}
                     >
                         <button
-                            style={{
+                                style={{
                                 cursor: "pointer",
-                                border: "1px solid #ccc",
+                                border: "1px solid var(--color-border)",
                                 padding: "5px",
                                 borderRadius: "5px",
                                 width: "100%",

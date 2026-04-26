@@ -58,14 +58,14 @@ const HoverCard = ({ id, name, image, averageRating, reviewCount, locationLat, l
                     alignItems: "center",
                     textAlign: "center",
                     p: 2,
-                    transform: "translateY(82%)",
+                    transform: "translateY(70%)",
                     transition: "transform 0.4s ease, opacity 0.4s ease",
                     opacity: 1,
                 }}
             >
-                <Typography variant="h6" sx={{ mb: 2 }}>{name}</Typography>
+                <Typography variant="h6" sx={{ height: 60 }}>{name}</Typography>
 
-                <Box className="mb-8">
+                <Box className="mt-4">
                     <AverageStars id={id} />
                     <Box> {averageRating?.toFixed(1)} ({reviewCount} reviews)</Box>
                 </Box>

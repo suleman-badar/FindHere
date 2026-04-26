@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 
 export default function VerifyOtp() {
     const location = useLocation();
@@ -14,7 +14,7 @@ export default function VerifyOtp() {
     const handleVerify = async () => {
         console.log(email);
         try {
-            const res = await axios.post("http://localhost:8000/api/auth/register/verify", {
+            const res = await api.post("/api/auth/register/verify", {
                 email,
                 otp,
             });
@@ -27,7 +27,7 @@ export default function VerifyOtp() {
 
     const handleResendOtp = async () => {
         try {
-            await axios.post("http://localhost:8000/api/auth/register/resend-otp", { email });
+            await api.post("/api/auth/register/resend-otp", { email });
             setResendMsg("OTP sent again to your email!");
             setError("");
         } catch (err) {

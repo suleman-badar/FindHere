@@ -24,7 +24,7 @@ export default function UserSection({ isDrawer }) {
                                 textTransform: "none",
                                 boxShadow: 3,
                                 "&:hover": {
-                                    backgroundColor: "#000d1a",
+                                    backgroundColor: "var(--color-primary-dark)",
                                 },
                             }}
                             component={Link}

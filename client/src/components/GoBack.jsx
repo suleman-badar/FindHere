@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBackIosNew";
 import { Link } from "react-router-dom";
+
 export default function GoBack() {
     return (
         <Box className="flex justify-between w-full mb-4 " >

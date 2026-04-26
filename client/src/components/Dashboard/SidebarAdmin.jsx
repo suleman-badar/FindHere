@@ -4,7 +4,7 @@ import {
     Info, Image, Phone, Clock, Map, DollarSign, Tags
 } from "lucide-react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useSelectedPlace } from "../../context/SelectedPlaceContext";
@@ -38,8 +38,8 @@ export default function SidebarAdmin({ places }) {
 
     const handleSignOut = async () => {
         try {
-            const res = await axios.post(
-                "http://localhost:8000/api/auth/logout",
+            const res = await api.post(
+                "/api/auth/logout",
                 {},
                 { withCredentials: true }
             );

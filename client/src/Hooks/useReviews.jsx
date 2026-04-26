@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/axios";
 
 export default function useReviews(id) {
     const [reviews, setReviews] = useState([]);
@@ -9,7 +9,7 @@ export default function useReviews(id) {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/review/all-review/${id}`);
+                const res = await api.get(`/api/review/all-review/${id}`);
                 const reviewsData = res.data || [];
 
                 setReviews(reviewsData);

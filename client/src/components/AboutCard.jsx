@@ -30,7 +30,7 @@ export default function FeatureCard({ Icon = ExploreIcon, title, description }) 
                         mb: 2,
                     }}
                 >
-                    <Icon sx={{ fontSize: 48, color: "green" }} />
+                    <Icon sx={{ fontSize: 48, color: "#ff4d4d" }} />
                 </Box>
 
                 <Typography variant="h6" fontWeight="bold" gutterBottom>

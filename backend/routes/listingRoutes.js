@@ -10,8 +10,6 @@ router.put("/update-listing/:listingId", protect, upload.array("images", 5), upd
 router.delete("/:listingId", protect, deleteListing);
 router.get("/owner", protect, getOwnerListings);
 
-
-
 // Public routes
 router.get("/all-listing", getAllListings);
 router.get("/details/:id", getListingById);

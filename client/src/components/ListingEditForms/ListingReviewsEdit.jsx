@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelectedPlace } from "../../context/SelectedPlaceContext";
-import axios from "axios";
+import api from "../../api/axios";
 import { toast } from "react-toastify";
 import StarRating from "../Reviews/StarRating";
 import { Box, Typography, IconButton } from "@mui/material";
@@ -14,10 +14,11 @@ export default function ListingReviewsEdit() {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/review/all-review/${selectedPlaceId}`);
+                const res = await api.get(`/api/review/all-review/${selectedPlaceId}`);
                 setReviews(res.data || []);
             } catch (err) {
                 console.error(err);
+                setReviews([]);
             }
         };
         fetchReviews();
@@ -27,7 +28,7 @@ export default function ListingReviewsEdit() {
         if (!window.confirm("Are you sure you want to delete this review?")) return;
 
         try {
-            await axios.delete(`http://localhost:8000/api/review/delete/${reviewId}`, { withCredentials: true });
+            await api.delete(`/api/review/delete/${reviewId}`, { withCredentials: true });
             toast.success("Review deleted successfully");
             setReviews((prev) => prev.filter((r) => r._id !== reviewId));
         } catch (err) {
@@ -42,7 +43,7 @@ export default function ListingReviewsEdit() {
                     <Box
                         key={review._id}
                         className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center bg-blue-50 p-4 mb-4 rounded-xl hover:shadow-lg transition-shadow relative"
-                        sx={{ border: "1px solid #e0e0e0" }}
+                        sx={{ border: "1px solid var(--color-border)" }}
                     >
                         <Box className="flex items-start sm:items-center">
                             <img

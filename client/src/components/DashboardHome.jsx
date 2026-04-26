@@ -29,7 +29,7 @@ export default function DashboardHome() {
         if (!window.confirm("Are you sure you want to delete this listing?")) return;
 
         try {
-            await axios.delete(`http://localhost:8000/api/listing/${id}`, { withCredentials: true });
+            await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/listing/${id}`, { withCredentials: true });
             toast.success("Listing deleted successfully");
             setPlaces(prev => prev.filter(p => p._id !== id));
         } catch (err) {

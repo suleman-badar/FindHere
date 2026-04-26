@@ -4,17 +4,19 @@
   "description": "Backend for FindHere",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "seed": "node seed.js"
   },
   "keywords": [],
   "author": "Ali Maqsood",
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@faker-js/faker": "^8.0.2",
     "apple-signin-auth": "^2.0.0",
     "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",
-    "cloudinary": "^1.41.3",
+    "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
@@ -25,11 +27,11 @@
     "joi": "^18.0.1",
     "jsonwebtoken": "^9.0.2",
     "meilisearch": "^0.52.0",
-    "mongoose": "^8.17.1",
+    "mongoose": "^8.23.0",
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
-    "multer-storage-cloudinary": "^4.0.0",
-    "nodemailer": "^7.0.5",
+    "multer-storage-cloudinary": "^2.2.1",
+    "nodemailer": "^8.0.6",
     "nodemon": "^3.1.10",
     "otp-generator": "^4.0.1"
   }

@@ -14,7 +14,7 @@ export default function AverageStars({ id }) {
                     <StarIcon
                         key={star}
                         sx={{
-                            color: star <= Math.round(avgRating) ? "#facc15" : "#e5e7eb",
+                            color: star <= Math.round(avgRating) ? "var(--color-star)" : "var(--color-star-empty)",
                             fontSize: 28,
                         }}
                     />

@@ -10,7 +10,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../api/axios";
 import Btn from "../Btn";
 import FiltersDrawer from "./FiltersDrawer";
 import qs from "qs";
@@ -30,7 +30,7 @@ export default function Search() {
         setHasSearched(true);
 
         try {
-            const res = await axios.get("http://localhost:8000/api/search", {
+            const res = await api.get("/api/search", {
                 params: {
                     q: value,
                     ...filters,
@@ -89,11 +89,11 @@ export default function Search() {
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     sx={{
-                        backgroundColor: "#d0d0d0",
+                        backgroundColor: "var(--color-surface)",
                         borderRadius: "15px",
                         "& .MuiFilledInput-root": {
                             borderRadius: "15px",
-                            backgroundColor: "#d0d0d0",
+                            backgroundColor: "var(--color-surface)",
                             height: "50px",
                             display: "flex",
                             alignItems: "center",
@@ -132,9 +132,9 @@ export default function Search() {
                     startIcon={<FilterListIcon />}
                     onClick={() => setDrawerOpen(true)}
                     sx={{
-                        borderColor: "#082567",
-                        backgroundColor: "#d0d0d0",
-                        color: "#082567",
+                        borderColor: "var(--color-primary)",
+                        backgroundColor: "var(--color-surface)",
+                        color: "var(--color-primary)",
                         borderRadius: "10px",
                         padding: "10px 20px",
                         height: "40px",

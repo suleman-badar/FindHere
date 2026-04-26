@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Loader from "../components/Loader";
 import { signInValidations } from "../validations/signInValidations";
-import axios from "axios";
+import api from "../api/axios";
 import PasswordInput from "../components/PasswordInput";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
@@ -30,11 +30,10 @@ export default function SignIn() {
             setErrors({});
             setLoading(true);
 
-            const res = await axios.post(
-                "http://localhost:8000/api/auth/login",
+            const res = await api.post(
+                "/api/auth/login",
                 { email, password },
-                { withCredentials: true },
-                { timeout: 5000 }
+                { withCredentials: true, timeout: 5000 }
             );
             if (res.data.success) {
                 login(res.data.user);
@@ -73,7 +72,7 @@ export default function SignIn() {
 
     return (
         <Box className="flex items-center justify-center min-h-screen relative overflow-hidden">
-            {/* 🔥 Animated Gradient Background */}
+            {/* Animated Gradient Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 animate-gradient-x" />
 
             {/* Decorative blur blobs */}

@@ -56,7 +56,7 @@ export default function LocationEdit() {
                         sx={{
                             fontWeight: 700,
                             letterSpacing: 0.5,
-                            color: "#1e3a8a",
+                            color: "var(--color-primary)",
                             textAlign: "center",
                         }}
                     >
@@ -145,7 +145,7 @@ export default function LocationEdit() {
                                 py: 1.5,
                                 fontWeight: 500,
                                 borderColor: "rgba(0,0,0,0.15)",
-                                color: "#374151",
+                                color: "var(--color-muted)",
                                 backdropFilter: "blur(5px)",
                                 backgroundColor: "rgba(255,255,255,0.5)",
                                 "&:hover": { backgroundColor: "rgba(255,255,255,0.7)" },
@@ -164,7 +164,7 @@ export default function LocationEdit() {
                                 px: 5,
                                 py: 1.7,
                                 fontWeight: 600,
-                                background: "linear-gradient(90deg, #2563eb, #3b82f6)",
+                                background: "var(--gradient-primary)",
                                 color: "#fff",
                                 boxShadow: "0 6px 20px rgba(59,130,246,0.35)",
                                 "&:hover": { boxShadow: "0 8px 25px rgba(59,130,246,0.45)" },

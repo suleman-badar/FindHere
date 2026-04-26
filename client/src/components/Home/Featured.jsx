@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import HoverCard from "./HoverCard";
 import Carousel from "../Carousel";
 import Loader from "../Loader";
-import axios from "axios";
+import api from "../../api/axios";
 
 export default function Featured() {
     const [listings, setListings] = useState([]);
@@ -13,9 +13,8 @@ export default function Featured() {
     useEffect(() => {
         async function fetchListings() {
             try {
-                const res = await axios.get("http://localhost:8000/api/review/listings-with-reviews");
+                const res = await api.get("/api/review/listings-with-reviews");
                 setListings(res.data);
-                // console.log("API response:", res.data);
             } catch (err) {
                 console.error("Failed to fetch listings:", err);
             } finally {
@@ -28,7 +27,7 @@ export default function Featured() {
 
 
     return (
-        <Box sx={{ p: 4, backgroundColor: "#d0d0d0", textAlign: "center", position: "relative" }}>
+        <Box sx={{ p: 4, textAlign: "center", position: "relative" }}>
             {loading ? (
                 <Loader />
             ) : (

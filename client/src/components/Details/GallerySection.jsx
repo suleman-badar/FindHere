@@ -39,7 +39,7 @@ export default function GallerySection({ images }) {
                 <Box className="flex justify-around mt-8">
                     <IconButton
                         onClick={handlePrev}
-                        className="absolute top-1/2 left-0 transform -translate-y-1/2 ml-2 bg-white/70 hover:bg-white shadow-lg z-20"
+                        className="absolute top-1/2 left-0 transform -translate-y-1/2 ml-2 bg-surface/70 hover:bg-surface/90 text-text shadow-lg z-20 border border-border"
                         size="large"
                     >
                         <ArrowBackIosNewIcon fontSize="medium" />
@@ -48,7 +48,7 @@ export default function GallerySection({ images }) {
                     {/* Next Button - extreme right */}
                     <IconButton
                         onClick={handleNext}
-                        className="absolute top-1/2 right-0 transform -translate-y-1/2 mr-2 bg-white/70 hover:bg-white shadow-lg z-20"
+                        className="absolute top-1/2 right-0 transform -translate-y-1/2 mr-2 bg-surface/70 hover:bg-surface/90 text-text shadow-lg z-20 border border-border"
                         size="large"
                     >
                         <ArrowForwardIosIcon fontSize="medium" />
@@ -61,7 +61,7 @@ export default function GallerySection({ images }) {
                 {images.map((_, idx) => (
                     <Box
                         key={idx}
-                        className={`w-3 h-3 rounded-full cursor-pointer transition-colors duration-300 ${idx === currentIndex ? "bg-blue-600" : "bg-gray-300"
+                        className={`w-3 h-3 rounded-full cursor-pointer transition-colors duration-300 ${idx === currentIndex ? "bg-primary" : "bg-muted"
                             }`}
                         onClick={() => setCurrentIndex(idx)}
                     />

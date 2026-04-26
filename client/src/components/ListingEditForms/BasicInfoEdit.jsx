@@ -65,7 +65,7 @@ export default function BasicInfoEdit() {
                         sx={{
                             fontWeight: 700,
                             letterSpacing: 0.5,
-                            color: "#1e3a8a",
+                            color: 'var(--color-primary)',
                         }}
                     >
                         Edit General Information
@@ -222,7 +222,7 @@ export default function BasicInfoEdit() {
                                 px: 5,
                                 py: 1.7,
                                 fontWeight: 600,
-                                background: "linear-gradient(90deg, #2563eb, #3b82f6)",
+                                background: "var(--gradient-primary)",
                                 color: "#fff",
                                 boxShadow: "0 6px 20px rgba(59,130,246,0.35)",
                                 "&:hover": { boxShadow: "0 8px 25px rgba(59,130,246,0.45)" },

@@ -5,7 +5,7 @@ import SidebarAdmin from "../components/Dashboard/SidebarAdmin";
 import Loader from "../components/Loader";
 import useDetails from "../Hooks/useDetails";
 import { useSelectedPlace } from "../context/SelectedPlaceContext";
-import axios from "axios";
+import api from "../api/axios";
 import { toast } from "react-toastify";
 
 
@@ -60,8 +60,8 @@ export default function Dashboard() {
                 }
             });
 
-            const res = await axios.put(
-                `http://localhost:8000/api/listing/update-listing/${selectedPlaceId}`,
+            const res = await api.put(
+                `/api/listing/update-listing/${selectedPlaceId}`,
                 formData,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -83,8 +83,8 @@ export default function Dashboard() {
 
     const onCancel = async () => {
         try {
-            const res = await axios.get(
-                `http://localhost:8000/api/listing/details/${selectedPlaceId}`,
+            const res = await api.get(
+                `/api/listing/details/${selectedPlaceId}`,
                 { withCredentials: true }
             );
             const formattedDetails = {
@@ -110,9 +110,9 @@ export default function Dashboard() {
         const checkAuthAndFetch = async () => {
             try {
                 setLoading(true);
-                await axios.get("http://localhost:8000/api/auth/check-auth", { withCredentials: true });
+                await api.get("/api/auth/check-auth", { withCredentials: true });
 
-                const res = await axios.get("http://localhost:8000/api/listing/owner", { withCredentials: true });
+                const res = await api.get("/api/listing/owner", { withCredentials: true });
                 setPlaces(res.data.data || []);
             } catch (err) {
                 navigate("/", { state: { authMessage: "You must be logged in first" } });

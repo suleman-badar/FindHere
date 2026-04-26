@@ -38,7 +38,7 @@ export default function InfoSection({ details, place }) {
 
                 {/* Price */}
                 {details?.price !== undefined && (
-                    <Typography variant="h6" className="text-blue-700 font-semibold">
+                    <Typography variant="h6" className="text-primary font-semibold">
                         Avg Price: ${details.price}
                     </Typography>
                 )}

@@ -39,11 +39,11 @@ export default function Details() {
                     <GoBack />
                 </Box>
                 <HeroSection details={data} />
-                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+                <Divider sx={{ my: 2, backgroundColor: "var(--color-border)" }} />
 
                 <Heading heading="Opening Hours" />
                 <OpeningHoursSection hours={data.hours} />
-                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+                <Divider sx={{ my: 2, backgroundColor: "var(--color-border)" }} />
 
 
 
@@ -60,16 +60,16 @@ export default function Details() {
                     paymentMethods={data.paymentMethods}
                     tags={data.tags}
                 />
-                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+                <Divider sx={{ my: 2, backgroundColor: "var(--color-border)" }} />
 
 
                 <Heading heading="Image Gallery" />
                 <GallerySection images={data.images} />
-                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+                <Divider sx={{ my: 2, backgroundColor: "var(--color-border)" }} />
 
                 <Heading heading="Location & Map" />
                 <MapSection location={data.location} address={details.data.addressNote} />
-                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+                <Divider sx={{ my: 2, backgroundColor: "var(--color-border)" }} />
 
                 <Heading heading="Get In Touch" />
                 <ContactSection
@@ -77,7 +77,7 @@ export default function Details() {
                     email={data.email}
                     website={data.website}
                 />
-                <Divider sx={{ my: 2, backgroundColor: "black" }} />
+                <Divider sx={{ my: 2, backgroundColor: "var(--color-border)" }} />
 
                 <Heading heading="Reviews" />
                 <ReviewSection listingId={id} />

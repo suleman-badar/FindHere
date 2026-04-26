@@ -11,9 +11,9 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 
 export default function Navbar() {
     const links = [
-        { text: "Explore", path: "/", icon: <ExploreIcon sx={{ color: "#082567" }} /> },
-        { text: "Dashboard", path: "/admin/dashboard", icon: <DashboardIcon sx={{ color: "#082567" }} /> },
-        { text: "About", path: "/about", icon: <InfoIcon sx={{ color: "#082567" }} /> },
+        { text: "Explore", path: "/", icon: <ExploreIcon sx={{ color: "var(--color-primary)" }} /> },
+        { text: "Dashboard", path: "/admin/dashboard", icon: <DashboardIcon sx={{ color: "var(--color-primary)" }} /> },
+        { text: "About", path: "/about", icon: <InfoIcon sx={{ color: "var(--color-primary)" }} /> },
 
     ];
 
@@ -22,16 +22,18 @@ export default function Navbar() {
             <AppBar
                 position="relative"
                 color="transparent"
-                sx={{ backdropFilter: "blur(8px)", backgroundColor: "#F8F9FA" }}
+                sx={{ backdropFilter: "blur(8px)" }}
             >
-                <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <img src={LogoImg} alt="Logo"
                         style={{
                             height: 70,
                             width: "auto"
                         }}></img>
-                    <UserSection />
-                    <HamburgerMenu links={links} />
+                    <div className="flex items-center gap-3">
+                        <UserSection />
+                        <HamburgerMenu links={links} />
+                    </div>
                 </Toolbar>
             </AppBar>
             <NavLinks links={links} />

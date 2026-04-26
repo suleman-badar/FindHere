@@ -1,12 +1,7 @@
 import Listing from "../models/Listing.js";
 import mongoose from "mongoose";
-import client from "../meiliSearch.js";
+import client from "../config/meiliSearch.js";
 
-/**
- * @desc   Create new listing
- * @route  POST /api/listing
- * @access Private (owner only)
- */
 export const createListing = async(req, res) => {
     try {
         // Destructure data from req.body

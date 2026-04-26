@@ -41,13 +41,13 @@ const ImageGallery = forwardRef(({ details, previewCount = 4 }, ref) => {
     return (
         <Box className="flex flex-col justify-center items-center">
             {/* Thumbnails */}
-            <Box sx={{ display: "flex", gap: 1, overflowX: "auto" }}>
+            <Box sx={{ display: "flex", gap: 8, overflowX: "auto", py: 2 }}>
                 {images.slice(0, previewCount).map((url, idx) => (
                     <img
                         key={idx}
                         src={url}
                         alt={`image-${idx}`}
-                        className="w-34 h-34 object-cover rounded-lg border cursor-pointer"
+                        className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-lg border cursor-pointer"
                         onClick={() => handleOpen(idx)}
                     />
                 ))}
@@ -55,7 +55,7 @@ const ImageGallery = forwardRef(({ details, previewCount = 4 }, ref) => {
                 {images.length > previewCount && (
                     <Box
                         onClick={() => handleOpen(0)}
-                        className="w-24 h-24 flex items-center justify-center rounded-lg border cursor-pointer bg-gray-100 text-sm font-medium"
+                        className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 flex items-center justify-center rounded-lg border cursor-pointer bg-surface text-text text-sm font-medium"
                     >
                         +{images.length - previewCount} More
                     </Box>
@@ -70,7 +70,7 @@ const ImageGallery = forwardRef(({ details, previewCount = 4 }, ref) => {
                 fullWidth
                 PaperProps={{
                     style: {
-                        backgroundColor: "black",
+                        backgroundColor: "var(--color-surface)",
                         position: "relative",
                         overflow: "hidden",
                     },
@@ -78,21 +78,21 @@ const ImageGallery = forwardRef(({ details, previewCount = 4 }, ref) => {
             >
                 <IconButton
                     onClick={handleClose}
-                    sx={{ position: "absolute", top: 10, right: 10, color: "white" }}
+                    sx={{ position: "absolute", top: 10, right: 10, color: "var(--color-text)" }}
                 >
                     <Close />
                 </IconButton>
 
                 <IconButton
                     onClick={showPrev}
-                    sx={{ position: "absolute", top: "50%", left: 10, color: "white" }}
+                    sx={{ position: "absolute", top: "50%", left: 10, color: "var(--color-text)" }}
                 >
                     <ArrowBack />
                 </IconButton>
 
                 <IconButton
                     onClick={showNext}
-                    sx={{ position: "absolute", top: "50%", right: 10, color: "white" }}
+                    sx={{ position: "absolute", top: "50%", right: 10, color: "var(--color-text)" }}
                 >
                     <ArrowForward />
                 </IconButton>

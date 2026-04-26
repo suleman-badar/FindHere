@@ -13,15 +13,13 @@ import searchRoutes from "./routes/searchRoutes.js";
 
 import helmet from "helmet";
 
-
-
 dotenv.config();
 
 // Connect to MongoDB
 connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 7700;
 
 // Middlewares
 app.use(cors({
@@ -36,7 +34,7 @@ app.use(helmet());
 
 
 
-app.get("/", (_req, res) => res.send("API is running"));
+app.get("/", (req, res) => res.send("API is running"));
 
 
 // Routes
@@ -52,4 +50,4 @@ app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);
 });
 
-app.use((_req, res) => res.status(404).json({ message: "Route not found" }));
+app.use((req, res) => res.status(404).json({ message: "Route not found" }));

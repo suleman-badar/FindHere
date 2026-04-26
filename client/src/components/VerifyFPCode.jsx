@@ -19,7 +19,7 @@ export default function VerifyForgotPasswordCode() {
     setMessage("");
 
     try {
-      const res = await axios.patch("http://localhost:8000/api/auth/verify-forgot-password-code", {
+      const res = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/api/auth/verify-forgot-password-code`, {
         email,
         providedCode: code,
         newPassword

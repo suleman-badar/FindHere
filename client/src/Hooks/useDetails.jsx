@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/axios";
 export default function useDetails(id) {
     const [details, setDetails] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ export default function useDetails(id) {
         }
         try {
             setLoading(true);
-            const res = await axios.get(`http://localhost:8000/api/listing/details/${id}`);
+            const res = await api.get(`/api/listing/details/${id}`);
             setDetails(res.data);
             setError(null);
         } catch (err) {

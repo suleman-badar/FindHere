@@ -1,4 +1,4 @@
-import client from "../../backend/meiliSearch.js";
+import client from "../config/meiliSearch.js";
 import Listing from "../models/Listing.js";
 
 export const syncResturants = async() => {

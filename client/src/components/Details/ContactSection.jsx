@@ -56,10 +56,10 @@ export default function ContactSection({ phone, email, website, avgPrice }) {
                     return (
                         <Card
                             key={item.key}
-                            sx={{
+                                sx={{
                                 flex: 1,
                                 minWidth: 250,
-                                backgroundColor: "#f3f4f6",
+                                backgroundColor: "var(--color-surface)",
                                 borderRadius: "16px",
                                 boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
                                 transition: "all 0.3s ease",

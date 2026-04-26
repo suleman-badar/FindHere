@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Loader from "../components/Loader";
 import { signUpValidations } from "../validations/signUpValidations";
-import axios from "axios";
+import api from "../api/axios";
 import PasswordInput from "../components/PasswordInput";
 import GoogleIcon from "@mui/icons-material/Google";
 import AppleIcon from "@mui/icons-material/Apple";
@@ -30,8 +30,8 @@ export default function SignUp() {
             setErrors({});
             setLoading(true);
 
-            const res = await axios.post(
-                "http://localhost:8000/api/auth/register",
+            const res = await api.post(
+                "/api/auth/register",
                 { name, email, password },
                 { timeout: 5000 }
             );
@@ -84,7 +84,7 @@ export default function SignUp() {
     return (
         <Box className="flex items-center justify-center h-screen relative overflow-hidden px-4">
             {/* Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 animate-gradient-x" />
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-300 via-red-400 to-pink-400 animate-gradient-x" />
             <div className="absolute top-20 left-20 w-64 h-64 bg-white/20 rounded-full blur-3xl" />
             <div className="absolute bottom-20 right-20 w-64 h-64 bg-purple-400/30 rounded-full blur-3xl" />
 
@@ -149,7 +149,7 @@ export default function SignUp() {
 
                         {/* Signup Button */}
                         <Btn text="Sign Up" type="submit"
-                            className="w-full mt-4 bg-gradient-to-r from-blue-500 to-pink-500 text-white rounded-xl py-3 shadow-lg hover:opacity-90 transition" />
+                            className="w-full mt-4 bg-gradient-to-r from-var(--color-primary-dark) to-var(--color-primary) text-white rounded-xl py-3 shadow-lg hover:opacity-90 transition" />
 
 
                     </form>
@@ -165,9 +165,9 @@ export default function SignUp() {
                     <Button variant="outlined" startIcon={<GoogleIcon />}
                         sx={{
                             width: "80%", maxWidth: "280px", mb: 2,
-                            color: "#082567", borderColor: "#000d1a",
+                            color: 'var(--color-primary)', borderColor: 'var(--color-primary-dark)',
                             borderRadius: "8px", textTransform: "none",
-                            "&:hover": { backgroundColor: "#082567", color: "white", boxShadow: 3 }
+                            "&:hover": { backgroundColor: 'var(--color-primary)', color: "white", boxShadow: 3 }
                         }}>
                         Sign Up with Google
                     </Button>

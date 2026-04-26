@@ -90,14 +90,21 @@ export default function FiltersDrawer({ open, onClose, onApply, search }) {
                     borderBottomLeftRadius: "16px",
                     display: "flex",
                     flexDirection: "column",
-                    bgcolor: "#f9fafb",
+                    bgcolor: "var(--color-surface)",
                 },
             }}
             TransitionComponent={Slide}
             transitionDuration={400}
         >
             {/* Header */}
-            <div className="px-4 py-4 flex items-center gap-2 bg-gradient-to-r from-indigo-300 to-blue-600 text-white sticky top-0 z-10 shadow">
+           <div
+  className="px-4 py-4 flex items-center gap-2 text-[color:var(--color-text)] sticky top-0 z-10 shadow"
+  style={{
+    background: "var(--color-accent/20)",
+    backdropFilter: "blur(12px)",
+    borderBottom: "1px solid var(--nav-border)"
+  }}
+>
                 <FilterListIcon />
                 <h2 className="text-lg font-semibold">Filters</h2>
             </div>
@@ -148,9 +155,9 @@ export default function FiltersDrawer({ open, onClose, onApply, search }) {
                     variant="contained"
                     onClick={handleApply}
                     sx={{
-                        background: "linear-gradient(90deg, #4f46e5, #2563eb)",
+                        background: 'var(--gradient-primary)',
                         "&:hover": {
-                            background: "linear-gradient(90deg, #4338ca, #1d4ed8)",
+                            filter: 'brightness(0.95)'
                         },
                         borderRadius: "9999px",
                         px: 4,

@@ -13,7 +13,7 @@ export default function ProgressCircle({ step, steps }) {
                     cx="80"
                     cy="80"
                     r="70"
-                    stroke="gray"
+                    stroke="var(--color-muted)"
                     strokeWidth="8"
                     fill="transparent"
                     className="opacity-20"
@@ -31,8 +31,8 @@ export default function ProgressCircle({ step, steps }) {
                 />
                 <defs>
                     <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#3b82f6" />
-                        <stop offset="100%" stopColor="#6366f1" />
+                        <stop offset="0%" stopColor="var(--color-primary)" />
+                        <stop offset="100%" stopColor="var(--color-primary-dark)" />
                     </linearGradient>
                 </defs>
             </svg>

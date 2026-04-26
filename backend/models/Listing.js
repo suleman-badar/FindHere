@@ -1,8 +1,14 @@
 import mongoose from "mongoose";
 
 const openingHoursSchema = new mongoose.Schema({
-    open: { type: String, default: "" },
-    close: { type: String, default: "" },
+    open: { 
+        type: String, 
+        default: "" 
+    },
+    close: { 
+        type: String, 
+        default: "" 
+    },
 }, { _id: false });
 
 const listingSchema = new mongoose.Schema({
@@ -24,7 +30,7 @@ const listingSchema = new mongoose.Schema({
     },
     images: {
         type: [String],
-        default: "",
+        default: [],
     },
     location: {
         type: [Number],
@@ -103,5 +109,5 @@ const listingSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const Listing = mongoose.model("listing", listingSchema);
+const Listing = mongoose.model("Listing", listingSchema);
 export default Listing;

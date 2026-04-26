@@ -14,8 +14,8 @@ export default function HeroSection({ details }) {
                     className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
                 />
 
-                {/* Stronger Gradient overlay */}
-                <Box className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-0"></Box>
+                {/* Stronger Gradient overlay (theme-aware) */}
+                <Box className="absolute inset-0 z-0" style={{ background: 'linear-gradient(to top, var(--hero-overlay), rgba(0,0,0,0.25), transparent)' }} />
 
                 {/* Text overlay */}
                 <Box className="absolute bottom-6 left-6 sm:left-12 sm:bottom-12 z-20 space-y-4">
@@ -47,11 +47,11 @@ export default function HeroSection({ details }) {
                                     label={c}
                                     size="small"
                                     sx={{
-                                        backgroundColor: "rgba(0,0,0,0.4)",
+                                        backgroundColor: "rgba(0,0,0,0.35)",
                                         color: "#fff",
                                         fontWeight: 500,
                                         backdropFilter: "blur(6px)",
-                                        border: "1px solid rgba(255,255,255,0.3)"
+                                        border: "1px solid rgba(255,255,255,0.18)"
                                     }}
                                 />
 
@@ -63,10 +63,10 @@ export default function HeroSection({ details }) {
 
                     {/* Price Box with glassmorphism */}
                     {details?.price !== undefined && details?.price !== null && (
-                        <Box className="inline-block bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border border-white/30 mt-2">
+                        <Box className="inline-block bg-surface/20 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border border-border mt-2 text-text">
                             <Typography
                                 variant="body1"
-                                className="text-gray-100 font-medium text-sm sm:text-base"
+                                className="font-medium text-sm sm:text-base"
                             >
                                 Average Price for One
                             </Typography>

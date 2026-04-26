@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { Box, Typography } from "@mui/material";
 import StarRating from "./StarRating";
 
@@ -28,10 +28,11 @@ export default function AllReviews({
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/review/all-review/${id}`);
+                const res = await api.get(`/api/review/all-review/${id}`);
                 setReviews(res.data || []);
             } catch (err) {
                 console.error("Error fetching reviews:", err);
+                setReviews([]);
             }
         };
         fetchReviews();
@@ -43,20 +44,20 @@ export default function AllReviews({
                 reviews.map((review) => (
                     <Box
                         key={review._id}
-                        className={reviewBoxClass || "flex bg-gray-100 w-full min-h-[180px] rounded-lg p-4 mb-4"}
+                        className={reviewBoxClass || "flex flex-col sm:flex-row bg-gray-100 w-full min-h-[160px] rounded-lg p-4 mb-4 items-start sm:items-center"}
                         sx={reviewBoxSx}
                     >
                         {showImage && (
-                            <Box className={imageClass || "h-full w-[10%]"} sx={imageSx}>
+                            <Box className={imageClass || "w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0"} sx={imageSx}>
                                 <img
                                     src={review.image || "/default-user.png"}
                                     alt={review.name || "Anonymous"}
-                                    className="h-full w-full object-cover rounded-full"
+                                    className="w-full h-full object-cover rounded-full"
                                     style={imageSx}
                                 />
                             </Box>
                         )}
-                        <Box className="ml-4 flex flex-col justify-around">
+                        <Box className="mt-3 sm:mt-0 sm:ml-4 flex flex-col justify-around w-full">
                             <Box>
                                 <Box className={nameClass} sx={nameSx}>
                                     {review.name || "Anonymous"}

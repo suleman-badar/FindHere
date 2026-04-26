@@ -41,7 +41,7 @@ export default function Home() {
     }, [location.state, location.pathname, navigate]);
 
     return (
-        <div className="bg-white">
+        <div className="bg-background text-text min-h-screen">
             <Hero />
             <Category />
             <Featured />

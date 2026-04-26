@@ -33,7 +33,7 @@ export default function MapSection({ location, address }) {
 
                     <Typography
                         variant="body1"
-                        className="text-gray-700 text-center mb-4 italic"
+                        className="text-text text-center mb-4 italic"
                     >
                         {address}
                     </Typography>

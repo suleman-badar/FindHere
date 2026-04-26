@@ -1,7 +1,6 @@
-    import mongoose, { Schema } from "mongoose";
+    import mongoose from "mongoose";
 
-    const reviewSchema = new Schema({
-
+    const reviewSchema = new mongoose.Schema({
         rating: {
             type: Number,
             required: true,
@@ -29,11 +28,10 @@
             default: Date.now,
         },
         listingId: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Listing",
             required: true
         }
-
     });
 
     const Review = mongoose.model("Review", reviewSchema);

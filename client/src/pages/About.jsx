@@ -17,7 +17,6 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 export default function About() {
     return (
         <Box className="mt-2">
-            <GoBack />
             <Box className=" flex flex-col justify-center items-center text-center h-[400px] bg-indigo-950 text-white">
                 <b>
                     <h1 className="mb-10 ">About</h1>

@@ -6,7 +6,7 @@ export default function Btn({ text, className = "", IconStart = null, IconEnd = 
         <Button
             {...props}
             sx={(theme) => ({
-                backgroundColor: "#082567",
+                backgroundColor: 'var(--color-primary)',
                 width: w,
                 margin: "0.5rem",
                 color: "white",
@@ -17,7 +17,7 @@ export default function Btn({ text, className = "", IconStart = null, IconEnd = 
                 cursor: "pointer",
                 gap: 2,
                 "&:hover": {
-                    backgroundColor: "#000d1a",
+                    backgroundColor: 'var(--color-primary-dark)',
                 },
                 // Merge parent sx safely
                 ...(typeof sxProp === "function" ? sxProp(theme) : sxProp),

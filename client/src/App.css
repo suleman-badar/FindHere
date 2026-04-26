@@ -1,19 +1,7 @@
 #root {
-    max-width: 1280px;
-    margin: 0;
-    /* padding: 2rem; */
+    /* max-width:px; */
+    margin: 0 auto;
+    padding: 0 0rem;
 }
 
-/* Hide scrollbar but keep scrolling */
-
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
-    /* Chrome, Safari */
-}
-
-.scrollbar-hide {
-    -ms-overflow-style: none;
-    /* IE & Edge */
-    scrollbar-width: none;
-    /* Firefox */
-}
+    

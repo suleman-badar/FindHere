@@ -79,22 +79,22 @@ export default function OpeningHoursSection({ hours }) {
 
                     return (
                         <Accordion
-                            key={day}
-                            defaultExpanded={isToday}
-                            className={`rounded-xl shadow-md transition ${isToday ? "border-2 border-blue-400 bg-blue-50/40" : ""
-                                }`}
+                                key={day}
+                                defaultExpanded={isToday}
+                                className={`rounded-xl shadow-md transition ${isToday ? "border-2 border-primary/60 bg-primary/10" : "bg-surface"
+                                    }`}
                         >
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                 {/* Day name + icon */}
-                                <Typography
-                                    className={`font-semibold flex items-center gap-3 ${isToday ? "text-blue-700" : "text-gray-800"
-                                        }`}
-                                >
-                                    <AccessTimeIcon
-                                        className={`${isToday ? "text-blue-600" : "text-gray-500"}`}
-                                    />
-                                    {day}
-                                </Typography>
+                                    <Typography
+                                        className={`font-semibold flex items-center gap-3 ${isToday ? "text-primary" : "text-text"
+                                            }`}
+                                    >
+                                        <AccessTimeIcon
+                                            className={`${isToday ? "text-primary" : "text-muted"}`}
+                                        />
+                                        {day}
+                                    </Typography>
 
                                 {/* Right side content */}
                                 <Box className="ml-auto flex items-center gap-3">
@@ -131,7 +131,7 @@ export default function OpeningHoursSection({ hours }) {
 
                                     {/* Always show timings for every day (including today) */}
                                     <Typography
-                                        className={`text-sm ${isClosedAllDay ? "text-red-500 font-medium" : "text-gray-700"
+                                        className={`text-sm ${isClosedAllDay ? "text-red-500 font-medium" : "text-text"
                                             }`}
                                     >
                                         {isClosedAllDay ? "Closed" : `${open} - ${close}`}
@@ -141,7 +141,7 @@ export default function OpeningHoursSection({ hours }) {
 
                             {/* Optional details area; keep concise */}
                             <AccordionDetails>
-                                <Typography className="text-gray-700">
+                                <Typography className="text-text">
                                     {isClosedAllDay
                                         ? "No service hours on this day."
                                         : isToday
