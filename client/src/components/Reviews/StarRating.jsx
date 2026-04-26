@@ -12,7 +12,7 @@ export default function StarRating({ rating = 0, maxStars = 5, size = 18 }) {
 
             {[...Array(maxStars - safeRating)].map((_, i) => (
                 <StarBorder key={i} sx={{ color: "var(--color-star-empty)", fontSize: size }} />
-            ))}}
+            ))}
         </Box>
     );
 }

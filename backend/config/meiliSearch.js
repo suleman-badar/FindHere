@@ -1,8 +1,12 @@
 import { MeiliSearch } from "meilisearch";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 
 const client = new MeiliSearch({
-    host: "http://localhost:7700", // Meilisearch server
-    // apiKey: "our-master-key",   //  TODO
+    host: process.env.MEILI_HOST, // Meilisearch server
+    apiKey: process.env.MEILI_MASTER_KEY,   //  TODO
 });
 
 export default client;

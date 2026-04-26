@@ -1,44 +1,68 @@
 import client from "../config/meiliSearch.js";
 import Listing from "../models/Listing.js";
 
-export const syncResturants = async() => {
-    const listings = await Listing.find();
 
-    // Convert ObjectId to string so Meilisearch accepts it
-    const restaurants = listings.map(doc => ({
-        ...doc.toObject(),
-        _id: doc._id.toString(),
-    }));
+// 🔥 Sync MongoDB → MeiliSearch
+export const syncResturants = async () => {
+  const listings = await Listing.find();
 
-    console.log("Syncing", restaurants.length, "restaurants");
+  const restaurants = listings.map(doc => ({
+    _id: doc._id.toString(),
+    name: doc.name,
+    tagline: doc.tagline,
+    description: doc.description,
+    cuisine: doc.cuisine,
+    tags: doc.tags,
+    amenities: doc.amenities,
+    services: doc.services,
+    paymentMethods: doc.paymentMethods,
+    price: doc.price,
+  }));
 
-    let index;
-    try {
-        index = await client.getIndex("restaurants");
-    } catch (e) {
-        index = await client.createIndex("restaurants", { primaryKey: "_id" });
-        await index.updateFilterableAttributes([
-            "tags",
-            "amenities",
-            "cuisine",
-            "services",
-            "paymentMethods",
-        ]);
-    }
+  console.log("Syncing", restaurants.length, "restaurants");
 
-    await index.addDocuments(restaurants);
-    return index;
+  //  Always get index reference
+  let index = client.index("restaurants");
+
+  //  Ensure settings are ALWAYS applied
+  await index.updateSettings({
+    searchableAttributes: [
+      "name",
+      "tagline",
+      "description",
+      "cuisine",
+      "tags"
+    ],
+    filterableAttributes: [
+      "tags",
+      "amenities",
+      "cuisine",
+      "services",
+      "paymentMethods",
+      "price"
+    ]
+  });
+
+  //  Add documents
+  await index.addDocuments(restaurants);
+
+  return index;
 };
 
+export const syncResturantsRoute = async (req, res) => {
+  try {
+    //  Optional: clear old index (recommended just once, when indexing for the first time)
+    await client.deleteIndex("restaurants").catch(() => {});
 
-export const syncResturantsRoute = async(req, res) => {
-    try {
-        await syncResturants();
-        res.json({ success: true, message: "Restaurants synced with Meilisearch" });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+    await syncResturants();
+
+    res.json({ success: true, message: "Restaurants synced with Meilisearch" });
+  } catch (error) {
+    console.error("Sync error:", error.message);
+    res.status(500).json({ error: error.message });
+  }
 };
+
 
 export const searchResturants = async(req, res) => {
     try {
