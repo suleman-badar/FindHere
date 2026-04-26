@@ -148,12 +148,12 @@ export default function Search() {
             {/* Results */}
             <div className="mt-4 w-full text-left relative">
                 {hasSearched && results.length > 0 && (
-                    <div className="space-y-2">
+                    <div className="space-y-2 max-h-64 overflow-y-auto pr-2 py-4 scroll-smooth">
                         {/* Close Button */}
                         <IconButton
                             onClick={handleCloseResults}
                             size="small"
-                            sx={{ position: "absolute", right: 15, top: -25 }}
+                            sx={{ position: "absolute", right: 15, top: -20, color: "var(--color-muted)" }}
                         >
                             <CloseIcon fontSize="small" />
                         </IconButton>

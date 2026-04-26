@@ -5,3 +5,11 @@
 }
 
     
+/* in your CSS */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-muted);
+  border-radius: 10px;
+}
