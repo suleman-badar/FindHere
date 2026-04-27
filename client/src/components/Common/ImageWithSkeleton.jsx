@@ -32,7 +32,7 @@ export default function ImageWithSkeleton({ src, alt = "", sx = {}, imgStyle = {
   return (
     <Box sx={{ width: "100%", height: "100%", position: "relative", ...sx }}>
       {!loaded && (
-        <Skeleton variant="rectangular" animation={false} sx={{ width: "100%", height: "100%" }} />
+        <Skeleton variant="rectangular" animation="wave" sx={{ width: "100%", height: "100%" }} />
       )}
       {loaded && (
         <img src={src} alt={alt} style={{ width: "100%", height: "100%", objectFit: "cover", ...imgStyle }} />
