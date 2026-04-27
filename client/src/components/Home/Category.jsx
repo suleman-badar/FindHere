@@ -11,9 +11,11 @@ import {
   Dumbbell,
 } from "lucide-react";
 
-export default function Category() {
+export default function Category({ selectedCategory: selectedCategoryProp, onSelectCategory }) {
   const scrollContainerRef = useRef(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [localSelected, setLocalSelected] = useState(null);
+  const selectedCategory = selectedCategoryProp !== undefined ? selectedCategoryProp : localSelected;
+  const setSelectedCategory = onSelectCategory || setLocalSelected;
 
   const categories = [
     { id: "restaurants", name: "Restaurants", icon: UtensilsCrossed },
@@ -46,7 +48,7 @@ export default function Category() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [setSelectedCategory]);
 
   return (
     <section

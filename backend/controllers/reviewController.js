@@ -3,16 +3,20 @@ import Listing from "../models/Listing.js";
 
 export const createReviews = async(req, res) => {
     try {
-        const { rating, reviewText, name } = req.body;
+        const { rating, reviewText, name, image } = req.body;
         const { id } = req.params;
 
-        const img = req.file ? req.file.path : "";
+        // Prefer uploaded file path, then body.image, otherwise leave undefined so Mongoose default applies
+        let img;
+        if (req.file) img = req.file.path;
+        else if (image) img = image;
+        else img = undefined;
 
         const review = new Review({
             rating,
             reviewText,
             name: name || "Anonymous",
-            image: img,
+            ...(img !== undefined ? { image: img } : {}),
             listingId: id,
         });
 
@@ -41,9 +45,12 @@ export const getReviewsByListingId = async(req, res) => {
 // Get all listings with average ratings
 export const getListingsWithRatings = async(req, res) => {
     try {
-        const listings = await Listing.aggregate([{
+        const category = req.query.category;
+        const pipeline = [];
+        if (category) pipeline.push({ $match: { category } });
+        pipeline.push({
                 $lookup: {
-                    from: "reviews", // collection name in MongoDB
+                    from: "reviews",
                     localField: "_id",
                     foreignField: "listingId",
                     as: "reviews"
@@ -65,13 +72,14 @@ export const getListingsWithRatings = async(req, res) => {
                     hours: 1,
                     images: 1,
                     owner: 1,
+                    category: 1,
                     averageRating: { $ifNull: ["$averageRating", 0] },
                     reviewCount: 1
                 }
-
             }
-        ]);
+        );
 
+        const listings = await Listing.aggregate(pipeline);
         res.json(listings);
     } catch (err) {
         console.error(err);

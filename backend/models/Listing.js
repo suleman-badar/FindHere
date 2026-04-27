@@ -102,6 +102,11 @@ const listingSchema = new mongoose.Schema({
         min: 1800,
         max: new Date().getFullYear(),
     },
+    category: {
+        type: String,
+        enum: ["restaurants","coffee","shopping","entertainment","outdoors","hotels","nightlife","fitness"],
+        default: "restaurants",
+    },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

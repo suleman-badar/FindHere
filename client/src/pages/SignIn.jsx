@@ -1,189 +1,244 @@
-import { Box } from "@mui/material";
-import Btn from "../components/Btn";
-import LoginImg from "../assets/LoginImg.png";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Loader from "../components/Loader";
-import { signInValidations } from "../validations/signInValidations";
-import api from "../api/axios";
-import PasswordInput from "../components/PasswordInput";
-import { toast } from "react-toastify";
-import { useAuth } from "../context/AuthContext";
+import React, { useState } from 'react';
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, AlertCircle } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import Logo from '../assets/logoImg.png';
+import api from '../api/axios';
+import { signInValidations } from '../validations/signInValidations';
+import { toast } from 'react-toastify';
+import { useAuth } from '../context/AuthContext';
+import Loader from '../components/Loader';
 
+export default function SignInPage() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-export default function SignIn() {
-    let navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-    const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState({});
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const { login } = useAuth();
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
-    const handleLogin = async () => {
-        try {
-            await signInValidations.validate(
-                { email, password },
-                { abortEarly: false }
-            );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-            setErrors({});
-            setLoading(true);
+    try {
+      await signInValidations.validate(
+        { email, password },
+        { abortEarly: false }
+      );
 
-            const res = await api.post(
-                "/api/auth/login",
-                { email, password },
-                { withCredentials: true, timeout: 5000 }
-            );
-            if (res.data.success) {
-                login(res.data.user);
-                setEmail("");
-                setPassword("");
-                toast.success("Welcome to FindHere");
-                navigate("/admin/dashboard");
-            }
+      setErrors({});
+      setLoading(true);
 
-        } catch (e) {
-            if (e.name === "ValidationError") {
-                const validationErrors = {};
-                e.inner.forEach((err) => {
-                    validationErrors[err.path] = err.message;
-                });
-                setErrors(validationErrors);
-            } else if (e.response) {
-                const { message, email } = e.response.data;
+      const res = await api.post(
+        "/api/auth/login",
+        { email, password },
+        { withCredentials: true, timeout: 5000 }
+      );
 
-                if (message?.includes("Email not verified")) {
-                    // Redirect to OTP page with email
-                    navigate("/verify-otp", { state: { email } });
-                } else {
-                    setErrors({ api: message || "Something went wrong" });
-                }
-            } else {
-                setErrors({ api: "Network error. Please try again." });
-            }
+      if (res.data.success) {
+        login(res.data.user);
+        toast.success("Welcome to FindHere");
+
+        setEmail("");
+        setPassword("");
+
+        navigate("/admin/dashboard");
+      }
+
+    } catch (e) {
+      if (e.name === "ValidationError") {
+        const validationErrors = {};
+        e.inner.forEach((err) => {
+          validationErrors[err.path] = err.message;
+        });
+        setErrors(validationErrors);
+
+      } else if (e.response) {
+        const { message, email } = e.response.data;
+
+        if (message?.includes("Email not verified")) {
+          navigate("/verify-otp", { state: { email } });
+        } else {
+          setErrors({ api: message || "Something went wrong" });
         }
-        finally {
-            setLoading(false);
-        }
-    };
 
-    if (loading) return <Loader />;
+      } else {
+        setErrors({ api: "Network error. Please try again." });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-        <Box className="flex items-center justify-center min-h-screen relative overflow-hidden">
-            {/* Animated Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 animate-gradient-x" />
+  if (loading) return <Loader />;
 
-            {/* Decorative blur blobs */}
-            <div className="absolute top-20 left-20 w-72 h-72 bg-white/20 rounded-full blur-3xl" />
-            <div className="absolute bottom-20 right-20 w-72 h-72 bg-purple-400/30 rounded-full blur-3xl" />
+  return (
+    <div className="min-h-screen w-full flex" style={{ fontFamily: 'Roboto, sans-serif' }}>
 
-            {/* Glassmorphic Card */}
-            <Box className="relative z-10 flex flex-col md:flex-row mx-2 bg-white/20 backdrop-blur-2xl border border-white/30 w-full max-w-4xl rounded-3xl shadow-[0_8px_40px_rgba(0,0,0,0.2)] overflow-hidden">
+      {/* LEFT PANEL */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1771574205963-0c1d84ac7354?fit=max&w=1080')`
+          }}
+        />
 
-                {/* Left Panel */}
-                {/* Left Panel */}
-                <Box className="hidden md:flex md:w-1/2 relative">
-                    <img
-                        src={LoginImg}
-                        alt="Login"
-                        className="w-full h-full object-cover"
-                    />
-                    <Box className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent flex flex-col justify-end p-8 text-white">
-                        <h2 className="text-4xl font-extrabold tracking-tight drop-shadow-lg">Welcome Back</h2>
-                        <p className="text-sm mt-3 opacity-90 leading-relaxed">
-                            Access your personal dashboard, manage listings, and explore amazing places.
-                        </p>
+        <div className="absolute inset-0 bg-black/45" />
 
-                        {/* Back to Home Button on Image */}
-                        <Link
-                            to="/"
-                            className="mt-4 inline-block rounded-xl py-2 px-4 text-sm text-white/80 border border-white/40 hover:bg-white/10 transition self-start"
-                        >
-                            ← Back to Home
-                        </Link>
-                    </Box>
-                </Box>
+        <div className="relative z-10 flex flex-col justify-between p-10 text-white w-full">
+          
+          {/* Top */}
+          <div className="flex items-center justify-between">
+            <img src={Logo} className="h-20 w-auto invert brightness-0" />
 
+            <Link
+              to="/"
+              className="flex items-center space-x-2 px-4 py-2 border border-white/30 rounded-lg hover:bg-white/10 transition"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm">Back to Home</span>
+            </Link>
+          </div>
 
-                {/* Right Panel */}
-                <Box className="flex flex-col items-center justify-center px-10 py-14 w-full md:w-1/2">
-                    <h3 className="text-4xl font-extrabold text-white mb-2 drop-shadow-lg">Sign In</h3>
-                    <p className="text-gray-100/80 text-sm mb-8 tracking-wide">
-                        Enter your credentials to unlock your account
-                    </p>
+          {/* Center */}
+          <div className="max-w-md">
+            <h1 className="text-5xl font-bold mb-4">Welcome Back</h1>
+            <p className="text-lg text-white/90">
+              Manage your listings and explore amazing places with ease.
+            </p>
+          </div>
 
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            handleLogin();
-                        }}
-                        className="flex flex-col items-center w-full max-w-sm"
-                    >
-                        {/* Email Input */}
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            className="h-12 w-full rounded-xl border border-white/40 bg-white/20 px-4 mb-3 text-white placeholder-gray-200 focus:ring-2 focus:ring-pink-300 focus:outline-none"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        {errors.email && (
-                            <p className="text-red-300 text-xs -mt-2 mb-2 self-start">{errors.email}</p>
-                        )}
+          {/* Bottom */}
+          <div className="flex space-x-8">
+            <div>
+              <p className="text-3xl font-bold">2,500+</p>
+              <p className="text-white/80 text-sm">Active Listings</p>
+            </div>
+            <div>
+              <p className="text-3xl font-bold">50K+</p>
+              <p className="text-white/80 text-sm">Happy Users</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                        {/* Password Input */}
-                        <PasswordInput
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Password"
-                            className="h-12 w-full rounded-xl border border-white/40 bg-white/20 px-4 text-white placeholder-gray-200 focus:ring-2 focus:ring-pink-300 focus:outline-none"
-                        />
-                        {errors.password && (
-                            <p className="text-red-300 text-xs -mt-2 mb-2 self-start">{errors.password}</p>
-                        )}
+      {/* RIGHT PANEL */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12 bg-white">
+        <div className="w-full max-w-md">
 
-                        {errors.api && (
-                            <p className="text-red-300 text-xs mt-1 mb-2">{errors.api}</p>
-                        )}
+          {/* Header */}
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-[#0f172a] mb-2">
+              Sign In
+            </h2>
+            <p className="text-[#6b7280]">
+              Enter your credentials to continue
+            </p>
+          </div>
 
-                        {/* Sign In Button */}
-                        <Btn
-                            text="Sign In"
-                            type="submit"
-                            className="w-full mt-4 bg-gradient-to-r from-blue-500 to-pink-500 text-white rounded-xl py-3 shadow-lg hover:opacity-90 transition"
-                        />
-                    </form>
+          {/* API Error */}
+          {errors.api && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex gap-3">
+              <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+              <p className="text-sm text-red-600">{errors.api}</p>
+            </div>
+          )}
 
-                    {/* Divider */}
-                    <div className="flex items-center w-full my-6">
-                        <span className="flex-grow h-px bg-white/30" />
-                        <span className="px-3 text-white/60 text-xs">OR</span>
-                        <span className="flex-grow h-px bg-white/30" />
-                    </div>
+          {/* FORM */}
+          <form onSubmit={handleSubmit} className="space-y-5">
 
-                    {/* Signup Link */}
-                    <Box className="flex gap-1 text-sm mt-2">
-                        <p className="text-gray-200">Don’t have an account?</p>
-                        <Link
-                            to="/signup"
-                            className="text-pink-300 font-semibold hover:underline"
-                        >
-                            Create Account
-                        </Link>
-                    </Box>
-                    <Box className="flex gap-1 text-sm mt-2">
-                        <p className="text-gray-200">Forgot Password?</p>
-                        <Link
-                            to="/send-fp-code"
-                            className="text-pink-300 font-semibold hover:underline"
-                        >
-                            Click here to change password
-                        </Link>
-                    </Box>
-                </Box>
-            </Box>
-        </Box>
-    );
+            {/* Email */}
+            <div>
+              <label className="text-sm font-medium text-[#0f172a] mb-2 block">
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6b7280]" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full pl-12 pr-4 py-3 border-2 rounded-xl border-[#e9e5e5] focus:border-[#b91c1c] focus:ring-2 focus:ring-[#b91c1c]/20 outline-none"
+                  style={{ background: '#fff6f5' }}
+                />
+              </div>
+              {errors.email && (
+                <p className="text-sm text-red-600 mt-1">{errors.email}</p>
+              )}
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="text-sm font-medium text-[#0f172a] mb-2 block">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6b7280]" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  className="w-full pl-12 pr-12 py-3 border-2 rounded-xl border-[#e9e5e5] focus:border-[#b91c1c] focus:ring-2 focus:ring-[#b91c1c]/20 outline-none"
+                  style={{ background: '#fff6f5' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#6b7280]"
+                >
+                  {showPassword ? <EyeOff /> : <Eye />}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="text-sm text-red-600 mt-1">{errors.password}</p>
+              )}
+            </div>
+
+            {/* Links */}
+            <div className="flex justify-between text-sm">
+              <Link to="/send-fp-code" className="text-[#6b7280] hover:text-[#b91c1c]">
+                Forgot Password?
+              </Link>
+            </div>
+
+            {/* Button */}
+            <button
+              type="submit"
+              className="w-full py-3 rounded-xl text-white font-semibold"
+              style={{ background: 'linear-gradient(90deg, #9d1717, #b91c1c)' }}
+            >
+              Sign In
+            </button>
+            {/* Divider */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-[#e9e5e5]" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-[#6b7280]">OR</span>
+              </div>
+            </div>
+
+            {/* Signup */}
+            <div className="text-center">
+              <p className="text-[#6b7280] text-sm">
+                Don't have an account?{' '}
+                <Link
+                  to="/signup"
+                  className="font-semibold text-[#ff7043] hover:underline"
+                >
+                  Create Account
+                </Link>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 }

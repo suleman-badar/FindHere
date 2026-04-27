@@ -6,6 +6,7 @@ import Hero from "../components/Home/Hero.jsx";
 import Footer from "../components/Footer.jsx";
 import Category from "../components/Home/Category.jsx";
 import Featured from "../components/Home/Featured.jsx";
+import { useState } from "react";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -40,11 +41,13 @@ export default function Home() {
         }
     }, [location.state, location.pathname, navigate]);
 
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
     return (
         <div className="bg-background text-text min-h-screen">
             <Hero />
-            <Category />
-            <Featured />
+            <Category selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
+            <Featured selectedCategory={selectedCategory} />
             <Footer />
         </div>
     );

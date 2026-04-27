@@ -3,18 +3,18 @@ import { useState, useEffect } from "react";
 import Carousel from "../Carousel";
 import ListingCard from "./ListingCard";
 import ListingSkeleton from "../Skeletons/ListingSkeleton";
-// Loader replaced by skeleton placeholders for better UX
 import api from "../../api/axios";
 
-export default function Featured() {
+export default function Featured({ selectedCategory = null }) {
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
 
-
     useEffect(() => {
         async function fetchListings() {
+            setLoading(true);
             try {
-                const res = await api.get("/api/review/listings-with-reviews");
+                const url = selectedCategory ? `/api/review/listings-with-reviews?category=${selectedCategory}` : "/api/review/listings-with-reviews";
+                const res = await api.get(url);
                 setListings(res.data);
             } catch (err) {
                 console.error("Failed to fetch listings:", err);
@@ -23,10 +23,9 @@ export default function Featured() {
             }
         }
         fetchListings();
-    }, []);
+    }, [selectedCategory]);
 
-
-
+    
     return (
         <Box sx={{ p: 4, textAlign: "center", position: "relative" }}>
             {loading ? (

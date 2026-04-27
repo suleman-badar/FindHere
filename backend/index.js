@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
+import helmet from "helmet";
 import cookieParser from "cookie-parser";
 
 import connectDB from "./config/db.js";
@@ -10,8 +11,6 @@ import authRoutes from "./routes/authRoute.js";
 import listingRoutes from "./routes/listingRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import searchRoutes from "./routes/searchRoutes.js";
-
-import helmet from "helmet";
 
 dotenv.config();
 
@@ -32,10 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 
-
-
 app.get("/", (req, res) => res.send("API is running"));
-
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -43,8 +39,6 @@ app.use("/api/listing", listingRoutes);
 app.use("/api/review", reviewRoutes);
 app.use("/api/search", searchRoutes);
 // app.use("/api/map", mapRoute);
-
-
 
 app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);

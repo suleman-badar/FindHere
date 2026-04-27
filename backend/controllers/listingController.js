@@ -22,6 +22,7 @@ export const createListing = async(req, res) => {
             amenities,
             price,
             cuisine,
+            category,
         } = req.body;
 
         if (!name || !location) {
@@ -54,7 +55,20 @@ export const createListing = async(req, res) => {
 
 
 
-        const images = req.files ? req.files.map((file) => file.path) : [];
+        // Support images passed via multipart (`req.files`) or as JSON in `req.body.images`
+        let imagesFromBody = [];
+        if (req.body.images) {
+            if (typeof req.body.images === "string") {
+                try {
+                    imagesFromBody = JSON.parse(req.body.images);
+                } catch (e) {
+                    imagesFromBody = [req.body.images];
+                }
+            } else if (Array.isArray(req.body.images)) {
+                imagesFromBody = req.body.images;
+            }
+        }
+        const images = req.files && req.files.length ? req.files.map((file) => file.path) : imagesFromBody;
         console.log("images", images);
 
         const listing = new Listing({
@@ -75,6 +89,7 @@ export const createListing = async(req, res) => {
             price: price !== undefined ? Number(price) : 0,
             cuisine: parsedCuisine || [],
             images,
+            category: category || "restaurants",
             owner: req.userId,
         });
 
@@ -136,6 +151,7 @@ export const updateListing = async(req, res) => {
             tags,
             amenities,
             price,
+            category,
             cuisine,
             existingImages
         } = req.body;
@@ -213,6 +229,8 @@ export const updateListing = async(req, res) => {
         listing.amenities = parseArrayField(amenities) || listing.amenities;
         listing.services = parseArrayField(services) || listing.services;
         listing.paymentMethods = parseArrayField(paymentMethods) || listing.paymentMethods;
+
+        if (category) listing.category = category;
 
         const updated = await listing.save();
         const index = client.index("restaurants");
