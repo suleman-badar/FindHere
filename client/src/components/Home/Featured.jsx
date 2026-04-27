@@ -1,8 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import HoverCard from "./HoverCard";
 import Carousel from "../Carousel";
-import Loader from "../Loader";
+import ListingCard from "./ListingCard";
+import ListingSkeleton from "../Skeletons/ListingSkeleton";
+// Loader replaced by skeleton placeholders for better UX
 import api from "../../api/axios";
 
 export default function Featured() {
@@ -29,7 +30,19 @@ export default function Featured() {
     return (
         <Box sx={{ p: 4, textAlign: "center", position: "relative" }}>
             {loading ? (
-                <Loader />
+                <>
+                    <Typography variant="h5" fontWeight="bold" gutterBottom>
+                        Featured Locations
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" mb={2}>
+                        Loading featured locations...
+                    </Typography>
+                    <Carousel>
+                        {[1, 2, 3, 4].map((i) => (
+                            <ListingSkeleton key={i} />
+                        ))}
+                    </Carousel>
+                </>
             ) : (
                 <>
                     <Typography variant="h5" fontWeight="bold" gutterBottom>
@@ -41,17 +54,7 @@ export default function Featured() {
 
                     <Carousel>
                         {listings.map((listing) => (
-                            <HoverCard
-                                key={listing?._id}
-                                id={listing?._id}
-                                name={listing?.name}
-                                image={listing?.images?.[0]}
-                                averageRating={listing?.averageRating}
-                                reviewCount={listing?.reviewCount}
-                            // locationLat={listing?.location[0]}
-                            // locationLon={listing?.location[1]}
-
-                            />
+                            <ListingCard key={listing?._id} listing={listing} />
                         ))}
                     </Carousel>
                 </>

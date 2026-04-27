@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/logoImg.png";
 import { FaTwitter, FaInstagram, FaFacebook } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Mail, Send } from "lucide-react";
@@ -28,23 +28,20 @@ const Footer = () => {
         color: "var(--color-text)",
       }}
     >
-      <div className="container mx-auto px-6 py-14 " style={{ borderColor: "var(--color-border)" }}>
+      <div
+        className="container mx-auto px-6 py-14 max-w-7xl"
+        style={{ borderColor: "var(--color-border)" }}
+      >
         {/* TOP GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 text-center md:text-left justify-items-center md:justify-items-start">
           
           {/* BRAND */}
           <div>
-            <div className="flex items-center mb-4">
-              <img src={Logo} alt="Logo" className="h-12 w-auto mr-2" />
-              <span
-                className="text-xl font-bold"
-                style={{ color: "var(--color-text)" }}
-              >
-                FindHere
-              </span>
+            <div className="flex items-center justify-center md:justify-start mb-4">
+              <img src={Logo} className="h-16 w-auto mr-2 fill-[var(--color-primary)]" />
             </div>
 
-            <p className="text-sm text-[var(--color-muted)]">
+            <p className="text-sm text-[var(--color-muted)] max-w-xs">
               Discover amazing places through real reviews, photos, and experiences from our community.
             </p>
           </div>
@@ -54,7 +51,7 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4 text-[var(--color-primary)]">
               Explore
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm flex flex-col items-center md:items-start">
               <li><Link className="hover:text-[var(--color-primary)]" to="/top-rated">Top Rated</Link></li>
               <li><Link className="hover:text-[var(--color-primary)]" to="/new-locations">New Places</Link></li>
               <li><Link className="hover:text-[var(--color-primary)]" to="/categories">Categories</Link></li>
@@ -67,7 +64,7 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4 text-[var(--color-primary)]">
               Community
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm flex flex-col items-center md:items-start">
               <li><Link className="hover:text-[var(--color-primary)]" to="/upload">Upload Photos</Link></li>
               <li><Link className="hover:text-[var(--color-primary)]" to="/dashboard">Dashboard</Link></li>
               <li><Link className="hover:text-[var(--color-primary)]" to="/guidelines">Guidelines</Link></li>
@@ -85,8 +82,11 @@ const Footer = () => {
               Get latest updates from FindHere.
             </p>
 
-            <form onSubmit={handleSubscribe} className="space-y-3">
-              <div className="flex items-center border border-[var(--color-border)] rounded-md overflow-hidden">
+            <form
+              onSubmit={handleSubscribe}
+              className="space-y-3 flex flex-col items-center md:items-start"
+            >
+              <div className="flex items-center border border-[var(--color-border)] rounded-md overflow-hidden w-full max-w-sm">
                 <span className="px-3 text-[var(--color-muted)]">
                   <Mail size={16} />
                 </span>
@@ -103,7 +103,7 @@ const Footer = () => {
 
               <button
                 type="submit"
-                className="w-full py-2 rounded-md text-white flex items-center justify-center gap-2"
+                className="w-full max-w-sm py-2 rounded-md text-white flex items-center justify-center gap-2"
                 style={{
                   background: "var(--gradient-primary)",
                 }}
@@ -115,42 +115,46 @@ const Footer = () => {
           </div>
         </div>
       </div>
+
       {/* DIVIDER */}
-        <div
-          className="border-t mt-10 p-6 flex flex-col md:flex-row justify-between items-center"
-          style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
-        >
-          {/* COPYRIGHT */}
-          <p className="text-sm text-[var(--color-muted)]">
-            © {new Date().getFullYear()} FindHere. All rights reserved.
-          </p>
+      <div
+        className="border-t mt-10 p-6 flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-4"
+        style={{
+          borderColor: "var(--color-border)",
+          backgroundColor: "var(--color-surface)",
+        }}
+      >
+        {/* COPYRIGHT */}
+        <p className="text-sm text-[var(--color-muted)]">
+          © {new Date().getFullYear()} FindHere. All rights reserved.
+        </p>
 
-          {/* SOCIALS */}
-          <div className="flex gap-5 mt-4 md:mt-0">
-            <a href="https://facebook.com" target="_blank">
-              <FaFacebook className="hover:text-[var(--color-primary)]" />
-            </a>
-            <a href="https://twitter.com" target="_blank">
-              <FaTwitter className="hover:text-[var(--color-primary)]" />
-            </a>
-            <a href="https://instagram.com" target="_blank">
-              <FaInstagram className="hover:text-[var(--color-primary)]" />
-            </a>
-          </div>
-
-          {/* LEGAL */}
-          <div className="flex gap-4 text-sm mt-4 md:mt-0 text-[var(--color-muted)]">
-            <Link className="hover:text-[var(--color-primary)]" to="/privacy">
-              Privacy
-            </Link>
-            <Link className="hover:text-[var(--color-primary)]" to="/terms">
-              Terms
-            </Link>
-            <Link className="hover:text-[var(--color-primary)]" to="/contact">
-              Contact
-            </Link>
-          </div>
+        {/* SOCIALS */}
+        <div className="flex gap-5 justify-center md:justify-start">
+          <a href="https://facebook.com" target="_blank" rel="noreferrer">
+            <FaFacebook className="hover:text-[var(--color-primary)]" />
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noreferrer">
+            <FaTwitter className="hover:text-[var(--color-primary)]" />
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noreferrer">
+            <FaInstagram className="hover:text-[var(--color-primary)]" />
+          </a>
         </div>
+
+        {/* LEGAL */}
+        <div className="flex gap-4 text-sm justify-center md:justify-start text-[var(--color-muted)]">
+          <Link className="hover:text-[var(--color-primary)]" to="/privacy">
+            Privacy
+          </Link>
+          <Link className="hover:text-[var(--color-primary)]" to="/terms">
+            Terms
+          </Link>
+          <Link className="hover:text-[var(--color-primary)]" to="/contact">
+            Contact
+          </Link>
+        </div>
+      </div>
     </footer>
   );
 };

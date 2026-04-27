@@ -14,6 +14,7 @@ import ReviewForm from './pages/ReviewForm.jsx'
 import VerifyOtp from './components/VerifyOtp.jsx';
 import SendCode from './components/SendFPCode.jsx';
 import VerifyForgotPasswordCode from './components/VerifyFPCode.jsx';
+import NotFoundPage from './pages/NotFound.jsx';
 
 // import AdminLayout from "./layouts/AdminLayout";
 
@@ -59,6 +60,9 @@ function App() {
           <Route path="/verify-otp/:email" element={<VerifyOtp />} />
           <Route path='send-fp-code' element={< SendCode />} />
           <Route path='verify-code' element={<VerifyForgotPasswordCode />} />
+
+          {/*404 Not Found */}
+          <Route path="*" element={<NotFoundPage />} />
 
           {/* admin access */}
           <Route path="/admin"

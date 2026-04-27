@@ -26,9 +26,7 @@ export default function Search() {
     // Handle search submit
     async function handleSubmit(e) {
         if (e?.preventDefault) e.preventDefault();
-
         setHasSearched(true);
-
         try {
             const res = await api.get("/api/search", {
                 params: {

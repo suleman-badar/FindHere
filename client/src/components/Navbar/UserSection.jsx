@@ -16,7 +16,7 @@ export default function UserSection({ isDrawer }) {
                         <Button
                             variant="contained"
                             sx={{
-                                backgroundColor: "#082567",
+                                backgroundColor:  "var(--color-primary-dark)",
                                 width: "80%",
                                 color: "white",
                                 borderRadius: "8px",
@@ -24,7 +24,7 @@ export default function UserSection({ isDrawer }) {
                                 textTransform: "none",
                                 boxShadow: 3,
                                 "&:hover": {
-                                    backgroundColor: "var(--color-primary-dark)",
+                                    backgroundColor: "var(--color-primary)",
                                 },
                             }}
                             component={Link}
