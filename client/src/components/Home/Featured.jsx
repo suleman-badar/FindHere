@@ -37,7 +37,7 @@ export default function Featured({ selectedCategory = null }) {
                         Loading featured locations...
                     </Typography>
                     <Carousel>
-                        {[1, 2, 3, 4].map((i) => (
+                        {[1, 2, 3, 4, 5 , 6].map((i) => (
                             <ListingSkeleton key={i} />
                         ))}
                     </Carousel>
