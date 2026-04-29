@@ -52,7 +52,7 @@ async function seed() {
     const createdListings = [];
 
     for (const category of CATEGORIES) {
-      // Ensure at least LISTINGS_PER_CATEGORY per category (append-only)
+      // Ensure at least 5 listings per category ( LISTINGS_PER_CATEGORY)
       const existingCount = await Listing.countDocuments({ category });
       const toCreate = Math.max(0, LISTINGS_PER_CATEGORY - existingCount);
       if (toCreate === 0) {
@@ -113,8 +113,8 @@ async function seed() {
             if (res.data && res.data.data) {
             createdListings.push(res.data.data);
             console.log(`Created listing ${res.data.data._id} in category ${category}`);
-            // create 11 reviews for each newly created listing
-            for (let r = 0; r < 11; r++) {
+            // create 2 reviews for each newly created listing
+            for (let r = 0; r < 2; r++) {
               const reviewBody = {
                 rating: 1 + Math.floor(Math.random() * 5),
                 reviewText: faker.lorem.sentences(2),
