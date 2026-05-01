@@ -39,9 +39,16 @@ export default function DashboardHome() {
     };
 
     return (
-        <div className="space-y-10 px-6">
-
-            {/*  STATS */}
+        <div
+            className="
+                w-full
+                min-w-0
+                overflow-x-hidden
+                space-y-10
+                px-2 sm:px-6 lg:px-4
+            "
+        >
+            {/* STATS */}
             <section>
                 <SectionHeader title="Engagement Stats" />
 
@@ -52,30 +59,33 @@ export default function DashboardHome() {
                 </div>
             </section>
 
-            {/*SAVED PLACES*/}
+            {/* SAVED PLACES */}
             <section>
-                <div className="flex items-center justify-between">
-                    <SectionHeader title="Your Listings" />
-                </div>
+                <SectionHeader title="Your Listings" />
 
                 <div className="mt-4">
                     {places.length === 0 ? (
-                        <div className="bg-white border border-[#e9e5e5] rounded-2xl p-10 text-center">
-                            <p className="text-[#6b7280]">No listings yet</p>
+                        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-10 text-center">
+                            <p className="text-[var(--color-muted)]">
+                                No listings yet
+                            </p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                             {places.map((place) => (
                                 <SavedPlaceCard
                                     key={place._id}
                                     place={place}
-                                    onSelect={() => setSelectedPlaceId(place._id)}
+                                    onSelect={() =>
+                                        setSelectedPlaceId(place._id)
+                                    }
                                     onDelete={handleDelete}
                                 />
                             ))}
                         </div>
                     )}
                 </div>
+
                 <div className="flex justify-center mt-6">
                     <Btn
                         text="Add New"
@@ -93,14 +103,22 @@ export default function DashboardHome() {
                     {activities.map((a) => (
                         <div
                             key={a.id}
-                            className="flex items-center justify-between p-4 rounded-2xl border border-[#e9e5e5] bg-[#fff6f5] hover:border-[#b91c1c] hover:shadow-md transition-all duration-200 cursor-pointer group"
+                            className="
+                                flex items-center justify-between
+                                p-4 rounded-2xl
+                                border border-[var(--color-border)]
+                                bg-[var(--color-surface)]
+                                hover:border-[var(--color-primary)]
+                                hover:shadow-md
+                                transition-all duration-200
+                                cursor-pointer group
+                            "
                         >
                             <ActivityItem activity={a} />
                         </div>
                     ))}
                 </div>
             </section>
-
         </div>
     );
 }

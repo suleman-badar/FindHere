@@ -22,18 +22,7 @@ export default function SavedPlaceCard({ place, onSelect, onDelete }) {
 
                 {/* Actions */}
                 <div className="flex flex-wrap gap-2 justify-start sm:justify-end mt-3 sm:mt-0">
-                    <button
-                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-300 hover:bg-gray-100 text-sm text-gray-700 transition-colors"
-                        onClick={() => {
-                            sessionStorage.setItem("scrollY", window.scrollY);
-
-                            onSelect(place._id)
-                            // navigate(`/admin/dashboard`);
-                        }}
-                    >
-                        <Edit size={16} />
-                        <span>Edit</span>
-                    </button>
+                    
                     <button
                         className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-red-400 hover:bg-red-100 text-red-600 text-sm transition-colors"
                         onClick={() => onDelete(place._id)}
