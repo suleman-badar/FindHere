@@ -1,8 +1,10 @@
+import { TrendingUp, Eye, MessageSquare, Heart } from "lucide-react";
+
 export const stats = [
-    { id: 1, title: "Engagement Score", value: 23, delta: -2.1, sub: "+5.7% vs last month" },
-    { id: 2, title: "Total Visits", value: 1247, delta: 12.5, sub: "+12.5% vs last month" },
-    { id: 3, title: "Reviews Written", value: 47, delta: 8.2, sub: "+8.2% vs last month" },
-    { id: 4, title: "Places Saved", value: 94.2, suffix: "%", delta: 4.3, sub: "Saved rate" },
+    { id: 1, icon: TrendingUp, label: "Engagement Score", value: 23, trend: true, trendValue: "-2.1%" },
+    { id: 2, icon: Eye, label: "Total Visits", value: "1,247", trend: true, trendValue: "+12.5%" },
+    { id: 3, icon: MessageSquare, label: "Reviews Written", value: 47, trend: true, trendValue: "+8.2%" },
+    { id: 4, icon: Heart, label: "Places Saved", value: "94.2%", trend: true, trendValue: "+4.3%" },
 ];
 
 export const savedPlaces = [

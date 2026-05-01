@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar from './components/Navbar.jsx'
 import Home from './pages/Home.jsx'
 import Details from './pages/Details.jsx'
-import Dashboard from './pages/Dashboard.jsx'
+import Dashboard from './pages/DashboardLayout.jsx'
 import About from './pages/About.jsx'
 import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/SignUp.jsx'

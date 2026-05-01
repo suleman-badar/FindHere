@@ -1,13 +1,5 @@
-// Dashboard.jsx
-import { useState, useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
-import SidebarAdmin from "../components/Dashboard/SidebarAdmin";
+import DashboardLayout from "../components/Dashboard/DashboardLayout";
 import Loader from "../components/Loader";
-import useDetails from "../Hooks/useDetails";
-import { useSelectedPlace } from "../context/SelectedPlaceContext";
-import api from "../api/axios";
-import { toast } from "react-toastify";
-
 
 export default function Dashboard() {
     const [places, setPlaces] = useState([]);
@@ -153,15 +145,18 @@ export default function Dashboard() {
 
 
 
+
     if (loading || detailsLoading || updating) return <Loader />;
 
     return (
-        <div className="flex bg-gray-100 min-h-screen">
-            <SidebarAdmin places={places} />
-
-            <main className="flex-1 p-8 space-y-10">
-                <Outlet context={{ places, setPlaces, selectedPlaceId, listingDetails, setListingDetails, loading, onSave, onCancel }} />
-            </main>
-        </div>
+        <DashboardLayout
+            places={places}
+            selectedPlaceId={selectedPlaceId}
+            listingDetails={listingDetails}
+            setListingDetails={setListingDetails}
+            loading={loading}
+            onSave={onSave}
+            onCancel={onCancel}
+        />
     );
 }

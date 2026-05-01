@@ -29,13 +29,17 @@ export const register = async(req, res) => {
             return res.status(400).json({ success: false, message: "All fields are required" });
         }
 
-
         const exists = await User.findOne({ email });
         if (exists) return res.status(400).json({ success: false, message: "Email already registered" });
 
         const user = await User.create({ name, email, password, isVerified: false });
-
         await sendOtp(email);
+
+        //TODO: extract OTP and pass it as second parameter here
+        // const verified=await verifyOtp(email,);
+        
+        //login user and take him top dashboard page
+        //if(verified){}
 
         return res.status(201).json({
             success: true,
