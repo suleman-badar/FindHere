@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react";
-import { useSelectedPlace } from "../../context/SelectedPlaceContext";
-import api from "../../api/axios";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import api from "../../api/axios";
 import StarRating from "../Reviews/StarRating";
 import { Box, Typography, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import Loader from "../Loader";
+import useDetails from "../../Hooks/useDetails";
 
 export default function ListingReviewsEdit() {
-    const { selectedPlaceId } = useSelectedPlace();
+    const { placeId } = useParams();
+    const navigate = useNavigate();
+    const { details, loading, error } = useDetails(placeId);
     const [reviews, setReviews] = useState([]);
 
     // Fetch reviews
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const res = await api.get(`/api/review/all-review/${selectedPlaceId}`);
+                const res = await api.get(`/api/review/all-review/${placeId}`);
                 setReviews(res.data || []);
             } catch (err) {
                 console.error(err);
@@ -22,7 +26,19 @@ export default function ListingReviewsEdit() {
             }
         };
         fetchReviews();
-    }, [selectedPlaceId]);
+    }, [placeId]);
+
+    const onSave = async (data) => {
+        // For reviews, maybe no save needed, just navigate
+        navigate('/admin/dashboard');
+    };
+
+    const onCancel = () => {
+        navigate('/admin/dashboard');
+    };
+
+    if (loading) return <Loader />;
+    if (error) return <div>Error loading listing</div>;
 
     const handleDelete = async (reviewId) => {
         if (!window.confirm("Are you sure you want to delete this review?")) return;

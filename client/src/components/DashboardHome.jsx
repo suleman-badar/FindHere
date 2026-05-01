@@ -39,7 +39,7 @@ export default function DashboardHome() {
     };
 
     return (
-        <div className="space-y-10">
+        <div className="space-y-10 px-6">
 
             {/*  STATS */}
             <section>

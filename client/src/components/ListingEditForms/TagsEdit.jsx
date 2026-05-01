@@ -13,7 +13,12 @@ import {
     OutlinedInput,
     Box,
 } from "@mui/material";
-import { useOutletContext } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import Loader from "../Loader";
+import useDetails from "../../Hooks/useDetails";
+import api from "../../api/axios";
 
 const tagsOptions = [
     "Family Friendly",
@@ -30,8 +35,33 @@ const amenitiesOptions = [
 ];
 
 export default function TagsEdit() {
-    const { listingDetails, setListingDetails, loading, onSave, onCancel } =
-        useOutletContext();
+    const { placeId } = useParams();
+    const navigate = useNavigate();
+    const { details, loading, error } = useDetails(placeId);
+    const [listingDetails, setListingDetails] = useState({});
+
+    useEffect(() => {
+        if (details) {
+            setListingDetails(details);
+        }
+    }, [details]);
+
+    const onSave = async (data) => {
+        try {
+            await api.put(`/api/listing/update-listing/${placeId}`, data, { withCredentials: true });
+            toast.success("Listing updated successfully");
+            navigate('/admin/dashboard');
+        } catch (err) {
+            toast.error("Failed to update listing");
+        }
+    };
+
+    const onCancel = () => {
+        navigate('/admin/dashboard');
+    };
+
+    if (loading) return <Loader />;
+    if (error) return <div>Error loading listing</div>;
 
     const handleCheckboxChange = (field, option, checked) => {
         let updated = listingDetails[field] ? [...listingDetails[field]] : [];
