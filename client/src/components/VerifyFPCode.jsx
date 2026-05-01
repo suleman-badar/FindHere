@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -19,7 +19,7 @@ export default function VerifyForgotPasswordCode() {
     setMessage("");
 
     try {
-      const res = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/api/auth/verify-forgot-password-code`, {
+      const res = await api.patch(`/api/auth/verify-forgot-password-code`, {
         email,
         providedCode: code,
         newPassword

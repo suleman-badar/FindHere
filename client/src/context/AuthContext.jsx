@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/axios";
 
 const AuthContext = createContext();
 
@@ -10,13 +10,11 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://findhere.onrender.com";
-                const res = await axios.get(`${API_BASE}/api/auth/me`, {
+                const res = await api.get("/api/auth/me", {
                     withCredentials: true,
                 });
                 console.log("Auth /me response:", res.data);
                 setUser(res.data);
-
             } catch (err) {
                 setUser(null);
             } finally {

@@ -75,7 +75,7 @@ export const verifyUserOtp = async(req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 24 * 60 * 60 * 1000
         });
 
@@ -145,7 +145,7 @@ export const login = async(req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 24 * 60 * 60 * 1000
         }).json({ success: true, token, message: "Logged in successfully", user: userData });
 
@@ -205,7 +205,11 @@ export const updateProfile = async(req, res) => {
 
 // LOGOUT
 export const logout = (_req, res) => {
-    res.clearCookie("token", { path: "/" }).json({ success: true, message: "Logged out successfully" });
+    res.clearCookie("token", {
+        path: "/",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: process.env.NODE_ENV === "production",
+    }).json({ success: true, message: "Logged out successfully" });
 };
 
 // CHANGE PASSWORD
