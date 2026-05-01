@@ -2,7 +2,7 @@ import { Router } from "express";
 import { register, login, me, logout, resendOtp, changePassword, sendForgotPasswordCode, verifyForgotPasswordCode, updateProfile } from "../controllers/authController.js";
 import { protect } from "../middlewares/identification.js";
 import { verifyUserOtp } from "../controllers/authController.js";
-import { upload } from "../config/cloudinary.js";
+import { upload } from "../config/multer.js";
 import rateLimit from "express-rate-limit";
 
 const router = Router();

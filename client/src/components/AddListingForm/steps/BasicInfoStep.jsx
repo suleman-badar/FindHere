@@ -12,85 +12,176 @@ import {
     OutlinedInput
 } from "@mui/material";
 
+const inputSX = {
+    "& .MuiOutlinedInput-root": {
+        "& fieldset, & .MuiOutlinedInput-notchedOutline": {
+            borderColor: "var(--color-border)",
+        },
+        "&.Mui-focused fieldset, &.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "var(--color-primary)",
+        },
+    },
+    "& label.Mui-focused": {
+        color: "var(--color-primary)",
+    },
+};
+
+const outlinedInputSX = {
+    "& fieldset, & .MuiOutlinedInput-notchedOutline": {
+        borderColor: "var(--color-border)",
+    },
+    "&.Mui-focused fieldset, &.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        borderColor: "var(--color-primary)",
+    },
+};
+
+
 const cuisines = ["Italian", "Chinese", "Fast Food", "Cafe", "Indian", "Mexican", "Japanese"];
 
-export default function BasicInfoStep({ formData, setFormData, nextStep, prevStep, errors = {} }) {
+export default function BasicInfoStep({
+    formData,
+    setFormData,
+    nextStep,
+    prevStep,
+    errors = {}
+}) {
     return (
-        <Card className="p-6 shadow-lg rounded-lg">
-            <CardContent>
-                <Typography variant="h5" className="mb-4 font-bold">Basic Info</Typography>
+        <Card className="shadow-lg rounded-2xl border border-[var(--color-border)]">
+            <CardContent className="p-6">
 
-                <TextField
-                    fullWidth
-                    label="Restaurant Name"
-                    value={formData.name || ""}
-                    onChange={(e) => setFormData("name", e.target.value)}
-                    margin="normal"
-                    error={!!errors.name}
-                    helperText={errors.name}
-                />
+                <Typography
+                    variant="h5"
+                    className="font-bold text-[var(--color-text)] mb-6"
+                >
+                    Basic Info
+                </Typography>
 
-                <TextField
-                    fullWidth
-                    label="Tagline (optional)"
-                    value={formData.tagline || ""}
-                    onChange={(e) => setFormData("tagline", e.target.value)}
-                    margin="normal"
-                    error={!!errors.tagline}
-                    helperText={errors.tagline}
-                />
+                {/* FIXED SPACING SYSTEM */}
+                <div className="flex flex-col gap-6">
 
-                <TextField
-                    fullWidth
-                    label="Description"
-                    value={formData.description || ""}
-                    onChange={(e) => setFormData("description", e.target.value)}
-                    margin="normal"
-                    multiline
-                    rows={4}
-                    error={!!errors.description}
-                    helperText={errors.description}
-                />
+                    {/* NAME */}
+                    <div className="flex flex-col gap-1">
+                        <TextField
+                            fullWidth
+                            label="Restaurant Name"
+                            value={formData.name || ""}
+                            onChange={(e) => setFormData("name", e.target.value)}
+                            error={!!errors.name}
+                            helperText={errors.name}
+                            sx={inputSX}
+                        />
+                    </div>
 
-                <FormControl fullWidth margin="normal">
-                    <InputLabel>Cuisine Type</InputLabel>
-                    <Select
-                        multiple
-                        value={formData.cuisine || []}
-                        onChange={(e) => setFormData("cuisine", e.target.value)}
-                        input={<OutlinedInput label="Cuisine Type" />}
-                        renderValue={(selected) => (
-                            <div className="flex flex-wrap gap-1">
-                                {selected.map((value) => (
-                                    <Chip key={value} label={value} size="small" />
+                    {/* TAGLINE */}
+                    <div className="flex flex-col gap-1">
+                        <TextField
+                            fullWidth
+                            label="Tagline (optional)"
+                            value={formData.tagline || ""}
+                            onChange={(e) => setFormData("tagline", e.target.value)}
+                            error={!!errors.tagline}
+                            helperText={errors.tagline}
+                            sx={inputSX}
+                        />
+                    </div>
+
+                    {/* DESCRIPTION */}
+                    <div className="flex flex-col gap-1">
+                        <TextField
+                            fullWidth
+                            label="Description"
+                            value={formData.description || ""}
+                            onChange={(e) => setFormData("description", e.target.value)}
+                            multiline
+                            rows={4}
+                            error={!!errors.description}
+                            helperText={errors.description}
+                            sx={inputSX}
+                        />
+                    </div>
+
+                    {/* CUISINE */}
+                    <div className="flex flex-col gap-1">
+                        <FormControl fullWidth>
+                            <InputLabel>Cuisine Type</InputLabel>
+                            <Select
+                                multiple
+                                value={formData.cuisine || []}
+                                onChange={(e) => setFormData("cuisine", e.target.value)}
+                                input={<OutlinedInput label="Cuisine Type" sx={outlinedInputSX} />}
+                                sx={inputSX}
+                                renderValue={(selected) => (
+                                    <div className="flex flex-wrap gap-1">
+                                        {selected.map((value) => (
+                                            <Chip key={value} label={value} size="small" />
+                                        ))}
+                                    </div>
+                                )}
+                            >
+                                {cuisines.map((cuisine) => (
+                                    <MenuItem key={cuisine} value={cuisine}>
+                                        {cuisine}
+                                    </MenuItem>
                                 ))}
-                            </div>
-                        )}
-                    >
-                        {cuisines.map((cuisine) => (
-                            <MenuItem key={cuisine} value={cuisine}>
-                                {cuisine}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                    {errors.cuisine && <p className="text-red-500 text-sm mt-1">{errors.cuisine}</p>}
-                </FormControl>
+                            </Select>
 
-                <TextField
-                    fullWidth
-                    label="Established Year"
-                    type="number"
-                    value={formData.establishedYear || ""}
-                    onChange={(e) => setFormData("establishedYear", e.target.value)}
-                    margin="normal"
-                    error={!!errors.establishedYear}
-                    helperText={errors.establishedYear}
-                />
+                            {errors.cuisine && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.cuisine}
+                                </p>
+                            )}
+                        </FormControl>
+                    </div>
 
-                <div className="flex justify-between mt-6">
-                    <Button variant="outlined" onClick={prevStep}>Back</Button>
-                    <Button variant="contained" color="primary" onClick={nextStep}>Next</Button>
+                    {/* YEAR */}
+                    <div className="flex flex-col gap-1">
+                        <TextField
+                            fullWidth
+                            label="Established Year"
+                            type="number"
+                            value={formData.establishedYear || ""}
+                            onChange={(e) => setFormData("establishedYear", e.target.value)}
+                            error={!!errors.establishedYear}
+                            helperText={errors.establishedYear}
+                            sx={inputSX}
+                        />
+                    </div>
+
                 </div>
+
+                {/* NAVIGATION */}
+                <div className="flex justify-between mt-8 pt-4 border-t border-[var(--color-border)]">
+                    <Button
+                        variant="outlined"
+                        onClick={prevStep}
+                        sx={{
+                            textTransform: "none",
+                            borderColor: "var(--color-border)",
+                            color: "var(--color-text)",
+                            "&:hover": {
+                                borderColor: "var(--color-primary)",
+                            },
+                        }}
+                    >
+                        Back
+                    </Button>
+
+                    <Button
+                        variant="contained"
+                        onClick={nextStep}
+                        sx={{
+                            textTransform: "none",
+                            background: "var(--gradient-primary)",
+                            color: "#fff",
+                            "&:hover": {
+                                boxShadow: "0 8px 24px rgba(185,28,28,0.25)",
+                            },
+                        }}
+                    >
+                        Next
+                    </Button>
+                </div>
+
             </CardContent>
         </Card>
     );

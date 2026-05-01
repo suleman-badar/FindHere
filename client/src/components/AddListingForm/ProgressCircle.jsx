@@ -1,41 +1,59 @@
 export default function ProgressCircle({ step, steps }) {
-    const percentage = ((step + 1) / steps.length) * 100;
+  const percentage = ((step + 1) / steps.length) * 100;
+  const radius = 70;
+  const circumference = 2 * Math.PI * radius;
 
-    return (
-        <div className="relative">
-            <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-sm font-semibold text-gray-600">
-                    {step + 1}/{steps.length}
-                </span>
-            </div>
-            <svg className="w-40 h-40 transform -rotate-90">
-                <circle
-                    cx="80"
-                    cy="80"
-                    r="70"
-                    stroke="var(--color-muted)"
-                    strokeWidth="8"
-                    fill="transparent"
-                    className="opacity-20"
-                />
-                <circle
-                    cx="80"
-                    cy="80"
-                    r="70"
-                    stroke="url(#gradient)"
-                    strokeWidth="8"
-                    fill="transparent"
-                    strokeDasharray={2 * Math.PI * 70}
-                    strokeDashoffset={(1 - percentage / 100) * 2 * Math.PI * 70}
-                    strokeLinecap="round"
-                />
-                <defs>
-                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="var(--color-primary)" />
-                        <stop offset="100%" stopColor="var(--color-primary-dark)" />
-                    </linearGradient>
-                </defs>
-            </svg>
-        </div>
-    );
+  return (
+    <div className="relative flex items-center justify-center">
+
+      {/* Glow background */}
+      <div className="absolute w-44 h-44 rounded-full bg-[var(--color-primary)] opacity-5 blur-2xl" />
+
+      {/* Center Text */}
+      <div className="absolute flex flex-col items-center justify-center">
+        <span className="text-lg font-bold text-[var(--color-text)]">
+          {step + 1}
+        </span>
+        <span className="text-xs text-[var(--color-muted)]">
+          / {steps.length}
+        </span>
+      </div>
+
+      {/* SVG */}
+      <svg className="w-40 h-40 transform -rotate-90">
+
+        {/* Background Track */}
+        <circle
+          cx="80"
+          cy="80"
+          r={radius}
+          stroke="var(--color-border)"
+          strokeWidth="10"
+          fill="transparent"
+        />
+
+        {/* Progress */}
+        <circle
+          cx="80"
+          cy="80"
+          r={radius}
+          stroke="url(#gradient)"
+          strokeWidth="10"
+          fill="transparent"
+          strokeDasharray={circumference}
+          strokeDashoffset={(1 - percentage / 100) * circumference}
+          strokeLinecap="round"
+          className="transition-all duration-500 ease-out"
+        />
+
+        {/* Gradient */}
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="var(--color-primary-dark)" />
+            <stop offset="100%" stopColor="var(--color-primary)" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  );
 }

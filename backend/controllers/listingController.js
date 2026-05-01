@@ -1,8 +1,10 @@
 import Listing from "../models/Listing.js";
 import mongoose from "mongoose";
 import client from "../config/meiliSearch.js";
+import { uploadToCloudinary } from "../config/uploadToCloudinary.js";
 
-export const createListing = async(req, res) => {
+
+export const createListing = async (req, res) => {
     try {
         // Destructure data from req.body
         const {
@@ -68,7 +70,11 @@ export const createListing = async(req, res) => {
                 imagesFromBody = req.body.images;
             }
         }
-        const images = req.files && req.files.length ? req.files.map((file) => file.path) : imagesFromBody;
+        const uploadedImages = await Promise.all(
+            req.files.map((file) => uploadToCloudinary(file.buffer))
+        );
+
+        const images = uploadedImages.map((img) => img.secure_url);
         console.log("images", images);
 
         const listing = new Listing({
@@ -98,7 +104,7 @@ export const createListing = async(req, res) => {
         const saved = await listing.save();
 
         const index = client.index("restaurants");
-        await index.addDocuments([{...saved.toObject(), id: saved._id.toString() }]);
+        await index.addDocuments([{ ...saved.toObject(), id: saved._id.toString() }]);
 
 
         // await index.addDocuments([saved]);
@@ -124,7 +130,7 @@ export const createListing = async(req, res) => {
  * @access Private (owner only)
  */
 
-export const updateListing = async(req, res) => {
+export const updateListing = async (req, res) => {
     try {
         const listing = await Listing.findById(req.params.listingId);
         if (!listing) {
@@ -234,7 +240,7 @@ export const updateListing = async(req, res) => {
 
         const updated = await listing.save();
         const index = client.index("restaurants");
-        await index.addDocuments([{...updated.toObject(), id: updated._id.toString() }]);
+        await index.addDocuments([{ ...updated.toObject(), id: updated._id.toString() }]);
 
 
         res.status(200).json({ success: true, data: updated });
@@ -250,7 +256,7 @@ export const updateListing = async(req, res) => {
  * @route  GET /api/listing/all-listing
  * @access Public
  */
-export const getAllListings = async(req, res) => {
+export const getAllListings = async (req, res) => {
     try {
         const listings = await Listing.find().populate("owner", "name email");
         res.json({ success: true, data: listings });
@@ -264,7 +270,7 @@ export const getAllListings = async(req, res) => {
  * @route  GET /api/listing/details/:id
  * @access Public
  */
-export const getListingById = async(req, res) => {
+export const getListingById = async (req, res) => {
     try {
         const listing = await Listing.findById(req.params.id);
         if (!listing) {
@@ -281,26 +287,26 @@ export const getListingById = async(req, res) => {
  * @route  GET /api/listing/owner
  * @access Private (owner only)
  */
-export const getOwnerListings = async(req, res) => {
+export const getOwnerListings = async (req, res) => {
     try {
 
         const listings = await Listing.aggregate([{
-                $match: { owner: new mongoose.Types.ObjectId(String(req.userId)) }
-            },
-            {
-                $lookup: {
-                    from: "reviews",
-                    localField: "_id",
-                    foreignField: "listingId",
-                    as: "reviews"
-                }
-            },
-            {
-                $addFields: {
-                    averageRating: { $avg: "$reviews.rating" },
-                    reviewCount: { $size: "$reviews" }
-                }
+            $match: { owner: new mongoose.Types.ObjectId(String(req.userId)) }
+        },
+        {
+            $lookup: {
+                from: "reviews",
+                localField: "_id",
+                foreignField: "listingId",
+                as: "reviews"
             }
+        },
+        {
+            $addFields: {
+                averageRating: { $avg: "$reviews.rating" },
+                reviewCount: { $size: "$reviews" }
+            }
+        }
         ]);
 
 
@@ -316,7 +322,7 @@ export const getOwnerListings = async(req, res) => {
  * @route  DELETE /api/listing/delete-listing/:listingId
  * @access Private (owner only)
  */
-export const deleteListing = async(req, res) => {
+export const deleteListing = async (req, res) => {
     try {
         const listing = await Listing.findById(req.params.listingId);
         if (!listing) {

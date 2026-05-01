@@ -1,5 +1,26 @@
 import { Card, CardContent, Typography, TextField, Button, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 
+const inputSX = {
+    "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+            borderColor: "var(--color-border)",
+        },
+        "&.Mui-focused fieldset": {
+            borderColor: "var(--color-primary)",
+        },
+    },
+    "& label.Mui-focused": {
+        color: "var(--color-primary)",
+    },
+};
+
+const checkboxSX = {
+    color: "var(--color-primary)",
+    "&.Mui-checked": {
+        color: "var(--color-primary)",
+    },
+};
+
 const paymentOptions = ["Cash", "Card", "Digital Wallet"];
 const serviceOptions = ["Dine-in", "Takeaway", "Delivery", "Outdoor Seating", "Reservation"];
 
@@ -18,6 +39,7 @@ export default function PricingStep({ formData, setFormData, errors = {}, nextSt
                     margin="normal"
                     error={!!errors.avgPrice}
                     helperText={errors.avgPrice}
+                    sx={inputSX}
                 />
 
                 <Typography variant="subtitle1" className="mt-4">Payment Methods</Typography>
@@ -27,6 +49,7 @@ export default function PricingStep({ formData, setFormData, errors = {}, nextSt
                             key={option}
                             control={
                                 <Checkbox
+                                    sx={checkboxSX}
                                     checked={formData?.paymentMethods?.includes(option)}
                                     onChange={(e) => {
                                         const checked = e.target.checked;
@@ -49,6 +72,7 @@ export default function PricingStep({ formData, setFormData, errors = {}, nextSt
                             key={option}
                             control={
                                 <Checkbox
+                                    sx={checkboxSX}
                                     checked={formData.services?.includes(option) || false}   // ✅ safe
                                     onChange={(e) => {
                                         const checked = e.target.checked;
@@ -65,8 +89,34 @@ export default function PricingStep({ formData, setFormData, errors = {}, nextSt
                 </FormGroup>
 
                 <div className="flex justify-between mt-6">
-                    <Button variant="outlined" onClick={prevStep}>Back</Button>
-                    <Button variant="contained" color="primary" onClick={nextStep}>Next</Button>
+                    <Button
+                        variant="outlined"
+                        onClick={prevStep}
+                        sx={{
+                            textTransform: "none",
+                            color: "var(--color-text)",
+                            borderColor: "var(--color-border)",
+                            "&:hover": {
+                                borderColor: "var(--color-primary)",
+                            },
+                        }}
+                    >
+                        Back
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={nextStep}
+                        sx={{
+                            textTransform: "none",
+                            background: "var(--gradient-primary)",
+                            color: "#fff",
+                            "&:hover": {
+                                boxShadow: "0 8px 24px rgba(185,28,28,0.25)",
+                            },
+                        }}
+                    >
+                        Next
+                    </Button>
                 </div>
             </CardContent>
         </Card>

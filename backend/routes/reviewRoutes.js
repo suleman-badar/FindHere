@@ -1,6 +1,6 @@
 import express from "express";
 import { getReviewsByListingId, createReviews, getListingsWithRatings, deleteReview } from "../controllers/reviewController.js";
-import { upload } from "../config/cloudinary.js";
+import { upload } from "../config/multer.js";
 
 const router = express.Router();
 

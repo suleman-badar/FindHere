@@ -46,7 +46,7 @@ export default function Sidebar({ places }) {
     } catch {}
   }, [collapsed]);
 
-  // 🔥 Sign Out Logic (from your old code)
+  // Sign Out Logic (from your old code)
   const handleSignOut = async () => {
     try {
       const res = await api.post("/api/auth/logout", {}, { withCredentials: true });
@@ -61,13 +61,13 @@ export default function Sidebar({ places }) {
     }
   };
 
-  // 🔥 Handle Place Click
+  // Handle Place Click
   const handlePlaceClick = (id) => {
     setSelectedPlaceId(id === "all" ? null : id);
     navigate("/admin/dashboard");
   };
 
-  // 🔥 Admin Sections with proper icons
+  // Admin Sections with proper icons
   const adminItems = [
     { key: "basic-info", label: "Basic Info", icon: Info },
     { key: "contact", label: "Contact Info", icon: Phone },
@@ -89,9 +89,7 @@ export default function Sidebar({ places }) {
       <div className="p-4 border-b border-[#e9e5e5] flex items-center">
         {!collapsed && (
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#b91c1c] to-[#ff7043] rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold">F</span>
-            </div>
+            
             <span className="text-[#b91c1c] font-bold text-lg">FindHere</span>
           </div>
         )}

@@ -26,7 +26,7 @@ export default function ImagesStep({ formData, setFormData, errors = {}, prevSte
                 />
                 <label
                     htmlFor="fileUpload"
-                    className="flex items-center justify-center gap-2 cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    className="flex items-center justify-center gap-2 cursor-pointer bg-[var(--color-primary)] text-white px-4 py-2 rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors"
                 >
                     Select Images
                 </label>
@@ -48,9 +48,33 @@ export default function ImagesStep({ formData, setFormData, errors = {}, prevSte
                 {errors.images && <p className="text-red-500 text-sm mt-1">{errors.images}</p>}
 
                 <div className="flex justify-between mt-6 items-center">
-                    <Button variant="outlined" onClick={prevStep}>Back</Button>
+                    <Button
+                        variant="outlined"
+                        onClick={prevStep}
+                        sx={{
+                            textTransform: "none",
+                            color: "var(--color-text)",
+                            borderColor: "var(--color-border)",
+                            "&:hover": {
+                                borderColor: "var(--color-primary)",
+                            },
+                        }}
+                    >
+                        Back
+                    </Button>
                     {loading && <Loader />}
-                    <Button variant="contained" color="success" onClick={handleSubmit}>
+                    <Button
+                        variant="contained"
+                        onClick={handleSubmit}
+                        sx={{
+                            textTransform: "none",
+                            background: "var(--gradient-primary)",
+                            color: "#fff",
+                            "&:hover": {
+                                boxShadow: "0 8px 24px rgba(185,28,28,0.25)",
+                            },
+                        }}
+                    >
                         Submit
                     </Button>
 

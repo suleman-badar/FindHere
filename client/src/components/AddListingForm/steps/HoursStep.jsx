@@ -1,6 +1,27 @@
 import { Card, CardContent, Typography, TextField, Button, RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { useState } from "react";
 
+const inputSX = {
+    "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+            borderColor: "var(--color-border)",
+        },
+        "&.Mui-focused fieldset": {
+            borderColor: "var(--color-primary)",
+        },
+    },
+    "& label.Mui-focused": {
+        color: "var(--color-primary)",
+    },
+};
+
+const radioSX = {
+    color: "var(--color-primary)",
+    "&.Mui-checked": {
+        color: "var(--color-primary)",
+    },
+};
+
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export default function HoursStep({ formData, setFormData, errors = {}, nextStep, prevStep }) {
@@ -27,8 +48,8 @@ export default function HoursStep({ formData, setFormData, errors = {}, nextStep
                     onChange={(e) => setMode(e.target.value)}
                     className="mb-6"
                 >
-                    <FormControlLabel value="same" control={<Radio />} label="Same hours for all days" />
-                    <FormControlLabel value="different" control={<Radio />} label="Different hours for each day" />
+                    <FormControlLabel value="same" control={<Radio sx={radioSX} />} label="Same hours for all days" />
+                    <FormControlLabel value="different" control={<Radio sx={radioSX} />} label="Different hours for each day" />
                 </RadioGroup>
 
                 {mode === "same" ? (
@@ -42,6 +63,7 @@ export default function HoursStep({ formData, setFormData, errors = {}, nextStep
                             helperText={errors[`hours.open`]}
                             label="Open"
                             InputLabelProps={{ shrink: true }}
+                            sx={inputSX}
                         />
                         <TextField
                             type="time"
@@ -51,6 +73,7 @@ export default function HoursStep({ formData, setFormData, errors = {}, nextStep
                             helperText={errors[`hours.close`]}
                             label="Close"
                             InputLabelProps={{ shrink: true }}
+                            sx={inputSX}
                         />
                     </div>
                 ) : (
@@ -72,6 +95,7 @@ export default function HoursStep({ formData, setFormData, errors = {}, nextStep
                                     helperText={errors[`hours.${day}.open`]}
                                     label="Open"
                                     InputLabelProps={{ shrink: true }}
+                                    sx={inputSX}
                                 />
                                 <TextField
                                     type="time"
@@ -86,6 +110,7 @@ export default function HoursStep({ formData, setFormData, errors = {}, nextStep
                                     helperText={errors[`hours.${day}.close`]}
                                     label="Close"
                                     InputLabelProps={{ shrink: true }}
+                                    sx={inputSX}
                                 />
                             </div>
                         </div>
@@ -94,8 +119,34 @@ export default function HoursStep({ formData, setFormData, errors = {}, nextStep
 
                 {/* Action Buttons */}
                 <div className="flex justify-between mt-6">
-                    <Button variant="outlined" onClick={prevStep}>Back</Button>
-                    <Button variant="contained" color="primary" onClick={nextStep}>Next</Button>
+                    <Button
+                        variant="outlined"
+                        onClick={prevStep}
+                        sx={{
+                            textTransform: "none",
+                            color: "var(--color-text)",
+                            borderColor: "var(--color-border)",
+                            "&:hover": {
+                                borderColor: "var(--color-primary)",
+                            },
+                        }}
+                    >
+                        Back
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={nextStep}
+                        sx={{
+                            textTransform: "none",
+                            background: "var(--gradient-primary)",
+                            color: "#fff",
+                            "&:hover": {
+                                boxShadow: "0 8px 24px rgba(185,28,28,0.25)",
+                            },
+                        }}
+                    >
+                        Next
+                    </Button>
                 </div>
             </CardContent>
         </Card>

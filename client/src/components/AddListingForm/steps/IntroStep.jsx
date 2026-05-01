@@ -18,7 +18,7 @@ export default function IntroStep({ nextStep }) {
                 <RestaurantIcon
                     sx={{
                         fontSize: 50,
-                        color: "primary.main",
+                        color: "var(--color-primary)",
                         mb: 2,
                     }}
                 />
@@ -49,6 +49,11 @@ export default function IntroStep({ nextStep }) {
                     textTransform: "none",
                     fontSize: "1rem",
                     fontWeight: 600,
+                    background: "var(--gradient-primary)",
+                    color: "#fff",
+                    "&:hover": {
+                        boxShadow: "0 8px 24px rgba(185,28,28,0.25)",
+                    },
                 }}
                 onClick={nextStep}
             >

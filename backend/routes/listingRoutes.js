@@ -1,5 +1,5 @@
 import express from "express";
-import { upload } from "../config/cloudinary.js";
+import { upload } from "../config/multer.js";
 import { createListing, getAllListings, updateListing, getListingById, deleteListing, getOwnerListings } from "../controllers/listingController.js";
 import { protect } from "../middlewares/identification.js";
 

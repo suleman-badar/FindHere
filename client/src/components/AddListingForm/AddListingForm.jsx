@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 export default function AddListingForm() {
     const [step, setStep] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
 
@@ -26,6 +27,7 @@ export default function AddListingForm() {
         email: "",
         website: "",
         establishedYear: "",
+        images: [],
         hours: {
             Monday: { open: "", close: "" },
             Tuesday: { open: "", close: "" },
@@ -48,11 +50,66 @@ export default function AddListingForm() {
             ...prev,
             [field]: value,
         }));
+
+        if (errors[field]) {
+            setErrors((prev) => ({
+                ...prev,
+                [field]: undefined,
+            }));
+        }
     };
 
     const [direction, setDirection] = useState(1);
 
+    const validateFormStep = (currentStep) => {
+        const validationErrors = {};
+
+        switch (currentStep) {
+            case 1:
+                if (!formData.name?.trim()) validationErrors.name = "Restaurant name is required";
+                if (!formData.description?.trim()) validationErrors.description = "Description is required";
+                if (!formData.cuisine?.length) validationErrors.cuisine = "Select at least one cuisine";
+                break;
+            case 2:
+                if (!formData.phone?.trim()) {
+                    validationErrors.phone = "Phone number is required";
+                } else if (!/^\+?[0-9\s()-]{7,20}$/.test(formData.phone)) {
+                    validationErrors.phone = "Enter a valid phone number";
+                }
+                if (formData.email?.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+                    validationErrors.email = "Invalid email address";
+                }
+                break;
+            case 3:
+                if (!formData.location?.length || formData.location.some((coord) => coord === undefined || coord === null || coord === "")) {
+                    validationErrors["location[0]"] = "Please select a valid location";
+                }
+                break;
+            case 5:
+                if (!formData.avgPrice?.toString().trim()) validationErrors.avgPrice = "Average price is required";
+                break;
+            case 6:
+                if (!formData.tags?.length) validationErrors.tags = "Add at least one tag";
+                break;
+            case 7:
+                if (!formData.images?.length) validationErrors.images = "Upload at least one image";
+                break;
+            default:
+                break;
+        }
+
+        return validationErrors;
+    };
+
     const nextStep = () => {
+        const validationErrors = validateFormStep(step);
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        setErrors({});
         if (step < steps.length - 1) {
             setDirection(1);
             setStep(step + 1);
@@ -67,6 +124,12 @@ export default function AddListingForm() {
     };
 
     const handleSubmit = async () => {
+        const validationErrors = validateFormStep(step);
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
         try {
             setLoading(true);
 
@@ -112,78 +175,85 @@ export default function AddListingForm() {
     if (loading) return <Loader />
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 py-10 px-4 flex justify-center items-center">
+        <div className="min-h-screen bg-[#fff6f5] py-10 px-4 flex justify-center items-start">
             <AnimatePresence mode="wait">
                 {step === 0 ? (
-                    // Intro Step (Get Started)
+                    /* ================= INTRO ================= */
                     <motion.div
                         key="intro"
                         initial={{ opacity: 0, y: 40, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -40, scale: 0.95 }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
+                        transition={{ duration: 0.5 }}
                         className="w-full max-w-2xl"
                     >
                         <Box
                             sx={{
                                 p: { xs: 4, sm: 6 },
-                                borderRadius: "16px",
-                                bgcolor: "white",
-                                boxShadow: 2,
+                                borderRadius: "20px",
+                                bgcolor: "#ffffff",
+                                boxShadow: "0 10px 30px rgba(0,0,0,0.06)",
                                 border: "1px solid var(--color-border)",
                                 textAlign: "center",
+                                position: "relative",
+                                overflow: "hidden",
                             }}
                         >
-                            {/* Header */}
+                            {/* Accent Top Bar */}
+                            <Box
+                                sx={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "4px",
+                                    background:
+                                        "linear-gradient(90deg, var(--color-primary-dark), var(--color-primary))",
+                                }}
+                            />
+
                             <Box sx={{ mb: 4 }}>
                                 <RestaurantIcon
                                     sx={{
-                                        fontSize: { xs: 40, sm: 50 },
-                                        color: "primary.main",
+                                        fontSize: 50,
+                                        color: "var(--color-primary)",
                                         mb: 2,
                                     }}
                                 />
-                                <Typography
-                                    variant="h5"
-                                    sm="h4"
-                                    fontWeight="bold"
-                                    color="text.primary"
-                                >
+
+                                <Typography fontWeight="bold" sx={{ fontSize: "1.6rem", color: "var(--color-text)" }}>
                                     Add a New Restaurant Listing
                                 </Typography>
-                                <Typography
-                                    variant="body1"
-                                    color="text.secondary"
-                                    sx={{ mt: 1, maxWidth: 600, mx: "auto" }}
-                                >
-                                    Welcome! We’ll guide you step by step to add all the necessary
-                                    information about your restaurant so it can rank higher, get
-                                    discovered, and attract more customers.
+
+                                <Typography sx={{ mt: 1, color: "var(--color-muted)" }}>
+                                    We’ll guide you step by step to create a powerful listing that attracts customers.
                                 </Typography>
                             </Box>
 
-                            <Divider sx={{ my: 4 }} />
+                            <Divider sx={{ my: 4, borderColor: "var(--color-border)" }} />
 
-                            {/* CTA */}
                             <Button
-                                variant="contained"
-                                size="large"
+                                onClick={nextStep}
                                 sx={{
                                     px: 5,
                                     py: 1.5,
                                     borderRadius: "12px",
                                     textTransform: "none",
-                                    fontSize: "1rem",
                                     fontWeight: 600,
+                                    color: "white",
+                                    background:
+                                        "linear-gradient(90deg, var(--color-primary-dark), var(--color-primary))",
+                                    "&:hover": {
+                                        boxShadow: "0 8px 20px rgba(185,28,28,0.3)",
+                                    },
                                 }}
-                                onClick={nextStep}
                             >
                                 Get Started
                             </Button>
                         </Box>
                     </motion.div>
                 ) : (
-                    //  Normal Layout with Form + Preview
+                    /* ================= MAIN FORM ================= */
                     <motion.div
                         key="form"
                         initial={{ opacity: 0, x: direction === 1 ? 50 : -50 }}
@@ -192,24 +262,47 @@ export default function AddListingForm() {
                         transition={{ duration: 0.4 }}
                         className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 w-full"
                     >
-                        {/* Left side - Form (always visible) */}
-                        <div className="lg:col-span-2 space-y-8">
-                            <StepperHeader step={step - 1} steps={steps.slice(1)} />
-                            <StepWrapper
-                                step={step}
-                                steps={steps}
-                                direction={direction}
-                                formData={formData}
-                                setFormData={setFormData}
-                                nextStep={nextStep}
-                                prevStep={prevStep}
-                                handleSubmit={handleSubmit}
-                            />
+                        {/* LEFT SIDE */}
+                        <div className="lg:col-span-2 space-y-6">
+
+                            {/* Stepper Wrapper */}
+                            <div className="bg-white border border-[#e9e5e5] rounded-2xl p-5 shadow-sm">
+                                <StepperHeader step={step - 1} steps={steps.slice(1)} />
+                            </div>
+
+                            {/* Step Content */}
+                            <div className="bg-white border border-[#e9e5e5] rounded-2xl p-6 shadow-md relative overflow-hidden">
+
+                                {/* Accent line */}
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#9d1717] to-[#b91c1c]" />
+
+                                <StepWrapper
+                                    step={step}
+                                    steps={steps}
+                                    direction={direction}
+                                    formData={formData}
+                                    setFormData={setFormData}
+                                    nextStep={nextStep}
+                                    prevStep={prevStep}
+                                    handleSubmit={handleSubmit}
+                                    errors={errors}
+                                    loading={loading}
+                                />
+                            </div>
                         </div>
 
-                        {/* Right side - Preview (hidden on small screens) */}
-                        <div className="hidden lg:flex flex-col items-center space-y-6 sticky top-20">
-                            <div className="bg-white rounded-2xl shadow-lg border p-6 w-full">
+                        {/* RIGHT SIDE PREVIEW */}
+                        <div className="hidden lg:flex flex-col sticky top-20">
+
+                            <div className="bg-white border border-[#e9e5e5] rounded-2xl shadow-lg p-6 relative overflow-hidden">
+
+                                {/* Accent */}
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#ff7043] to-[#b91c1c]" />
+
+                                <h3 className="text-sm font-semibold text-[#6b7280] mb-4 uppercase tracking-wide">
+                                    Live Preview
+                                </h3>
+
                                 <Preview
                                     step={step}
                                     totalSteps={steps.length}
@@ -220,6 +313,5 @@ export default function AddListingForm() {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
-    );
+        </div>);
 }

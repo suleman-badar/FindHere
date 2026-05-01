@@ -30,9 +30,33 @@ export default function ReviewStep({ formData, prevStep, handleSubmit, loading }
                 </div>
 
                 <div className="flex justify-between mt-6 items-center">
-                    <Button variant="outlined" onClick={prevStep}>Back</Button>
+                    <Button
+                        variant="outlined"
+                        onClick={prevStep}
+                        sx={{
+                            textTransform: "none",
+                            color: "var(--color-text)",
+                            borderColor: "var(--color-border)",
+                            "&:hover": {
+                                borderColor: "var(--color-primary)",
+                            },
+                        }}
+                    >
+                        Back
+                    </Button>
                     {loading && <p>Submitting...</p>}
-                    <Button variant="contained" color="green" onClick={handleSubmit}>
+                    <Button
+                        variant="contained"
+                        onClick={handleSubmit}
+                        sx={{
+                            textTransform: "none",
+                            background: "var(--gradient-primary)",
+                            color: "#fff",
+                            "&:hover": {
+                                boxShadow: "0 8px 24px rgba(185,28,28,0.25)",
+                            },
+                        }}
+                    >
                         Submit Listing
                     </Button>
                 </div>
