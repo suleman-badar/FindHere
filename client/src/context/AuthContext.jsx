@@ -10,7 +10,8 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/auth/me`, {
+                const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://findhere.onrender.com";
+                const res = await axios.get(`${API_BASE}/api/auth/me`, {
                     withCredentials: true,
                 });
                 console.log("Auth /me response:", res.data);
