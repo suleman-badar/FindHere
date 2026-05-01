@@ -15,6 +15,7 @@ import VerifyOtp from './components/VerifyOtp.jsx';
 import SendCode from './components/SendFPCode.jsx';
 import VerifyForgotPasswordCode from './components/VerifyFPCode.jsx';
 import NotFoundPage from './pages/NotFound.jsx';
+import Profile from './pages/Profile.jsx';
 
 // import AdminLayout from "./layouts/AdminLayout";
 
@@ -58,6 +59,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/verify-otp/:email" element={<VerifyOtp />} />
+          <Route path='/profile' element={<Profile />} />
           <Route path='send-fp-code' element={< SendCode />} />
           <Route path='verify-code' element={<VerifyForgotPasswordCode />} />
 

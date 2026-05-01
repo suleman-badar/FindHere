@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { register, login, me, logout, resendOtp, changePassword, sendForgotPasswordCode, verifyForgotPasswordCode } from "../controllers/authController.js";
+import { register, login, me, logout, resendOtp, changePassword, sendForgotPasswordCode, verifyForgotPasswordCode, updateProfile } from "../controllers/authController.js";
 import { protect } from "../middlewares/identification.js";
 import { verifyUserOtp } from "../controllers/authController.js";
+import { upload } from "../config/cloudinary.js";
 import rateLimit from "express-rate-limit";
 
 const router = Router();
@@ -24,6 +25,7 @@ router.post("/register/verify", verifyUserOtp);
 router.post("/register/resend-otp", resendOtp);
 router.post("/login", loginLimiter, login);
 router.get("/me", protect, me);
+router.patch("/profile", protect, upload.single("avatar"), updateProfile);
 router.post("/logout", protect, logout);
 
 router.patch('/change-password', protect, changePassword);

@@ -12,7 +12,8 @@ import {
   DollarSign,
   Tags,
   Image,
-  Star
+  Star,
+  User
 } from "lucide-react";
 
 import { useNavigate, useLocation } from "react-router-dom";
@@ -121,6 +122,13 @@ export default function Sidebar({ places }) {
             collapsed={collapsed}
             isActive={location.pathname === "/admin/dashboard"}
             onClick={() => handlePlaceClick("all")}
+          />
+          <SidebarItem
+            icon={User}
+            label="Profile"
+            collapsed={collapsed}
+            isActive={location.pathname === "/profile"}
+            onClick={() => navigate("/profile")}
           />
         </div>
 

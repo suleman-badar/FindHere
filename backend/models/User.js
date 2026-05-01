@@ -27,6 +27,16 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 6,
     },
+    phone: {
+        type: String,
+        trim: true,
+        maxlength: 20,
+    },
+    avatarUrl: {
+        type: String,
+        trim: true,
+        maxlength: 512,
+    },
     isVerified: { 
         type: Boolean, 
         default: false 

@@ -140,13 +140,14 @@ export const login = async(req, res) => {
         }
 
         const token = sign(user._id);
+        const userData = await User.findById(user._id).select("-password");
 
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 24 * 60 * 60 * 1000
-        }).json({ success: true, token, message: "Logged in successfully" });
+        }).json({ success: true, token, message: "Logged in successfully", user: userData });
 
     } catch (e) {
         res.status(500).json({ message: e.message });
@@ -160,6 +161,45 @@ export const me = async(req, res) => {
         res.json(user);
     } catch (e) {
         res.status(500).json({ success: true, message: e.message });
+    }
+};
+
+// UPDATE PROFILE
+export const updateProfile = async(req, res) => {
+    try {
+        const { name, email, phone } = req.body;
+        const avatarUrl = req.file?.path;
+
+        if (!name || !email) {
+            return res.status(400).json({ success: false, message: "Name and email are required." });
+        }
+
+        const user = await User.findById(req.userId).select("+password");
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found." });
+        }
+
+        if (email !== user.email) {
+            const exists = await User.findOne({ email });
+            if (exists) {
+                return res.status(400).json({ success: false, message: "Email is already in use." });
+            }
+        }
+
+        user.name = name;
+        user.email = email;
+        user.phone = phone || user.phone;
+        if (avatarUrl) {
+            user.avatarUrl = avatarUrl;
+        }
+
+        await user.save();
+
+        const updatedUser = await User.findById(req.userId).select("-password");
+        res.status(200).json({ success: true, message: "Profile updated successfully.", user: updatedUser });
+    } catch (error) {
+        console.error("Update profile error:", error);
+        res.status(500).json({ success: false, message: "Unable to update profile." });
     }
 };
 
