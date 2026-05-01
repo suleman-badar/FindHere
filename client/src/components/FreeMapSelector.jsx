@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@mui/material";
 import Loader from "./Loader";
 import "leaflet/dist/leaflet.css";
@@ -20,35 +20,34 @@ export default function FreeMapSelector({ location, setLocation }) {
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState([]);
-    // console.log("Setting location:", location);
-
 
     const handleSearch = async () => {
         try {
             setLoading(true);
-            const res = await axios.get("https://photon.komoot.io/api/", {
-                params: { q: query },
-            });
 
-            if (res.data.features && res.data.features.length > 0) {
+            const res = await axios.get(
+                "https://photon.komoot.io/api/",
+                {
+                    params: { q: query },
+                }
+            );
+
+            if (res.data.features?.length > 0) {
                 setResults(res.data.features);
             } else {
                 setResults([]);
-                alert("No results found");
             }
         } catch (err) {
-            console.error("Search error:", err);
-            alert("Failed to fetch search results");
+            setResults([]);
         } finally {
             setLoading(false);
         }
     };
-    // console.log("results", results);
-
 
     return (
-        <div>
-            <div style={{ marginBottom: "10px" }}>
+        <div style={{ width: "100%" }}>
+            {/* SEARCH BOX */}
+            <div style={{ marginBottom: 12 }}>
                 <input
                     type="text"
                     value={query}
@@ -60,65 +59,114 @@ export default function FreeMapSelector({ location, setLocation }) {
                             handleSearch();
                         }
                     }}
-                        style={{
-                        padding: "8px",
+                    style={{
+                        padding: "10px 12px",
                         width: "70%",
-                        marginRight: "5px",
-                        border: "1px solid var(--color-primary)",
-                        borderRadius: "0.4rem",
+                        marginRight: "8px",
+                        borderRadius: "10px",
+                        border: "1px solid var(--color-border)",
+                        outline: "none",
+                        backgroundColor: "rgba(255,255,255,0.8)",
+                        transition: "0.2s",
                     }}
+                    onFocus={(e) =>
+                        (e.target.style.border =
+                            "1px solid var(--color-primary)")
+                    }
+                    onBlur={(e) =>
+                        (e.target.style.border =
+                            "1px solid var(--color-border)")
+                    }
                 />
+
                 <Button
-                    variant="outlined"
+                    variant="contained"
                     onClick={handleSearch}
-                    style={{ padding: "8px 12px" }}
+                    sx={{
+                        borderRadius: "10px",
+                        textTransform: "none",
+                        px: 3,
+                        py: 1.2,
+                        fontWeight: 600,
+                        background: "var(--gradient-primary)",
+                        color: "#fff",
+                        boxShadow:
+                            "0 6px 20px rgba(185,28,28,0.25)",
+                        "&:hover": {
+                            boxShadow:
+                                "0 8px 25px rgba(185,28,28,0.35)",
+                        },
+                    }}
                 >
                     Search
                 </Button>
-                <div>{loading && <Loader />}</div>
+
+                <div style={{ marginTop: 8 }}>
+                    {loading && <Loader />}
+                </div>
             </div>
 
-
-            <ul style={{ marginTop: "10px", padding: 0 }}>
+            {/* RESULTS */}
+            <ul style={{ marginTop: 10, padding: 0 }}>
                 {results.map((place, i) => (
                     <li
                         key={i}
                         style={{
                             listStyle: "none",
-                            marginBottom: "5px",
+                            marginBottom: "8px",
                         }}
                     >
                         <button
-                                style={{
+                            style={{
                                 cursor: "pointer",
                                 border: "1px solid var(--color-border)",
-                                padding: "5px",
-                                borderRadius: "5px",
+                                padding: "10px",
+                                borderRadius: "10px",
                                 width: "100%",
                                 textAlign: "left",
+                                backgroundColor:
+                                    "rgba(255,255,255,0.7)",
+                                transition: "0.2s",
                             }}
+                            onMouseOver={(e) =>
+                                (e.currentTarget.style.border =
+                                    "1px solid var(--color-primary)")
+                            }
+                            onMouseOut={(e) =>
+                                (e.currentTarget.style.border =
+                                    "1px solid var(--color-border)")
+                            }
                             onClick={() => {
-                                const coords = place.geometry?.coordinates;
-                                if (!coords || coords.length < 2) return;
+                                const coords =
+                                    place.geometry?.coordinates;
+                                if (!coords || coords.length < 2)
+                                    return;
+
                                 const [lng, lat] = coords;
                                 setLocation([lat, lng]);
                                 setResults([]);
                             }}
                         >
-                            {place.properties.name || "Unnamed place"},{" "}
-                            {place.properties.street || ""}{" "}
-                            {place.properties.city || ""}{" "}
-                            {place.properties.country || ""}
+                            <span style={{ fontWeight: 600 }}>
+                                {place.properties.name ||
+                                    "Unnamed place"}
+                            </span>
+                            <br />
+                            <span style={{ color: "var(--color-muted)" }}>
+                                {place.properties.street || ""}{" "}
+                                {place.properties.city || ""}{" "}
+                                {place.properties.country || ""}
+                            </span>
                         </button>
                     </li>
                 ))}
             </ul>
 
-            {/* console.log("locartiondfjh",location) */}
+            {/* MAP */}
             <MapPreview location={location} />
 
-
-            <p>
+            {/* COORDS DISPLAY */}
+            <p style={{ marginTop: 10, color: "var(--color-muted)" }}>
                 {location
                     ? `Selected Lat: ${location[0]}, Lng: ${location[1]}`
                     : "No location selected"}

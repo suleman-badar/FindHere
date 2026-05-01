@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, Typography, TextField, Button, Stack, Divider } from "@mui/material";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    Typography,
+    TextField,
+    Button,
+    Stack,
+    Divider,
+} from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../Loader";
@@ -11,38 +20,79 @@ export default function LocationEdit() {
     const { placeId } = useParams();
     const navigate = useNavigate();
     const { details, loading, error } = useDetails(placeId);
+
     const [listingDetails, setListingDetails] = useState({});
     const [localLocation, setLocalLocation] = useState([0, 0]);
 
     useEffect(() => {
         if (details) {
             setListingDetails(details);
-            setLocalLocation(details?.location?.length === 2 ? details.location : [0, 0]);
+            setLocalLocation(
+                details?.location?.length === 2 ? details.location : [0, 0]
+            );
         }
     }, [details]);
 
     const onSave = async (data) => {
         try {
-            await api.put(`/api/listing/update-listing/${placeId}`, data, { withCredentials: true });
+            await api.put(
+                `/api/listing/update-listing/${placeId}`,
+                data,
+                { withCredentials: true }
+            );
+
             toast.success("Listing updated successfully");
-            navigate('/admin/dashboard');
+            navigate("/admin/dashboard");
         } catch (err) {
             toast.error("Failed to update listing");
         }
     };
 
     const onCancel = () => {
-        navigate('/admin/dashboard');
+        navigate("/admin/dashboard");
     };
 
     if (loading) return <Loader />;
     if (error) return <div>Error loading listing</div>;
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSave(listingDetails);
+    };
+
+    //  CONSISTENT FIELD STYLE (same across all forms)
+    const fieldSx = {
+        "& .MuiOutlinedInput-root": {
+            borderRadius: "14px",
+            backgroundColor: "rgba(255,255,255,0.8)",
+            backdropFilter: "blur(5px)",
+
+            "& fieldset": {
+                borderColor: "rgba(0,0,0,0.15)",
+            },
+
+            "&:hover fieldset": {
+                borderColor: "var(--color-primary)",
+            },
+
+            "&.Mui-focused fieldset": {
+                borderColor: "var(--color-primary)",
+            },
+        },
+
+        "& .MuiInputLabel-root.Mui-focused": {
+            color: "var(--color-primary)",
+        },
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         const numValue = parseFloat(value) || 0;
 
-        const updated = name === "latitude" ? [numValue, localLocation[1]] : [localLocation[0], numValue];
+        const updated =
+            name === "latitude"
+                ? [numValue, localLocation[1]]
+                : [localLocation[0], numValue];
 
         setLocalLocation(updated);
         setListingDetails((prev) => ({ ...prev, location: updated }));
@@ -50,14 +100,10 @@ export default function LocationEdit() {
 
     const handleLocationChange = (coords) => {
         if (!coords || coords.length < 2) return;
+
         const [lat, lng] = coords;
         setLocalLocation([lat, lng]);
         setListingDetails((prev) => ({ ...prev, location: [lat, lng] }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSave(listingDetails);
     };
 
     return (
@@ -90,116 +136,122 @@ export default function LocationEdit() {
                     </Typography>
                 }
                 sx={{
-                    background: "linear-gradient(135deg, rgba(59,130,246,0.15), rgba(147,197,253,0.15))",
+                    background:
+                        "linear-gradient(135deg, rgba(185,28,28,0.12), rgba(255,112,67,0.12))",
                     py: 3,
                     px: 4,
                     borderBottom: "1px solid rgba(0,0,0,0.08)",
-                    backdropFilter: "blur(5px)",
                 }}
             />
 
             <Divider sx={{ borderColor: "rgba(0,0,0,0.08)" }} />
 
             <CardContent sx={{ p: { xs: 4, sm: 5 } }}>
-                <Stack spacing={4}>
-                    <TextField
-                        label="Latitude"
-                        name="latitude"
-                        type="number"
-                        inputProps={{ min: -90, max: 90, step: 0.000001 }}
-                        value={localLocation[0]}
-                        onChange={handleChange}
-                        fullWidth
-                        variant="outlined"
-                        sx={{
-                            "& .MuiOutlinedInput-root": {
-                                borderRadius: "14px",
-                                backgroundColor: "rgba(255,255,255,0.8)",
-                                backdropFilter: "blur(5px)",
-                            },
-                        }}
-                    />
-
-                    <TextField
-                        label="Longitude"
-                        name="longitude"
-                        type="number"
-                        inputProps={{ min: -180, max: 180, step: 0.000001 }}
-                        value={localLocation[1]}
-                        onChange={handleChange}
-                        fullWidth
-                        variant="outlined"
-                        sx={{
-                            "& .MuiOutlinedInput-root": {
-                                borderRadius: "14px",
-                                backgroundColor: "rgba(255,255,255,0.8)",
-                                backdropFilter: "blur(5px)",
-                            },
-                        }}
-                    />
-
-                    <FreeMapSelector location={localLocation} setLocation={handleLocationChange} />
-
-<TextField
-  label="Additional Address Note"
-  value={listingDetails.addressNote || ""}
-  onChange={(e) =>
-    setListingDetails((prev) => ({ ...prev, addressNote: e.target.value }))
-  }
-  fullWidth
-  margin="normal"
-  variant="outlined"
-  sx={{
-    "& .MuiOutlinedInput-root": {
-      borderRadius: "14px",
-      backgroundColor: "rgba(255,255,255,0.8)",
-      backdropFilter: "blur(5px)",
-    },
-  }}
-/>
-
-                    {/* Action Buttons */}
-                    <Stack direction="row" spacing={3} justifyContent="flex-end">
-                        <Button
-                            type="button"
+                <form onSubmit={handleSubmit}>
+                    <Stack spacing={4}>
+                        <TextField
+                            label="Latitude"
+                            name="latitude"
+                            type="number"
+                            inputProps={{
+                                min: -90,
+                                max: 90,
+                                step: 0.000001,
+                            }}
+                            value={localLocation[0]}
+                            onChange={handleChange}
+                            fullWidth
                             variant="outlined"
-                            onClick={onCancel}
-                            sx={{
-                                borderRadius: "14px",
-                                textTransform: "none",
-                                px: 4,
-                                py: 1.5,
-                                fontWeight: 500,
-                                borderColor: "rgba(0,0,0,0.15)",
-                                color: "var(--color-muted)",
-                                backdropFilter: "blur(5px)",
-                                backgroundColor: "rgba(255,255,255,0.5)",
-                                "&:hover": { backgroundColor: "rgba(255,255,255,0.7)" },
-                            }}
-                        >
-                            Cancel
-                        </Button>
+                            sx={fieldSx}
+                        />
 
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            onClick={handleSubmit}
-                            sx={{
-                                borderRadius: "14px",
-                                textTransform: "none",
-                                px: 5,
-                                py: 1.7,
-                                fontWeight: 600,
-                                background: "var(--gradient-primary)",
-                                color: "#fff",
-                                boxShadow: "0 6px 20px rgba(59,130,246,0.35)",
-                                "&:hover": { boxShadow: "0 8px 25px rgba(59,130,246,0.45)" },
+                        <TextField
+                            label="Longitude"
+                            name="longitude"
+                            type="number"
+                            inputProps={{
+                                min: -180,
+                                max: 180,
+                                step: 0.000001,
                             }}
+                            value={localLocation[1]}
+                            onChange={handleChange}
+                            fullWidth
+                            variant="outlined"
+                            sx={fieldSx}
+                        />
+
+                        <FreeMapSelector
+                            location={localLocation}
+                            setLocation={handleLocationChange}
+                        />
+
+                        <TextField
+                            label="Additional Address Note"
+                            value={listingDetails.addressNote || ""}
+                            onChange={(e) =>
+                                setListingDetails((prev) => ({
+                                    ...prev,
+                                    addressNote: e.target.value,
+                                }))
+                            }
+                            fullWidth
+                            variant="outlined"
+                            sx={fieldSx}
+                        />
+
+                        {/* Action Buttons */}
+                        <Stack
+                            direction="row"
+                            spacing={3}
+                            justifyContent="flex-end"
                         >
-                            Save Location
-                        </Button>
+                            <Button
+                                type="button"
+                                variant="outlined"
+                                onClick={onCancel}
+                                sx={{
+                                    borderRadius: "14px",
+                                    textTransform: "none",
+                                    px: 4,
+                                    py: 1.5,
+                                    fontWeight: 500,
+                                    color: "var(--color-muted)",
+                                    borderColor: "rgba(0,0,0,0.15)",
+                                    backgroundColor: "rgba(255,255,255,0.5)",
+                                    "&:hover": {
+                                        backgroundColor:
+                                            "rgba(255,255,255,0.7)",
+                                    },
+                                }}
+                            >
+                                Cancel
+                            </Button>
+
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                sx={{
+                                    borderRadius: "14px",
+                                    textTransform: "none",
+                                    px: 5,
+                                    py: 1.7,
+                                    fontWeight: 600,
+                                    background: "var(--gradient-primary)",
+                                    color: "#fff",
+                                    boxShadow:
+                                        "0 6px 20px rgba(185,28,28,0.35)",
+                                    "&:hover": {
+                                        boxShadow:
+                                            "0 8px 25px rgba(185,28,28,0.45)",
+                                    },
+                                }}
+                            >
+                                Save Location
+                            </Button>
+                        </Stack>
                     </Stack>
-                </Stack>
+                </form>
             </CardContent>
         </Card>
     );

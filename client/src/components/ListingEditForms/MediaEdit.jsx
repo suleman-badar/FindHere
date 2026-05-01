@@ -22,6 +22,7 @@ export default function MediaEdit() {
     const { placeId } = useParams();
     const navigate = useNavigate();
     const { details, loading, error } = useDetails(placeId);
+
     const [listingDetails, setListingDetails] = useState({});
 
     useEffect(() => {
@@ -33,26 +34,28 @@ export default function MediaEdit() {
     const onSave = async (data) => {
         try {
             const formData = new FormData();
-            // Add all fields from data
-            Object.keys(data).forEach(key => {
-                if (key === 'images') {
-                    // Handle images separately if needed
-                } else {
+
+            Object.keys(data).forEach((key) => {
+                if (key !== "images") {
                     formData.append(key, JSON.stringify(data[key]));
                 }
             });
-            // For images, if there are new files, append them
-            // Assuming data has newImages or something, but for now, basic update
-            await api.put(`/api/listing/update-listing/${placeId}`, formData, { withCredentials: true });
+
+            await api.put(
+                `/api/listing/update-listing/${placeId}`,
+                formData,
+                { withCredentials: true }
+            );
+
             toast.success("Listing updated successfully");
-            navigate('/admin/dashboard');
+            navigate("/admin/dashboard");
         } catch (err) {
             toast.error("Failed to update listing");
         }
     };
 
     const onCancel = () => {
-        navigate('/admin/dashboard');
+        navigate("/admin/dashboard");
     };
 
     if (loading) return <Loader />;
@@ -62,17 +65,18 @@ export default function MediaEdit() {
 
     const handleFileSelect = (e) => {
         const files = Array.from(e.target.files);
-        if (files.length) {
-            const newEntries = files.map((file) => ({
-                file,
-                preview: URL.createObjectURL(file),
-            }));
 
-            setListingDetails((prev) => ({
-                ...prev,
-                images: [...(prev.images || []), ...newEntries],
-            }));
-        }
+        if (!files.length) return;
+
+        const newEntries = files.map((file) => ({
+            file,
+            preview: URL.createObjectURL(file),
+        }));
+
+        setListingDetails((prev) => ({
+            ...prev,
+            images: [...(prev.images || []), ...newEntries],
+        }));
     };
 
     const getSrc = (imgObj) => {
@@ -94,9 +98,11 @@ export default function MediaEdit() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const existingImages = listingDetails.images.filter((img) => typeof img === "string");
-        const newFiles = listingDetails.images.filter((img) => img.file).map((img) => img.file);
-        onSave({ ...listingDetails, existingImages }, newFiles);
+        const existingImages =
+            listingDetails.images?.filter((img) => typeof img === "string") ||
+            [];
+
+        onSave({ ...listingDetails, existingImages });
         fileInputRef.current.value = "";
     };
 
@@ -108,21 +114,29 @@ export default function MediaEdit() {
                 mt: 10,
                 borderRadius: 4,
                 overflow: "hidden",
-                background: "linear-gradient(135deg, var(--color-surface), #ffffff)",
-                boxShadow: "0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04)",
-                border: "1px solid rgba(0,0,0,0.05)",
-                transition: "all 0.3s ease",
+                backdropFilter: "blur(15px)",
+                backgroundColor: "rgba(255,255,255,0.6)",
+                border: "1px solid rgba(255,255,255,0.3)",
+                boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
             }}
         >
-            {/* Header with gradient overlay */}
+            {/* HEADER */}
             <CardHeader
                 title={
-                    <Typography variant="h5" sx={{ fontWeight: 700, letterSpacing: 0.5, color: "var(--color-primary)" }}>
+                    <Typography
+                        variant="h5"
+                        sx={{
+                            fontWeight: 700,
+                            letterSpacing: 0.5,
+                            color: "var(--color-primary)",
+                        }}
+                    >
                         Edit Media
                     </Typography>
                 }
                 sx={{
-                    background: "linear-gradient(90deg, rgba(59,130,246,0.15), rgba(99,102,241,0.15))",
+                    background:
+                        "linear-gradient(135deg, rgba(185,28,28,0.12), rgba(255,112,67,0.12))",
                     py: 3,
                     px: 5,
                     borderBottom: "1px solid rgba(0,0,0,0.08)",
@@ -134,43 +148,75 @@ export default function MediaEdit() {
             <CardContent sx={{ p: { xs: 4, sm: 5 } }}>
                 <form onSubmit={handleSubmit}>
                     <Stack spacing={4}>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "var(--color-text)" }}>
+                        <Typography
+                            variant="subtitle1"
+                            sx={{
+                                fontWeight: 600,
+                                color: "var(--color-text)",
+                            }}
+                        >
                             Gallery Images
                         </Typography>
 
+                        {/* IMAGES */}
                         <Stack spacing={3}>
-                            {(listingDetails.images || []).map((img, index) => {
-                                const src = getSrc(img);
-                                if (!src) return null;
-                                return (
-                                    <Stack
-                                        key={index}
-                                        direction={{ xs: "column", sm: "row" }}
-                                        spacing={4}
-                                        alignItems="center"
-                                        sx={{
-                                            borderRadius: 3,
-                                            padding: 2,
-                                            backgroundColor: "#ffffff",
-                                            boxShadow: "0 3px 10px rgba(0,0,0,0.06)",
-                                            transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                                            "&:hover": { transform: "translateY(-2px)", boxShadow: "0 5px 15px rgba(0,0,0,0.08)" },
-                                        }}
-                                    >
-                                        <img
-                                            src={src}
-                                            alt={`preview-${index}`}
-                                            className="rounded-lg border"
-                                            style={{ width: "180px", height: "110px", objectFit: "cover", borderRadius: "12px" }}
-                                        />
-                                        <IconButton color="error" onClick={() => handleRemoveImage(index)}>
-                                            <Delete />
-                                        </IconButton>
-                                    </Stack>
-                                );
-                            })}
+                            {(listingDetails.images || []).map(
+                                (img, index) => {
+                                    const src = getSrc(img);
+                                    if (!src) return null;
+
+                                    return (
+                                        <Stack
+                                            key={index}
+                                            direction={{
+                                                xs: "column",
+                                                sm: "row",
+                                            }}
+                                            spacing={3}
+                                            alignItems="center"
+                                            sx={{
+                                                borderRadius: 3,
+                                                p: 2,
+                                                backgroundColor:
+                                                    "rgba(255,255,255,0.8)",
+                                                border:
+                                                    "1px solid var(--color-border)",
+                                                boxShadow:
+                                                    "0 3px 10px rgba(0,0,0,0.06)",
+                                                "&:hover": {
+                                                    boxShadow:
+                                                        "0 6px 18px rgba(0,0,0,0.1)",
+                                                },
+                                            }}
+                                        >
+                                            <img
+                                                src={src}
+                                                alt={`preview-${index}`}
+                                                style={{
+                                                    width: 180,
+                                                    height: 110,
+                                                    objectFit: "cover",
+                                                    borderRadius: "12px",
+                                                }}
+                                            />
+
+                                            <IconButton
+                                                onClick={() =>
+                                                    handleRemoveImage(index)
+                                                }
+                                                sx={{
+                                                    color: "var(--color-primary)",
+                                                }}
+                                            >
+                                                <Delete />
+                                            </IconButton>
+                                        </Stack>
+                                    );
+                                }
+                            )}
                         </Stack>
 
+                        {/* FILE INPUT */}
                         <input
                             type="file"
                             accept="image/*"
@@ -179,59 +225,79 @@ export default function MediaEdit() {
                             style={{ display: "none" }}
                             multiple
                         />
+
+                        {/* ADD IMAGE BUTTON */}
                         <Button
                             variant="outlined"
                             onClick={handleAddImage}
                             sx={{
                                 textTransform: "none",
                                 borderRadius: "12px",
-                                py: 1.5,
+                                py: 1.3,
                                 fontWeight: 600,
                                 color: "var(--color-primary)",
-                                borderColor: "var(--color-accent)",
-                                "&:hover": { backgroundColor: "rgba(185,28,28,0.1)", borderColor: "var(--color-primary)" },
-                                width: "fit-content",
+                                borderColor: "var(--color-primary)",
+                                "&:hover": {
+                                    backgroundColor:
+                                        "rgba(185,28,28,0.08)",
+                                },
                             }}
                         >
                             + Add Image
                         </Button>
                     </Stack>
 
-                    <div className="flex justify-end gap-4 mt-10">
+                    {/* ACTIONS */}
+                    <Stack
+                        direction="row"
+                        spacing={3}
+                        justifyContent="flex-end"
+                        sx={{ mt: 10 }}
+                    >
                         <Button
                             type="button"
                             variant="outlined"
                             onClick={onCancel}
                             sx={{
-                                borderRadius: "12px",
+                                borderRadius: "14px",
                                 textTransform: "none",
                                 px: 4,
                                 py: 1.5,
-                                fontWeight: 500,
                                 color: "var(--color-muted)",
                                 borderColor: "var(--color-border)",
-                                "&:hover": { backgroundColor: "rgba(107,114,128,0.1)" },
+                                backgroundColor:
+                                    "rgba(255,255,255,0.5)",
+                                "&:hover": {
+                                    backgroundColor:
+                                        "rgba(255,255,255,0.7)",
+                                },
                             }}
                         >
                             Cancel
                         </Button>
+
                         <Button
                             type="submit"
                             variant="contained"
-                            color="primary"
                             sx={{
-                                borderRadius: "12px",
+                                borderRadius: "14px",
                                 textTransform: "none",
                                 px: 5,
                                 py: 1.7,
                                 fontWeight: 600,
-                                boxShadow: "0 5px 20px rgba(59,130,246,0.25)",
-                                "&:hover": { boxShadow: "0 8px 25px rgba(59,130,246,0.35)" },
+                                background: "var(--gradient-primary)",
+                                color: "#fff",
+                                boxShadow:
+                                    "0 6px 20px rgba(185,28,28,0.35)",
+                                "&:hover": {
+                                    boxShadow:
+                                        "0 8px 25px rgba(185,28,28,0.45)",
+                                },
                             }}
                         >
                             Save Media
                         </Button>
-                    </div>
+                    </Stack>
                 </form>
             </CardContent>
         </Card>

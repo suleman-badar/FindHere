@@ -23,23 +23,23 @@ export default function ContactEdit() {
     const [listingDetails, setListingDetails] = useState({});
 
     useEffect(() => {
-        if (details) {
-            setListingDetails(details);
-        }
+        if (details) setListingDetails(details);
     }, [details]);
 
     const onSave = async (data) => {
         try {
-            await api.put(`/api/listing/update-listing/${placeId}`, data, { withCredentials: true });
+            await api.put(`/api/listing/update-listing/${placeId}`, data, {
+                withCredentials: true,
+            });
             toast.success("Listing updated successfully");
-            navigate('/admin/dashboard');
+            navigate("/admin/dashboard");
         } catch (err) {
             toast.error("Failed to update listing");
         }
     };
 
     const onCancel = () => {
-        navigate('/admin/dashboard');
+        navigate("/admin/dashboard");
     };
 
     if (loading) return <Loader />;
@@ -55,6 +55,31 @@ export default function ContactEdit() {
         onSave(listingDetails);
     };
 
+    // ✅ SAME FIX as BasicInfoEdit (removes blue border globally)
+    const fieldSx = {
+        "& .MuiOutlinedInput-root": {
+            borderRadius: "14px",
+            backgroundColor: "rgba(255,255,255,0.8)",
+            backdropFilter: "blur(5px)",
+
+            "& fieldset": {
+                borderColor: "rgba(0,0,0,0.15)",
+            },
+
+            "&:hover fieldset": {
+                borderColor: "var(--color-primary)",
+            },
+
+            "&.Mui-focused fieldset": {
+                borderColor: "var(--color-primary)",
+            },
+        },
+
+        "& .MuiInputLabel-root.Mui-focused": {
+            color: "var(--color-primary)",
+        },
+    };
+
     return (
         <Card
             sx={{
@@ -68,7 +93,6 @@ export default function ContactEdit() {
                 border: "1px solid rgba(255,255,255,0.3)",
                 boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
                 transition: "all 0.3s ease",
-
             }}
         >
             {/* Header */}
@@ -86,7 +110,8 @@ export default function ContactEdit() {
                     </Typography>
                 }
                 sx={{
-                    background: "linear-gradient(135deg, rgba(59,130,246,0.15), rgba(147,197,253,0.15))",
+                    background:
+                        "linear-gradient(135deg, rgba(185,28,28,0.12), rgba(255,112,67,0.12))",
                     py: 3,
                     px: 5,
                     borderBottom: "1px solid rgba(0,0,0,0.08)",
@@ -103,20 +128,15 @@ export default function ContactEdit() {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 label="Phone Number"
-                                name="number"
+                                name="phone"
                                 value={listingDetails.phone || ""}
                                 onChange={handleChange}
                                 fullWidth
                                 variant="outlined"
-                                sx={{
-                                    "& .MuiOutlinedInput-root": {
-                                        borderRadius: "14px",
-                                        backgroundColor: "rgba(255,255,255,0.8)",
-                                        backdropFilter: "blur(5px)",
-                                    },
-                                }}
+                                sx={fieldSx}
                             />
                         </Grid>
+
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 label="Email"
@@ -125,15 +145,10 @@ export default function ContactEdit() {
                                 onChange={handleChange}
                                 fullWidth
                                 variant="outlined"
-                                sx={{
-                                    "& .MuiOutlinedInput-root": {
-                                        borderRadius: "14px",
-                                        backgroundColor: "rgba(255,255,255,0.8)",
-                                        backdropFilter: "blur(5px)",
-                                    },
-                                }}
+                                sx={fieldSx}
                             />
                         </Grid>
+
                         <Grid item xs={12}>
                             <TextField
                                 label="Website"
@@ -142,19 +157,18 @@ export default function ContactEdit() {
                                 onChange={handleChange}
                                 fullWidth
                                 variant="outlined"
-                                sx={{
-                                    "& .MuiOutlinedInput-root": {
-                                        borderRadius: "14px",
-                                        backgroundColor: "rgba(255,255,255,0.8)",
-                                        backdropFilter: "blur(5px)",
-                                    },
-                                }}
+                                sx={fieldSx}
                             />
                         </Grid>
                     </Grid>
 
                     {/* Action Buttons */}
-                    <Stack direction="row" spacing={3} justifyContent="flex-end" sx={{ mt: 10 }}>
+                    <Stack
+                        direction="row"
+                        spacing={3}
+                        justifyContent="flex-end"
+                        sx={{ mt: 10 }}
+                    >
                         <Button
                             type="button"
                             variant="outlined"
@@ -165,11 +179,12 @@ export default function ContactEdit() {
                                 px: 4,
                                 py: 1.5,
                                 fontWeight: 500,
-                                borderColor: "rgba(0,0,0,0.15)",
                                 color: "var(--color-muted)",
-                                backdropFilter: "blur(5px)",
+                                borderColor: "rgba(0,0,0,0.15)",
                                 backgroundColor: "rgba(255,255,255,0.5)",
-                                "&:hover": { backgroundColor: "rgba(255,255,255,0.7)" },
+                                "&:hover": {
+                                    backgroundColor: "rgba(255,255,255,0.7)",
+                                },
                             }}
                         >
                             Cancel
@@ -186,8 +201,10 @@ export default function ContactEdit() {
                                 fontWeight: 600,
                                 background: "var(--gradient-primary)",
                                 color: "#fff",
-                                boxShadow: "0 6px 20px rgba(59,130,246,0.35)",
-                                "&:hover": { boxShadow: "0 8px 25px rgba(59,130,246,0.45)" },
+                                boxShadow: "0 6px 20px rgba(185,28,28,0.35)",
+                                "&:hover": {
+                                    boxShadow: "0 8px 25px rgba(185,28,28,0.45)",
+                                },
                             }}
                         >
                             Save Changes

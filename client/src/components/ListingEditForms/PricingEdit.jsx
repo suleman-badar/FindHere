@@ -1,4 +1,3 @@
-// PricingEdit.jsx
 import {
     Card,
     CardContent,
@@ -8,6 +7,8 @@ import {
     FormGroup,
     FormControlLabel,
     Checkbox,
+    Stack,
+    Divider,
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -29,6 +30,7 @@ export default function PricingEdit() {
     const { placeId } = useParams();
     const navigate = useNavigate();
     const { details, loading, error } = useDetails(placeId);
+
     const [listingDetails, setListingDetails] = useState({});
 
     useEffect(() => {
@@ -39,45 +41,108 @@ export default function PricingEdit() {
 
     const onSave = async (data) => {
         try {
-            await api.put(`/api/listing/update-listing/${placeId}`, data, { withCredentials: true });
+            await api.put(
+                `/api/listing/update-listing/${placeId}`,
+                data,
+                { withCredentials: true }
+            );
+
             toast.success("Listing updated successfully");
-            navigate('/admin/dashboard');
+            navigate("/admin/dashboard");
         } catch (err) {
             toast.error("Failed to update listing");
         }
     };
 
     const onCancel = () => {
-        navigate('/admin/dashboard');
+        navigate("/admin/dashboard");
     };
 
     if (loading) return <Loader />;
     if (error) return <div>Error loading listing</div>;
 
-    // Guard while data loads
-    if (!listingDetails || loading) return <Loader />;
-
     const handleCheckboxChange = (field, option, checked) => {
         setListingDetails((prev) => {
             const current = Array.isArray(prev[field]) ? [...prev[field]] : [];
+
             let updated;
             if (checked) {
-                updated = current.includes(option) ? current : [...current, option];
+                updated = current.includes(option)
+                    ? current
+                    : [...current, option];
             } else {
                 updated = current.filter((o) => o !== option);
             }
+
             return { ...prev, [field]: updated };
         });
     };
 
-    return (
-        <Card className="p-6 shadow-lg rounded-lg">
-            <CardContent>
-                <Typography variant="h5" className="mb-4 font-bold">
-                    Edit Pricing & Services
-                </Typography>
+    const fieldSx = {
+        "& .MuiOutlinedInput-root": {
+            borderRadius: "14px",
+            backgroundColor: "rgba(255,255,255,0.8)",
+            backdropFilter: "blur(5px)",
 
-                {/* Average Meal Price */}
+            "& fieldset": {
+                borderColor: "rgba(0,0,0,0.15)",
+            },
+
+            "&:hover fieldset": {
+                borderColor: "var(--color-primary)",
+            },
+
+            "&.Mui-focused fieldset": {
+                borderColor: "var(--color-primary)",
+            },
+        },
+
+        "& .MuiInputLabel-root.Mui-focused": {
+            color: "var(--color-primary)",
+        },
+    };
+
+    const checkboxSx = {
+        color: "var(--color-muted)",
+        "&.Mui-checked": {
+            color: "var(--color-primary)",
+        },
+    };
+
+    return (
+        <Card
+            sx={{
+                maxWidth: 900,
+                mx: "auto",
+                mt: 10,
+                borderRadius: 4,
+                overflow: "hidden",
+                backdropFilter: "blur(15px)",
+                backgroundColor: "rgba(255,255,255,0.6)",
+                border: "1px solid rgba(255,255,255,0.3)",
+                boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
+            }}
+        >
+            {/* HEADER */}
+            <Typography
+                variant="h5"
+                sx={{
+                    fontWeight: 700,
+                    color: "var(--color-primary)",
+                    textAlign: "center",
+                    py: 3,
+                    background:
+                        "linear-gradient(135deg, rgba(185,28,28,0.12), rgba(255,112,67,0.12))",
+                    borderBottom: "1px solid rgba(0,0,0,0.08)",
+                }}
+            >
+                Edit Pricing & Services
+            </Typography>
+
+            <Divider sx={{ borderColor: "rgba(0,0,0,0.08)" }} />
+
+            <CardContent sx={{ p: { xs: 4, sm: 5 } }}>
+                {/* PRICE */}
                 <TextField
                     fullWidth
                     label="Average Meal Price"
@@ -85,24 +150,46 @@ export default function PricingEdit() {
                     type="number"
                     value={listingDetails.price ?? ""}
                     onChange={(e) =>
-                        setListingDetails((prev) => ({ ...prev, price: e.target.value }))
+                        setListingDetails((prev) => ({
+                            ...prev,
+                            price: e.target.value,
+                        }))
                     }
-                    margin="normal"
+                    sx={fieldSx}
                 />
 
-                {/* Payment Methods */}
-                <Typography variant="subtitle1" className="mt-4">
+                {/* PAYMENT METHODS */}
+                <Typography
+                    sx={{
+                        mt: 4,
+                        fontWeight: 600,
+                        color: "var(--color-text)",
+                    }}
+                >
                     Payment Methods
                 </Typography>
+
                 <FormGroup row>
                     {paymentOptions.map((option) => (
                         <FormControlLabel
                             key={option}
                             control={
                                 <Checkbox
-                                    checked={Array.isArray(listingDetails?.paymentMethods) && listingDetails.paymentMethods.includes(option)}
+                                    sx={checkboxSx}
+                                    checked={
+                                        Array.isArray(
+                                            listingDetails?.paymentMethods
+                                        ) &&
+                                        listingDetails.paymentMethods.includes(
+                                            option
+                                        )
+                                    }
                                     onChange={(e) =>
-                                        handleCheckboxChange("paymentMethods", option, e.target.checked)
+                                        handleCheckboxChange(
+                                            "paymentMethods",
+                                            option,
+                                            e.target.checked
+                                        )
                                     }
                                 />
                             }
@@ -111,19 +198,38 @@ export default function PricingEdit() {
                     ))}
                 </FormGroup>
 
-                {/* Services */}
-                <Typography variant="subtitle1" className="mt-4">
+                {/* SERVICES */}
+                <Typography
+                    sx={{
+                        mt: 3,
+                        fontWeight: 600,
+                        color: "var(--color-text)",
+                    }}
+                >
                     Services
                 </Typography>
+
                 <FormGroup row>
                     {serviceOptions.map((option) => (
                         <FormControlLabel
                             key={option}
                             control={
                                 <Checkbox
-                                    checked={Array.isArray(listingDetails?.services) && listingDetails.services.includes(option)}
+                                    sx={checkboxSx}
+                                    checked={
+                                        Array.isArray(
+                                            listingDetails?.services
+                                        ) &&
+                                        listingDetails.services.includes(
+                                            option
+                                        )
+                                    }
                                     onChange={(e) =>
-                                        handleCheckboxChange("services", option, e.target.checked)
+                                        handleCheckboxChange(
+                                            "services",
+                                            option,
+                                            e.target.checked
+                                        )
                                     }
                                 />
                             }
@@ -132,19 +238,52 @@ export default function PricingEdit() {
                     ))}
                 </FormGroup>
 
-                {/* Action Buttons */}
-                <div className="flex justify-between mt-6">
-                    <Button variant="outlined" onClick={() => onCancel && onCancel()}>
+                {/* ACTIONS */}
+                <Stack
+                    direction="row"
+                    spacing={3}
+                    justifyContent="flex-end"
+                    sx={{ mt: 6 }}
+                >
+                    <Button
+                        variant="outlined"
+                        onClick={onCancel}
+                        sx={{
+                            borderRadius: "14px",
+                            textTransform: "none",
+                            px: 4,
+                            color: "var(--color-muted)",
+                            borderColor: "var(--color-border)",
+                            backgroundColor: "rgba(255,255,255,0.5)",
+                            "&:hover": {
+                                backgroundColor:
+                                    "rgba(255,255,255,0.7)",
+                            },
+                        }}
+                    >
                         Cancel
                     </Button>
+
                     <Button
                         variant="contained"
-                        color="primary"
-                        onClick={() => onSave && onSave(listingDetails)}
+                        onClick={() => onSave(listingDetails)}
+                        sx={{
+                            borderRadius: "14px",
+                            textTransform: "none",
+                            px: 5,
+                            fontWeight: 600,
+                            background: "var(--gradient-primary)",
+                            boxShadow:
+                                "0 6px 20px rgba(185,28,28,0.35)",
+                            "&:hover": {
+                                boxShadow:
+                                    "0 8px 25px rgba(185,28,28,0.45)",
+                            },
+                        }}
                     >
                         Save Changes
                     </Button>
-                </div>
+                </Stack>
             </CardContent>
         </Card>
     );

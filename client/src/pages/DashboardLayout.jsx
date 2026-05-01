@@ -9,6 +9,15 @@ export default function DashboardLayout() {
   const navigate = useNavigate();
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [collapsed, setCollapsed] = useState(() => {
+    try {
+      const stored = localStorage.getItem("dashboardSidebarCollapsed");
+      return stored ? JSON.parse(stored) : false;
+    } catch {
+      return false;
+    }
+  });
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   // Fetch user listings on mount
   useEffect(() => {
@@ -37,11 +46,44 @@ export default function DashboardLayout() {
     fetchPlaces();
   }, [navigate]);
 
+  // Listen for sidebar collapse state changes via localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      try {
+        const stored = localStorage.getItem("dashboardSidebarCollapsed");
+        setCollapsed(stored ? JSON.parse(stored) : false);
+      } catch {
+        setCollapsed(false);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    const interval = setInterval(handleStorageChange, 100);
+    
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Listen for screen resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const sidebarWidth = screenWidth < 768 ? (collapsed ? 80 : 80) : (collapsed ? 80 : 288);
+  const contentMargin = screenWidth < 768 ? 16 : (collapsed ? 80 : 288);
+
   if (loading) {
     return (
       <div className="flex mt-6">
         <Sidebar places={[]} />
-        <main className="flex-1 ml-8">
+        <main className="flex-1" style={{ marginLeft: `${contentMargin}px`, transition: "all 0.3s ease" }}>
           <DashboardSkeleton />
         </main>
       </div>
@@ -52,7 +94,7 @@ export default function DashboardLayout() {
     <div className="flex mt-6">
       <Sidebar places={places} />
 
-      <div className="flex-1 ml-8">
+      <div className="flex-1" style={{ marginLeft: `${contentMargin}px`, transition: "all 0.3s ease" }}>
         <Outlet context={{ places, setPlaces }} />
       </div>
     </div>
