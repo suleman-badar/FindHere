@@ -2,7 +2,7 @@ import client from "../config/meiliSearch.js";
 import Listing from "../models/Listing.js";
 
 
-// 🔥 Sync MongoDB → MeiliSearch
+// Sync MongoDB with MeiliSearch
 export const syncResturants = async () => {
   const listings = await Listing.find();
 

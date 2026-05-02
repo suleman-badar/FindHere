@@ -6,7 +6,7 @@ dotenv.config();
 
 const client = new MeiliSearch({
     host: process.env.MEILI_HOST, // Meilisearch server
-    apiKey: process.env.MEILI_MASTER_KEY,   //  TODO
+    apiKey: process.env.MEILI_MASTER_KEY,  
 });
 
 export default client;

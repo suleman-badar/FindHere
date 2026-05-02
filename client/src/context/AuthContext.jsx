@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
                 const res = await api.get("/api/auth/me", {
                     withCredentials: true,
                 });
-                console.log("Auth /me response:", res.data);
+                // console.log("Auth /me response:", res.data);
                 setUser(res.data);
             } catch (err) {
                 setUser(null);
