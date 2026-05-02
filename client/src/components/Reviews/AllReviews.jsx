@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import api from "../../api/axios";
+import useReviews from "../../Hooks/useReviews";
 import { Box, Typography } from "@mui/material";
 import StarRating from "./StarRating";
 
@@ -23,24 +22,15 @@ export default function AllReviews({
     showImage = true,
     showRating = true
 }) {
-    const [reviews, setReviews] = useState([]);
-
-    useEffect(() => {
-        const fetchReviews = async () => {
-            try {
-                const res = await api.get(`/api/review/all-review/${id}`);
-                setReviews(res.data || []);
-            } catch (err) {
-                console.error("Error fetching reviews:", err);
-                setReviews([]);
-            }
-        };
-        fetchReviews();
-    }, [id]);
+    const { reviews = [], loading } = useReviews(id);
 
     return (
         <Box className={containerClass} sx={containerSx}>
-            {reviews.length > 0 ? (
+            {loading ? (
+                <Box className="flex items-center justify-center">
+                    <Typography className="text-gray-400 my-4">Loading reviews...</Typography>
+                </Box>
+            ) : reviews.length > 0 ? (
                 reviews.map((review) => (
                     <Box
                         key={review._id}

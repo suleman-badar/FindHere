@@ -4,11 +4,11 @@ import { toast } from "react-toastify";
 import Sidebar from "../components/Dashboard/Sidebar/Sidebar";
 import api from "../api/axios";
 import DashboardSkeleton from "../components/Skeletons/DashboardSkeleton";
+import { useQuery } from '@tanstack/react-query';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
   const [places, setPlaces] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [collapsed, setCollapsed] = useState(() => {
     try {
       const stored = localStorage.getItem("dashboardSidebarCollapsed");
@@ -19,32 +19,33 @@ export default function DashboardLayout() {
   });
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-  // Fetch user listings on mount
-  useEffect(() => {
-    const fetchPlaces = async () => {
-      try {
-        setLoading(true);
-        // Check auth first
-        await api.get("/api/auth/check-auth", { withCredentials: true });
-        
-        // Fetch owner listings
-        const res = await api.get("/api/listing/owner", { withCredentials: true });
-        setPlaces(res.data.data || []);
-      } catch (err) {
-        console.error("Error fetching places:", err);
-        // Redirect to home with auth message if not authenticated
-        if (err.response?.status === 401) {
-          navigate("/", { state: { authMessage: "You must be logged in first" } });
-        } else {
-          toast.error("Failed to fetch your listings");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchPlaces();
-  }, [navigate]);
+  const fetchOwnerListings = async () => {
+    // verify auth first (will throw if unauthenticated)
+    await api.get("/api/auth/check-auth", { withCredentials: true });
+    const res = await api.get("/api/listing/owner", { withCredentials: true });
+    return res.data.data || [];
+  };
+
+  // Fetch user listings via React Query
+  const { data: ownerData, isLoading, error } = useQuery({
+    queryKey: ["ownerListings"],
+    queryFn: fetchOwnerListings,
+    staleTime: 60 * 1000,
+    retry: false,
+    onError: (err) => {
+      if (err.response?.status === 401) {
+        navigate("/", { state: { authMessage: "You must be logged in first" } });
+      } else {
+        toast.error("Failed to fetch your listings");
+      }
+    },
+  }
+  );
+
+  useEffect(() => {
+    if (ownerData) setPlaces(ownerData);
+  }, [ownerData]);
 
   // Listen for sidebar collapse state changes via localStorage
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function DashboardLayout() {
 
     window.addEventListener("storage", handleStorageChange);
     const interval = setInterval(handleStorageChange, 100);
-    
+
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       clearInterval(interval);
@@ -79,11 +80,11 @@ export default function DashboardLayout() {
   const sidebarWidth = screenWidth < 768 ? (collapsed ? 80 : 80) : (collapsed ? 80 : 288);
   const contentMargin = screenWidth < 768 ? 16 : (collapsed ? 80 : 288);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex mt-6">
         <Sidebar places={[]} />
-        <main className="flex-1" style={{ marginLeft: "4px" , transition: "all 0.3s ease" }}>
+        <main className="flex-1" style={{ marginLeft: `${contentMargin}px`, transition: "all 0.3s ease" }}>
           <DashboardSkeleton />
         </main>
       </div>
@@ -94,7 +95,7 @@ export default function DashboardLayout() {
     <div className="flex mt-6">
       <Sidebar places={places} />
 
-      <div className="flex-1" style={{ marginLeft: "4px", transition: "all 0.3s ease" }}>
+      <div className="flex-1" style={{ marginLeft: `${contentMargin}px`, transition: "all 0.3s ease" }}>
         <Outlet context={{ places, setPlaces }} />
       </div>
     </div>

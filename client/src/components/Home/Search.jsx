@@ -37,7 +37,7 @@ export default function Search() {
                     qs.stringify(params, { arrayFormat: "repeat" }),
             });
             setResults(res.data);
-            console.log("Result is:", res.data);
+            // console.log("Result is:", res.data);
         } catch (err) {
             console.error("Search error:", err);
         }

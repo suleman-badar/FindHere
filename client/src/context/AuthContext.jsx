@@ -1,35 +1,35 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext } from "react";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import api from "../api/axios";
 
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+export const AuthProvider = ({ children }) => {
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const res = await api.get("/api/auth/me", {
-                    withCredentials: true,
-                });
-                // console.log("Auth /me response:", res.data);
-                setUser(res.data);
-            } catch (err) {
-                setUser(null);
-            } finally {
-                setLoading(false);
-            }
-        };
-        checkAuth();
-    }, []);
-
-    const login = (userData) => {
-        setUser(userData);
+    const fetchMe = async () => {
+        const res = await api.get("/api/auth/me");
+        return res.data;
     };
 
-    const logout = () => {
-        setUser(null);
+    const { data: user, isLoading: loading } = useQuery({
+        queryKey: ["me"],
+        queryFn: fetchMe,
+        staleTime: 5 * 60 * 1000,
+        retry: false,
+    });
+
+    const login = (userData) => {
+        queryClient.setQueryData(["me"], userData);
+    };
+
+    const logout = async () => {
+        try {
+            await api.post('/api/auth/logout');
+        } catch (e) {
+            // ignore
+        }
+        queryClient.setQueryData(["me"], null);
     };
 
     return (
@@ -39,6 +39,6 @@ export function AuthProvider({ children }) {
     );
 }
 
-export function useAuth() {
+export const useAuth = () => {
     return useContext(AuthContext);
 }

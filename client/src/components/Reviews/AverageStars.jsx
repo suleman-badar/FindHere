@@ -21,6 +21,5 @@ export default function AverageStars({ id }) {
                 ))}
             </Box>
         </Box>
-
     );
 }

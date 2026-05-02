@@ -5,8 +5,7 @@ const DEFAULT_API_BASE = "https://findhere.onrender.com";
 const API_BASE = raw && raw !== "undefined" && raw !== "null" ? raw : DEFAULT_API_BASE;
 const baseURL = API_BASE.replace(/\/+$/, "");
 
-console.log("API Base URL:", baseURL);
-
+// console.log("API Base URL:", baseURL);
 const api = axios.create({
   baseURL,
 });

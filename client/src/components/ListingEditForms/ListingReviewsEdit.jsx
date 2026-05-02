@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../api/axios";
+import useReviews from "../../Hooks/useReviews";
+import { useQueryClient } from '@tanstack/react-query';
 import StarRating from "../Reviews/StarRating";
 import {
     Box,
@@ -16,21 +18,8 @@ export default function ListingReviewsEdit() {
     const { placeId } = useParams();
     const navigate = useNavigate();
     const { loading, error } = useDetails(placeId);
-    const [reviews, setReviews] = useState([]);
-
-    useEffect(() => {
-        const fetchReviews = async () => {
-            try {
-                const res = await api.get(
-                    `/api/review/all-review/${placeId}`
-                );
-                setReviews(res.data || []);
-            } catch (err) {
-                setReviews([]);
-            }
-        };
-        fetchReviews();
-    }, [placeId]);
+    const queryClient = useQueryClient();
+    const { reviews = [] } = useReviews(placeId);
 
     const handleDelete = async (reviewId) => {
         if (!window.confirm("Are you sure you want to delete this review?")) return;
@@ -41,7 +30,8 @@ export default function ListingReviewsEdit() {
             });
 
             toast.success("Review deleted successfully");
-            setReviews((prev) => prev.filter((r) => r._id !== reviewId));
+            // invalidate cached reviews for this listing so UI updates
+            queryClient.invalidateQueries(["reviews", placeId]);
         } catch (err) {
             toast.error(
                 err.response?.data?.message || "Failed to delete review"

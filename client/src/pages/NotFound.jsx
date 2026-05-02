@@ -37,7 +37,7 @@ export default function NotFoundPage() {
       });
 
       setResults(res.data);
-      console.log("Result is:", res.data);
+      // console.log("Result is:", res.data);
     } catch (err) {
       console.error("Search error:", err);
     }
