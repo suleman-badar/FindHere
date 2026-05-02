@@ -23,7 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <AuthProvider>
           <App />
         </AuthProvider>
-        {process.env.NODE_ENV === 'development' && (
+        {import.meta.env.DEV === 'development' && (
           <ReactQueryDevtools initialIsOpen={false} />
         )}
       </QueryClientProvider>
