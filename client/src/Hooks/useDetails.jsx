@@ -12,7 +12,7 @@ export default function useDetails(id) {
         queryKey: ["listing", id],
         queryFn: fetchDetails,
         enabled: !!id,
-        staleTime: 60 * 1000,
+        staleTime: 60 * 1000, //60s( 1000 ms * 60 ms = 1 min)
         refetchOnWindowFocus: false,
     });
 

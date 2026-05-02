@@ -19,7 +19,7 @@ export default function Featured({ selectedCategory }) {
     const { data: listings, isLoading, error } = useQuery({
         queryKey: ["featuredListings", selectedCategory],
         queryFn: fetchListings,
-        staleTime: 5 * 60 * 1000,
+        staleTime: 5 * 60 * 1000, // 5 minutes
         refetchOnWindowFocus: false,
     });
 

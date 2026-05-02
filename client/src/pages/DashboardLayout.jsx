@@ -31,7 +31,7 @@ export default function DashboardLayout() {
   const { data: ownerData, isLoading, error } = useQuery({
     queryKey: ["ownerListings"],
     queryFn: fetchOwnerListings,
-    staleTime: 60 * 1000,
+    staleTime: 60 * 1000,  //60s( 1000 ms * 60 ms = 1 min)
     retry: false,
     onError: (err) => {
       if (err.response?.status === 401) {
