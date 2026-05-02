@@ -84,7 +84,7 @@ export default function DashboardLayout() {
     return (
       <div className="flex mt-6">
         <Sidebar places={[]} />
-        <main className="flex-1" style={{ marginLeft: `${contentMargin}px`, transition: "all 0.3s ease" }}>
+        <main className="flex-1" style={{ marginLeft: "4px", transition: "all 0.3s ease" }}>
           <DashboardSkeleton />
         </main>
       </div>
@@ -95,7 +95,7 @@ export default function DashboardLayout() {
     <div className="flex mt-6">
       <Sidebar places={places} />
 
-      <div className="flex-1" style={{ marginLeft: `${contentMargin}px`, transition: "all 0.3s ease" }}>
+      <div className="flex-1" style={{ marginLeft: "4px", transition: "all 0.3s ease" }}>
         <Outlet context={{ places, setPlaces }} />
       </div>
     </div>
