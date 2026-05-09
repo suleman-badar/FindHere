@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 7700;
 
 // Middlewares
 app.use(cors({
-    origin: "https://findhere.vercel.app",
+    origin: "https://find-here.vercel.app",
     credentials: true,
 }));
 app.use(morgan("dev"));
