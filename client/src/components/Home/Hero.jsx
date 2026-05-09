@@ -1,5 +1,5 @@
 import { ArrowRight, Sparkles, MapPin } from "lucide-react";
-import { ImageWithFallback } from "../../../figma/ImageWithFallback";
+import { ImageWithFallback } from "../../components/Home/fallback/ImageWithFallback";
 import Search from "./Search";
 
 const colors = {
@@ -29,12 +29,12 @@ export default function Hero({onExploreClick, onCategoriesClick }) {
         <div className="absolute bottom-0 right-0 w-[700px] h-[700px] rounded-full blur-3xl opacity-30 bg-red-700/40" />
       </div>
 
-      {/* 🎯 Floating UI */}
+      {/*  Floating UI */}
       <FloatingPin className="top-[18%] right-[12%]" delay="0s" label="4.9" />
       <FloatingPin className="top-[58%] right-[22%]" delay="1.2s" label="4.7" small />
       <FloatingPin className="top-[32%] right-[38%]" delay="2.4s" label="4.8" small />
 
-      {/* 📦 Content */}
+      {/*  Content */}
       <div className="relative z-10 px-6 md:px-12 lg:px-20 pt-16 pb-24 max-w-7xl mx-auto">
         <div className="max-w-3xl">
 
@@ -64,7 +64,7 @@ export default function Hero({onExploreClick, onCategoriesClick }) {
             Explore curated destinations near and far.
           </p>
 
-          {/* 🔥 SEARCH (your logic injected here) */}
+          {/* SEARCH (your logic injected here) */}
           <Search />
 
           {/* CTA */}

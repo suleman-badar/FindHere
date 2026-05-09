@@ -4,8 +4,10 @@ import Carousel from "../Carousel";
 import ListingCard from "./ListingCard";
 import ListingSkeleton from "../Skeletons/ListingSkeleton";
 import api from "../../api/axios";
+import { forwardRef} from "react";
 
-export default function Featured({ selectedCategory }) {
+
+const Featured = forwardRef(({ selectedCategory }, ref) => {
 
     const fetchListings = async () => {
         const url = selectedCategory
@@ -24,7 +26,7 @@ export default function Featured({ selectedCategory }) {
     });
 
     return (
-        <Box sx={{ p: 4, textAlign: "center", position: "relative" }}>
+        <Box ref={ref} sx={{ p: 4, textAlign: "center", position: "relative" }}>
             {isLoading ? (
                 <>
                     <Typography variant="h5" fontWeight="bold" gutterBottom>
@@ -60,3 +62,6 @@ export default function Featured({ selectedCategory }) {
         </Box>
     );
 }
+);
+
+export default Featured;   

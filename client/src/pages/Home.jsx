@@ -43,22 +43,22 @@ export default function Home() {
 
     const [selectedCategory, setSelectedCategory] = useState(null);
 
-    const featuresRef = useRef(null);
+    const featuredRef = useRef(null);
     const categoriesRef = useRef(null);
 
     return (
         <div className="bg-background text-text min-h-screen">
             <Hero
                 onExploreClick={() => {
-                    featuresRef.current?.scrollIntoView({ behavior: "smooth" });
+                    featuredRef.current?.scrollIntoView({ behavior: "smooth" });
                 }}
                 onCategoriesClick={() => {
                     categoriesRef.current?.scrollIntoView({ behavior: "smooth" });
                 }}
             />
 
-            <Category selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} ref={featuresRef} />
-            <Featured selectedCategory={selectedCategory} ref={categoriesRef} />
+            <Category selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} ref={categoriesRef} />
+            <Featured selectedCategory={selectedCategory} ref={featuredRef} />
             <Footer />  
         </div>
     );
