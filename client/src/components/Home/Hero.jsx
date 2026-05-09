@@ -1,6 +1,7 @@
 import { ArrowRight, Sparkles, MapPin } from "lucide-react";
 import { ImageWithFallback } from "../../components/Home/fallback/ImageWithFallback";
 import Search from "./Search";
+import { Star } from "@mui/icons-material";
 
 const colors = {
   primary: "#b91c1c",
@@ -92,7 +93,12 @@ export default function Hero({onExploreClick, onCategoriesClick }) {
 }
 
 /* Floating Pin */
-function FloatingPin({ className = "", delay = "0s", label }) {
+function FloatingPin({
+  className = "",
+  delay = "0s",
+  label,
+  small = false,
+}) {
   return (
     <div
       className={`absolute z-[5] hidden lg:block ${className}`}
@@ -101,9 +107,56 @@ function FloatingPin({ className = "", delay = "0s", label }) {
         animationDelay: delay,
       }}
     >
-      <div className="rounded-2xl bg-white/10 backdrop-blur-xl p-3 text-center">
-        <MapPin className="w-4 h-4 text-white mx-auto" />
-        <div className="text-white text-sm">{label}</div>
+      <div
+        className="rounded-2xl backdrop-blur-2xl border border-white/30 px-3 py-2 flex items-center gap-2 shadow-2xl"
+        style={{
+          background: "rgba(255,255,255,0.18)",
+          boxShadow: "0 16px 40px -10px rgba(0,0,0,0.45)",
+          transform: small ? "scale(0.85)" : "none",
+        }}
+      >
+        <div
+          className="w-8 h-8 rounded-xl flex items-center justify-center"
+          style={{
+            background:
+              "linear-gradient(135deg, #b91c1c 0%, #ff7043 100%)",
+            boxShadow: "0 6px 16px -4px #b91c1c",
+          }}
+        >
+          <MapPin
+            className="w-4 h-4 text-white"
+            strokeWidth={2.5}
+          />
+        </div>
+
+        <div className="pr-1">
+          <div className="flex items-center gap-1">
+            <Star
+              className="w-3 h-3"
+              style={{
+                color: "#fbbf24",
+                fill: "#fbbf24",
+              }}
+            />
+
+            <span
+              className="text-white"
+              style={{
+                fontSize: "13px",
+                fontWeight: 600,
+              }}
+            >
+              {label}
+            </span>
+          </div>
+
+          <div
+            className="text-white/70"
+            style={{ fontSize: "10px" }}
+          >
+            Top rated
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -137,6 +137,20 @@ h4 {
     }
 }
 
+@keyframes float-soft {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-14px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
 
 /* button {
     border-radius: 8px;
